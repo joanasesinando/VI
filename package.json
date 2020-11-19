@@ -5,7 +5,7 @@
   "authors": "Afonso Luís (83419), Joana Sesinando (81583), Tiago Delgado (86521)",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/joanasesinando/VI"
   },
   "scripts": {
     "clean": "rimraf dist/{css/*,js/*}",
