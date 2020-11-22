@@ -14,21 +14,21 @@ body {
 }
 
 .info {
-	width: 18vw;
+	width: 16vw;
 	background-color: color(typography, 1);
 	@include border-radius(medium);
 	z-index: 10;
 }
 
 .radar-charts {
-	width: 43vw;
+	width: 49vw;
 	background-color: color(bg, 1);
 	@include border-radius(medium);
 	box-shadow: 0 4px 25px #DCD4E9;
 }
 
 .map-pyramid {
-	width: 29vw;
+	width: 25vw;
 
 	.map, .population-pyramid {
 		height: 48%;
