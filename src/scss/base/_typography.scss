@@ -1,0 +1,4 @@
+h6, .h6 {
+	@include font-family(base);
+	@include font-weight(medium);
+}

@@ -1,0 +1,57 @@
+// --------------------------------------------
+// Colors -------------------------------------
+// Usage example: color(primary, 1)
+// --------------------------------------------
+$color: (
+	typography: (
+		1: #393874,
+		2: #5756B3,
+		3: #656392,
+		4: #8484A0,
+		5: white,
+	),
+	bg: (
+		1: white,
+		2: #F6F7FB,
+	),
+	primary: (
+		1: #8675FF,
+		2: #7461FC,
+	),
+	secondary: (
+		1: #FF708B,
+		2: #E75B75,
+	),
+	additional: (
+		1: #66C8FF,
+		2: #32ADF1,
+	),
+	additional-2: (
+		1: #FF9065,
+		2: #F27749,
+	),
+	additional-3: (
+		1: #FFBA69,
+		2: #E9A04C,
+	),
+	additional-4: (
+		1: #42CC7E,
+		2: #39B870,
+	),
+);
+
+
+// --------------------------------------------
+// Typography ---------------------------------
+// --------------------------------------------
+$font__family: (
+	base: '"Poppins", sans-serif', // font-family(base)
+);
+
+$font__weight: (
+	light: 300,     // font__weight(light)
+	regular: 400, 	// font__weight(regular)
+	medium: 500,	// font__weight(medium)
+	semibold: 600,	// font__weight(semi-bold)
+	bold: 700		// font__weight(bold)
+);

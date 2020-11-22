@@ -1,0 +1,42 @@
+.navbar {
+	height: 50px;
+	background-color: color(bg, 1);
+	box-shadow: 0 8px 20px 10px rgba(137, 137, 137, 0.05);
+
+	.navbar-brand img {
+		height: 1.7rem;
+	}
+
+	.project-title {
+		color: color(typography, 2);
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+
+	.nav-item {
+		position: relative;
+
+		.nav-link {
+			color: color(typography, 4);
+			&:hover, &:focus {
+				color: darken(color(typography, 4), 10);
+			}
+		}
+
+		&.active .nav-link {
+			color: color(typography, 1);
+			@include font-weight(medium);
+		}
+
+		&.active::after {
+			content: '';
+			position: absolute;
+			bottom: -5px;
+			right: 0;
+			width: 100%;
+			height: 3px;
+			background-color: color(typography, 2);
+		}
+	}
+}
