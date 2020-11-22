@@ -1,3 +1,10 @@
 {
-	"extends": "standard"
+	"extends": "standard",
+	"rules": {
+		"no-undef": "warn",
+		"no-unused-vars": "warn",
+		"no-tabs": "off",
+		"camelcase": "off",
+		"no-cond-assign": "warn"
+	}
 }

@@ -1,0 +1,23 @@
+.radar-charts {
+	position: relative;
+
+	.radars {
+		h5 {
+			color: color(typography, 1);
+		}
+
+		.radar-big5, .radar-tipi {
+			width: 48%;
+		}
+
+		svg {
+			display: block;
+			margin: auto;
+		}
+	}
+
+	.saved-results {
+		color: color(typography, 1);
+		@include margin-top(large);
+	}
+}
