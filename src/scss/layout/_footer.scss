@@ -1,0 +1,13 @@
+.footer {
+	height: 37px;
+	background-color: color(bg, 1);
+	box-shadow: 0 8px 20px 10px rgba(137, 137, 137, 0.05);
+
+	.course, .academic-term {
+		@include font-weight(semibold);
+		font-size: .65rem;
+		color: color(typography, 3);
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+	}
+}
