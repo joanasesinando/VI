@@ -13,6 +13,7 @@ $color: (
 	bg: (
 		1: white,
 		2: #F6F7FB,
+		3: #EEF1FA,
 	),
 	primary: (
 		1: #8675FF,
@@ -54,4 +55,23 @@ $font__weight: (
 	medium: 500,	// font__weight(medium)
 	semibold: 600,	// font__weight(semi-bold)
 	bold: 700		// font__weight(bold)
+);
+
+
+// --------------------------------------------
+// Margins ------------------------------------
+// --------------------------------------------
+$margin: (
+	small: .5rem,   // margin(small)
+	medium: .6rem,   // margin(medium)
+	large: 1rem,   // margin(large)
+);
+
+
+// --------------------------------------------
+// Border-radius ------------------------------
+// --------------------------------------------
+$border-radius: (
+	medium: 10px,   // border-radius(medium)
+	large: 30px,    // border-radius(large)
 );

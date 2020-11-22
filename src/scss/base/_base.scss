@@ -4,4 +4,45 @@ body {
 
 .container {
 	max-width: 1380px;
+	padding-left: 2rem;
+	padding-right: 2rem;
+}
+
+.info, .radar-charts, .map-pyramid {
+	height: 55vh;
+	@include margin-top(large);
+}
+
+.info {
+	width: 18vw;
+	background-color: color(typography, 1);
+	@include border-radius(medium);
+	z-index: 10;
+}
+
+.radar-charts {
+	width: 43vw;
+	background-color: color(bg, 1);
+	@include border-radius(medium);
+	box-shadow: 0 4px 25px #DCD4E9;
+}
+
+.map-pyramid {
+	width: 29vw;
+
+	.map, .population-pyramid {
+		height: 48%;
+		background-color: color(bg, 1);
+		@include border-radius(medium);
+		box-shadow: 0 4px 25px #DCD4E9;
+	}
+}
+
+.parallel-coordinates {
+	width: 100%;
+	height: 31.6vh;
+	@include margin-top(medium);
+	background-color: color(bg, 3);
+	border-top-left-radius: 30px;
+	border-top-right-radius: 30px;
 }

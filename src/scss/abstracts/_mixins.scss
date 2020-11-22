@@ -7,3 +7,22 @@
 @mixin font-weight($elem) {
 	font-weight: get-font-weight($elem);
 }
+
+// Margins
+@mixin margin-top($elem) {
+	margin-top: get-margin($elem);
+}
+@mixin margin-bottom($elem) {
+	margin-bottom: get-margin($elem);
+}
+@mixin margin-left($elem) {
+	margin-left: get-margin($elem);
+}
+@mixin margin-right($elem) {
+	margin-right: get-margin($elem);
+}
+
+// Border-radius
+@mixin border-radius($elem) {
+	border-radius: get-border-radius($elem);
+}

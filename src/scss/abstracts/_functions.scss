@@ -21,3 +21,19 @@
 @function get-font-weight($elem) {
 	@return map-get($font__weight, $elem);
 }
+
+// --------------------------------------------------------------------
+// Retrieve Margins ---------------------------------------------------
+// Used in _mixins.scss [@mixin margin-...] ---------------------------
+// --------------------------------------------------------------------
+@function get-margin($elem) {
+	@return map-get($margin, $elem);
+}
+
+// --------------------------------------------------------------------
+// Retrieve Border Radius ---------------------------------------------
+// Used in _mixins.scss [@mixin border-radius] ---------------------------
+// --------------------------------------------------------------------
+@function get-border-radius($elem) {
+	@return map-get($border-radius, $elem);
+}
