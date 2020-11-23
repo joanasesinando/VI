@@ -1,7 +1,7 @@
 (async function () {
   console.log('Drawing map...')
 
-  const width = '360'
+  const width = '424'
   const height = '224.4'
 
   // Create the container SVG

@@ -5,6 +5,7 @@
 	box-shadow: 0 8px 20px 10px rgba(137, 137, 137, 0.05);
 	position: absolute;
 	bottom: 0;
+	padding: .5rem;
 
 	.course, .academic-term {
 		@include font-weight(semibold);

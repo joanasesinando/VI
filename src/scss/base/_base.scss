@@ -8,8 +8,6 @@ body {
 
 .container {
 	max-width: none;
-//	padding-left: 2rem;
-//	padding-right: 2rem;
 }
 
 .info, .radar-charts, .map-pyramid {
@@ -18,29 +16,25 @@ body {
 }
 
 .info {
-	//width: 16vw;
 	background-color: color(typography, 1);
 	@include border-radius(medium);
+	@include margin-right(large);
 	z-index: 10;
 }
 
 .radar-charts {
-	//width: 49vw;
 	background-color: color(bg, 1);
 	@include border-radius(medium);
+	@include margin-right(large);
 	box-shadow: 0 4px 25px #DCD4E9;
 	z-index: 5;
 }
 
-.map-pyramid {
-	//width: 25vw;
-
-	.map, .population-pyramid {
-		height: 48%;
-		background-color: color(bg, 1);
-		@include border-radius(medium);
-		box-shadow: 0 4px 25px #DCD4E9;
-	}
+.map, .population-pyramid {
+	height: 48%;
+	background-color: color(bg, 1);
+	@include border-radius(medium);
+	box-shadow: 0 4px 25px #DCD4E9;
 }
 
 .parallel-coordinates {
@@ -83,7 +77,6 @@ body {
 	@media (min-width: breakpoint(min, sm)) {
 		width: 60vw;
 	}
-
 	@media (min-width: breakpoint(min, md)) {
 		width: 50vw;
 	}
