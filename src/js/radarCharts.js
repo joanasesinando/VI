@@ -102,7 +102,7 @@
     margin: margin,
     levels: 5,
     maxValue: 100,
-    roundStrokes: true,
+    roundStrokes: false,
     color: d3.scaleOrdinal().range(['#EE7DB1']),
     format: '.0f',
     unit: '%'
@@ -114,7 +114,7 @@
     margin: margin,
     levels: 7,
     maxValue: 7,
-    roundStrokes: true,
+    roundStrokes: false,
     color: d3.scaleOrdinal().range(['#EE7DB1']),
     format: '.0f'
   }
@@ -469,6 +469,7 @@
         .attr('fill', '#393874')
         .text(d => d)
     }
+    rotateTipiChart(rScale, maxValue, angleSlice, cfg)
     return svg
   }
 
@@ -485,6 +486,21 @@
       'A amet dictumst aliquet aenean eget aenean nunc sed interdum.\n' +
       'Dui lectus vulputate ultricies nunc, arcu volutpat lorem in amet.')
     text.select('.source').text('Source: ' + 'wikipedia.org')
+      .attr('href', '#')
+  }
+
+  // Rotates Tipi chart
+  function rotateTipiChart (rScale, maxValue, angleSlice, cfg) {
+    // d3.selectAll('.radar-tipi .axisLabel')
+    //   .attr('x', (d, i) => -i * 4 + 33)
+    //
+    // d3.selectAll('.radar-tipi .axis line')
+    //   .attr('x2', (d, i) => rScale(maxValue * 1.1) * Math.cos(angleSlice * i - 60 - (Math.PI / 2)))
+    //   .attr('y2', (d, i) => rScale(maxValue * 1.1) * Math.sin(angleSlice * i - 60 - (Math.PI / 2)))
+    //
+    // d3.selectAll('.radar-tipi .axis .legend tspan')
+    //   .attr('x', (d, i) => rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice * i - 60 - (Math.PI / 2)))
+    //   .attr('y', (d, i) => rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice * i - 60 - (Math.PI / 2)))
   }
 
   console.log('Radar charts - DONE!')

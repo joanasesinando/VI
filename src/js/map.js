@@ -22,8 +22,10 @@ d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(d
     .data(countries.features)
     .enter()
     .append('path')
-    .attr('cl', 'country')
+    .attr('class', 'country')
     .attr('d', path)
+    .append('title')
+    .text(d => d.properties.name)
 })
 
 const zoom = d3.zoom()

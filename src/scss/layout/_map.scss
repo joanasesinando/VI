@@ -4,4 +4,9 @@
 	svg {
 		border-radius: 10px;
 	}
+
+	.country:hover {
+		fill: color(secondary, 1);
+		cursor: pointer;
+	}
 }
