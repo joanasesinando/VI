@@ -1,5 +1,5 @@
 .info {
-	overflow-y: scroll;
+	overflow-y: auto;
 
 	.text {
 		display: none;
@@ -29,6 +29,7 @@
 			color: #726FC0;
 			@include font-weight(regular);
 			font-size: .7rem;
+			cursor: pointer;
 		}
 	}
 

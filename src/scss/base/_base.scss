@@ -1,11 +1,15 @@
 body {
 	background-color: color(bg, 2);
+
+	&.no-vis {
+		background-color: color(primary, 1);
+	}
 }
 
 .container {
-	max-width: 1380px;
-	padding-left: 2rem;
-	padding-right: 2rem;
+	max-width: none;
+//	padding-left: 2rem;
+//	padding-right: 2rem;
 }
 
 .info, .radar-charts, .map-pyramid {
@@ -14,14 +18,14 @@ body {
 }
 
 .info {
-	width: 16vw;
+	//width: 16vw;
 	background-color: color(typography, 1);
 	@include border-radius(medium);
 	z-index: 10;
 }
 
 .radar-charts {
-	width: 49vw;
+	//width: 49vw;
 	background-color: color(bg, 1);
 	@include border-radius(medium);
 	box-shadow: 0 4px 25px #DCD4E9;
@@ -29,7 +33,7 @@ body {
 }
 
 .map-pyramid {
-	width: 25vw;
+	//width: 25vw;
 
 	.map, .population-pyramid {
 		height: 48%;
@@ -65,5 +69,22 @@ body {
 
 	&:hover {
 		background-color: darken(color(primary, 1), 5);
+	}
+}
+
+.warning {
+	display: none;
+	width: 80vw;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+
+	@media (min-width: breakpoint(min, sm)) {
+		width: 60vw;
+	}
+
+	@media (min-width: breakpoint(min, md)) {
+		width: 50vw;
 	}
 }

@@ -32,8 +32,16 @@
 
 // --------------------------------------------------------------------
 // Retrieve Border Radius ---------------------------------------------
-// Used in _mixins.scss [@mixin border-radius] ---------------------------
+// Used in _mixins.scss [@mixin border-radius] ------------------------
 // --------------------------------------------------------------------
 @function get-border-radius($elem) {
 	@return map-get($border-radius, $elem);
+}
+
+// --------------------------------------------------------------------
+// Retrieve Breakpoints -----------------------------------------------
+// Usage: breakpoint(small) -------------------------------------------
+// --------------------------------------------------------------------
+@function breakpoint($elem, $variant) {
+	@return map-get(map-get($breakpoint, $elem), $variant);
 }
