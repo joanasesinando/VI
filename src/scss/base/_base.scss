@@ -47,3 +47,23 @@ body {
 	border-top-left-radius: 30px;
 	border-top-right-radius: 30px;
 }
+
+::-webkit-scrollbar {
+	width: 5px;
+	background-color: color(primary, 1);
+	border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+	background-color: color(bg, 2);
+	border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background-color: color(primary, 1);
+
+	&:hover {
+		background-color: darken(color(primary, 1), 5);
+	}
+}

@@ -1,3 +1,35 @@
 .info {
+	overflow-y: scroll;
+
+	.text {
+		display: none;
+
+		.title {
+			position: relative;
+			color: white;
+
+			&::after {
+				content: '';
+				position: absolute;
+				bottom: -10px;
+				left: 0;
+				width: 33px;
+				height: 3px;
+				background-color: color(primary, 1);
+			}
+		}
+
+		.description {
+			color: white;
+			font-size: .85rem;
+			margin-top: 2rem;
+		}
+
+		.source {
+			color: #726FC0;
+			@include font-weight(regular);
+			font-size: .7rem;
+		}
+	}
 
 }

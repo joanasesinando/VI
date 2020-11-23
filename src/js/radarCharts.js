@@ -297,6 +297,8 @@
       .style('font-size', '10.2px')
       .style('font-family', 'Poppins')
       .style('font-weight', '500')
+      .style('cursor', 'pointer')
+      .style('user-select', 'none')
       .attr('fill', '#393874')
       .attr('text-anchor', 'middle')
       .attr('dy', '0.35em')
@@ -304,6 +306,16 @@
       .attr('y', (d, i) => rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice * i - (Math.PI / 2)))
       .text(d => d)
       .call(wrap, cfg.wrapWidth)
+      .on('mouseover', (event) => {
+        event.target.style.fill = '#8675FF'
+        event.target.style.fontSize = '11px'
+        event.target.style.transition = 'ease-in-out 200ms'
+      })
+      .on('mouseout', (event) => {
+        event.target.style.fill = '#393874'
+        event.target.style.fontSize = '10.2px'
+      })
+      .on('click', (event, datum) => showInfo(event, datum))
 
     /// //////////////////////////////////////////////////////
     /// ////////// Draw the radar chart blobs ////////////////
@@ -385,29 +397,35 @@
       .data(d => d.axes)
       .enter().append('circle')
       .attr('class', 'radarInvisibleCircle')
-      .attr('r', cfg.dotRadius * 1.5)
+      .attr('r', cfg.dotRadius * 4)
       .attr('cx', (d, i) => rScale(d.value) * Math.cos(angleSlice * i - (Math.PI / 2)))
       .attr('cy', (d, i) => rScale(d.value) * Math.sin(angleSlice * i - (Math.PI / 2)))
       .style('fill', 'none')
       .style('pointer-events', 'all')
-      .on('mouseover', function (d, i) {
+      .on('mouseover', function (e, d) {
         tooltip
           .attr('x', this.cx.baseVal.value - 10)
           .attr('y', this.cy.baseVal.value - 10)
           .transition()
           .style('display', 'block')
+          .style('opacity', '1')
+          .style('user-select', 'none')
           .text(Format(d.value) + cfg.unit)
       })
       .on('mouseout', function () {
         tooltip.transition()
-          .style('display', 'none').text('')
+          .style('display', 'none')
+          .style('opacity', '0')
+          .text('')
       })
 
     const tooltip = g.append('text')
       .attr('class', 'tooltip')
       .attr('x', 0)
       .attr('y', 0)
-      .style('font-size', '12px')
+      .style('font-size', '13px')
+      .style('font-family', 'Poppins')
+      .style('font-weight', '600')
       .style('display', 'none')
       .attr('text-anchor', 'middle')
       .attr('dy', '0.35em')
@@ -452,6 +470,21 @@
         .text(d => d)
     }
     return svg
+  }
+
+  /** * -------------------------------------------- ***/
+  /** * ------------------ Functions --------------- ***/
+  /** * -------------------------------------------- ***/
+
+  // Shows information on the left section
+  function showInfo (event, datum) {
+    const text = d3.select('.info .text').style('display', 'block')
+    text.select('.title').text(datum)
+    text.select('.description').text('Mollis maecenas eu orci vitae nibh euismod. Morbi bibendum tellus massa ultricies cras mattis aenean senectus. Et quis faucibus nulla enim volutpat amet. Pharetra, neque ipsum in lorem. Dictumst malesuada viverra felis, diam consequat non accumsan, tristique nulla. \n' +
+      '\n' +
+      'A amet dictumst aliquet aenean eget aenean nunc sed interdum.\n' +
+      'Dui lectus vulputate ultricies nunc, arcu volutpat lorem in amet.')
+    text.select('.source').text('Source: ' + 'wikipedia.org')
   }
 
   console.log('Radar charts - DONE!')
