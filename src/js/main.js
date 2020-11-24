@@ -1,7 +1,7 @@
-(function () {
-  resize()
-  window.addEventListener('resize', resize)
-}())
+resize()
+window.addEventListener('resize', resize)
+
+eva.replace()
 
 function resize () {
   window.innerWidth < 991.98 ? showWarning() : hideWarning()

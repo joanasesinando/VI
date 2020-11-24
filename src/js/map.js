@@ -37,4 +37,12 @@ const zoom = d3.zoom()
 
 svg.call(zoom)
 
+d3.select('.map .zoom .plus').on('click', () => {
+  zoom.scaleBy(svg.transition().duration(200), 1.5)
+})
+
+d3.select('.map .zoom .minus').on('click', () => {
+  zoom.scaleBy(svg.transition().duration(200), 0.5)
+})
+
 console.log('Map - DONE!')
