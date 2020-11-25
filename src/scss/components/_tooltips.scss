@@ -1,0 +1,25 @@
+.tooltip {
+	position: absolute;
+	line-height: 1.1rem;
+	padding: .5rem .6rem;
+	background-color: white;
+	color: color(typography, 1);
+	pointer-events: none;
+	border-radius: 10px;
+	box-shadow: 0 1.77778px 8.88889px 8.88889px rgba(0, 0, 0, 0.16);
+
+	&:after {
+		content: '';
+		display: block;
+		position: absolute;
+		bottom: -5px;
+		left: 50%;
+		transform: translateX(-50%);
+
+		width: 0;
+		height: 0;
+		border-top: solid 8px white;
+		border-left: solid 8px transparent;
+		border-right: solid 8px transparent;
+	}
+}

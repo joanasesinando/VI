@@ -1,0 +1,26 @@
+.test {
+	svg {
+		max-width: 100%;
+	}
+
+	.axis {
+		line, path {
+			fill: transparent;
+			stroke: #555;
+		}
+	}
+
+	.bar.left {
+		fill: color(primary, 1);
+		&:hover {
+			fill: color(primary, 2);
+		}
+	}
+
+	.bar.right {
+		fill: color(secondary, 1);
+		&:hover {
+			fill: color(secondary, 2);
+		}
+	}
+}
