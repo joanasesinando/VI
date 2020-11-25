@@ -78,14 +78,14 @@
     {
       name: 'default results: averages',
       axes: [
-        { axis: 'C & U', value: cu / data_tipi.length },
+        { axis: 'C & U', value: 7 - (cu / data_tipi.length) },
         { axis: 'E & E', value: ee / data_tipi.length },
-        { axis: 'R & Q', value: rq / data_tipi.length },
-        { axis: 'C & S', value: cs / data_tipi.length },
+        { axis: 'R & Q', value: 7 - (rq / data_tipi.length) },
+        { axis: 'C & S', value: 7 - (cs / data_tipi.length) },
         { axis: 'A & U', value: au / data_tipi.length },
         { axis: 'D & S', value: ds / data_tipi.length },
-        { axis: 'D & C', value: dc / data_tipi.length },
-        { axis: 'C & Q', value: cq / data_tipi.length },
+        { axis: 'D & C', value: 7 - (dc / data_tipi.length) },
+        { axis: 'C & Q', value: 7 - (cq / data_tipi.length) },
         { axis: 'S & W', value: sw / data_tipi.length },
         { axis: 'O & C', value: oc / data_tipi.length }
       ]
@@ -102,9 +102,10 @@
     margin: margin,
     levels: 5,
     maxValue: 100,
+    startAngle: 0,
     roundStrokes: false,
     color: d3.scaleOrdinal().range(['#EE7DB1']),
-    format: '.0f',
+    format: '.1f',
     unit: '%'
   }
 
@@ -114,9 +115,10 @@
     margin: margin,
     levels: 7,
     maxValue: 7,
+    startAngle: Math.PI / 10,
     roundStrokes: false,
     color: d3.scaleOrdinal().range(['#EE7DB1']),
-    format: '.0f'
+    format: '.1f'
   }
 
   const svg_radar_big5 = RadarChart('.radar-big5', big5_default, radarOptionsBigFive)
@@ -167,6 +169,7 @@
       margin: { top: 20, right: 20, bottom: 20, left: 20 }, // The margins of the SVG
       levels: 3,				// How many levels or inner circles should there be drawn
       maxValue: 0, 			// What is the value that the biggest circle will represent
+      startAngle: 0, // The starting angle for the radar, 0 means the 1st line is vertical
       labelFactor: 1.25, 	// How much farther than the radius of the outer circle should the labels be placed
       wrapWidth: 60, 		// The number of pixels after which a label needs to be given a new line
       opacityArea: 0.35, 	// The opacity of the area of the blob
@@ -285,8 +288,8 @@
     axis.append('line')
       .attr('x1', 0)
       .attr('y1', 0)
-      .attr('x2', (d, i) => rScale(maxValue * 1.1) * Math.cos(angleSlice * i - (Math.PI / 2)))
-      .attr('y2', (d, i) => rScale(maxValue * 1.1) * Math.sin(angleSlice * i - (Math.PI / 2)))
+      .attr('x2', (d, i) => rScale(maxValue * 1.1) * Math.cos(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
+      .attr('y2', (d, i) => rScale(maxValue * 1.1) * Math.sin(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
       .attr('class', 'line')
       .style('stroke', '#dedef0')
       .style('stroke-width', '1px')
@@ -302,8 +305,8 @@
       .attr('fill', '#393874')
       .attr('text-anchor', 'middle')
       .attr('dy', '0.35em')
-      .attr('x', (d, i) => rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice * i - (Math.PI / 2)))
-      .attr('y', (d, i) => rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice * i - (Math.PI / 2)))
+      .attr('x', (d, i) => rScale(maxValue * cfg.labelFactor) * Math.cos(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
+      .attr('y', (d, i) => rScale(maxValue * cfg.labelFactor) * Math.sin(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
       .text(d => d)
       .call(wrap, cfg.wrapWidth)
       .on('mouseover', (event) => {
@@ -325,7 +328,7 @@
     const radarLine = d3.radialLine()
       .curve(d3.curveLinearClosed)
       .radius(d => rScale(d.value))
-      .angle((d, i) => i * angleSlice)
+      .angle((d, i) => cfg.startAngle + i * angleSlice)
 
     if (cfg.roundStrokes) {
       radarLine.curve(d3.curveCardinalClosed)
@@ -377,8 +380,8 @@
       .append('circle')
       .attr('class', 'radarCircle')
       .attr('r', cfg.dotRadius)
-      .attr('cx', (d, i) => rScale(d.value) * Math.cos(angleSlice * i - (Math.PI / 2)))
-      .attr('cy', (d, i) => rScale(d.value) * Math.sin(angleSlice * i - (Math.PI / 2)))
+      .attr('cx', (d, i) => rScale(d.value) * Math.cos(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
+      .attr('cy', (d, i) => rScale(d.value) * Math.sin(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
       .style('fill', (d) => cfg.color(d.id))
       .style('fill-opacity', 0.8)
 
@@ -398,8 +401,8 @@
       .enter().append('circle')
       .attr('class', 'radarInvisibleCircle')
       .attr('r', cfg.dotRadius * 4)
-      .attr('cx', (d, i) => rScale(d.value) * Math.cos(angleSlice * i - (Math.PI / 2)))
-      .attr('cy', (d, i) => rScale(d.value) * Math.sin(angleSlice * i - (Math.PI / 2)))
+      .attr('cx', (d, i) => rScale(d.value) * Math.cos(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
+      .attr('cy', (d, i) => rScale(d.value) * Math.sin(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
       .style('fill', 'none')
       .style('pointer-events', 'all')
       .on('mouseover', function (e, d) {
