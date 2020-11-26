@@ -6,8 +6,14 @@
 			color: color(typography, 1);
 		}
 
-		.radar-big5, .radar-tipi {
-			width: 48%;
+		.radar-big5 {
+			width: 40%;
+			@media only screen and (max-width: 1080px) { width: 35%; }
+		}
+
+		.radars-tipi {
+			width: 60%;
+			@media only screen and (max-width: 1080px) { width: 65%; }
 		}
 
 		svg {

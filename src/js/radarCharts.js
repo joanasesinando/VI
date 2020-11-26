@@ -1,11 +1,12 @@
 (async function () {
-  console.log('Drawing radar charts...')
+  console.log('%cDrawing radar charts...', 'color: #EE7DB1; font-weight: bold')
+  const t0 = performance.now()
 
   /** * -------------------------------------------- ***/
   /** * ------------------ Set Up ------------------ ***/
   /** * -------------------------------------------- ***/
 
-  const margin = { top: 40, right: 55, bottom: 50, left: 55 }
+  const margin = { top: 40, right: 50, bottom: 30, left: 50 }
   const width = 180
   const height = 180
 
@@ -22,25 +23,34 @@
   let conscientiousness = 0
   let agreeableness = 0
 
-  // Calculate global average
+  // Get sums
   for (const key in data_big5) {
-    const entry = data_big5[key]
-    openness += entry.Openness
-    extraversion += entry.Extraversion
-    neuroticism += entry.Neuroticism
-    conscientiousness += entry.Conscientiousness
-    agreeableness += entry.Agreeableness
+    if (Object.prototype.hasOwnProperty.call(data_big5, key)) {
+      const entry = data_big5[key]
+      openness += entry.Openness
+      extraversion += entry.Extraversion
+      neuroticism += entry.Neuroticism
+      conscientiousness += entry.Conscientiousness
+      agreeableness += entry.Agreeableness
+    }
   }
+
+  // Get averages
+  openness = openness / data_big5.length
+  extraversion = extraversion / data_big5.length
+  neuroticism = neuroticism / data_big5.length
+  conscientiousness = conscientiousness / data_big5.length
+  agreeableness = agreeableness / data_big5.length
 
   const big5_default = [
     {
-      name: 'default results: averages',
+      name: 'default results: big five',
       axes: [
-        { axis: 'Openness', value: openness / data_big5.length },
-        { axis: 'Extraversion', value: extraversion / data_big5.length },
-        { axis: 'Neuroticism', value: neuroticism / data_big5.length },
-        { axis: 'Conscientiousness', value: conscientiousness / data_big5.length },
-        { axis: 'Agreeableness', value: agreeableness / data_big5.length }
+        { axis: 'O', value: openness },
+        { axis: 'E', value: extraversion },
+        { axis: 'N', value: neuroticism },
+        { axis: 'C', value: conscientiousness },
+        { axis: 'A', value: agreeableness }
       ]
     }
   ]
@@ -59,35 +69,57 @@
   let cs = 0
   let cu = 0
 
-  // Calculate global average
+  // Get sums
   for (const key in data_tipi) {
-    const entry = data_tipi[key]
-    ee += entry.TIPI1
-    cq += entry.TIPI2
-    ds += entry.TIPI3
-    au += entry.TIPI4
-    oc += entry.TIPI5
-    rq += entry.TIPI6
-    sw += entry.TIPI7
-    dc += entry.TIPI8
-    cs += entry.TIPI9
-    cu += entry.TIPI10
+    if (Object.prototype.hasOwnProperty.call(data_tipi, key)) {
+      const entry = data_tipi[key]
+      ee += entry.TIPI1
+      cq += entry.TIPI2
+      ds += entry.TIPI3
+      au += entry.TIPI4
+      oc += entry.TIPI5
+      rq += entry.TIPI6
+      sw += entry.TIPI7
+      dc += entry.TIPI8
+      cs += entry.TIPI9
+      cu += entry.TIPI10
+    }
   }
 
-  const tipi_default = [
+  // Get averages
+  ee = ee / data_tipi.length
+  au = au / data_tipi.length
+  ds = ds / data_tipi.length
+  sw = sw / data_tipi.length
+  oc = oc / data_tipi.length
+  cu = 7 - (cu / data_tipi.length)
+  rq = 7 - (rq / data_tipi.length)
+  cs = 7 - (cs / data_tipi.length)
+  dc = 7 - (dc / data_tipi.length)
+  cq = 7 - (cq / data_tipi.length)
+
+  const tipi_pos_default = [
     {
-      name: 'default results: averages',
+      name: 'default results: tipi pos',
       axes: [
-        { axis: 'C & U', value: 7 - (cu / data_tipi.length) },
-        { axis: 'E & E', value: ee / data_tipi.length },
-        { axis: 'R & Q', value: 7 - (rq / data_tipi.length) },
-        { axis: 'C & S', value: 7 - (cs / data_tipi.length) },
-        { axis: 'A & U', value: au / data_tipi.length },
-        { axis: 'D & S', value: ds / data_tipi.length },
-        { axis: 'D & C', value: 7 - (dc / data_tipi.length) },
-        { axis: 'C & Q', value: 7 - (cq / data_tipi.length) },
-        { axis: 'S & W', value: sw / data_tipi.length },
-        { axis: 'O & C', value: oc / data_tipi.length }
+        { axis: 'O & C', value: oc },
+        { axis: 'E & E', value: ee },
+        { axis: 'A & U', value: au },
+        { axis: 'D & S', value: ds },
+        { axis: 'S & W', value: sw }
+      ]
+    }
+  ]
+
+  const tipi_neg_default = [
+    {
+      name: 'default results: tipi neg',
+      axes: [
+        { axis: 'C & U', value: cu },
+        { axis: 'R & Q', value: rq },
+        { axis: 'C & S', value: cs },
+        { axis: 'D & C', value: dc },
+        { axis: 'C & Q', value: cq }
       ]
     }
   ]
@@ -110,19 +142,25 @@
   }
 
   const radarOptionsTipi = {
-    w: width,
+    w: width - 50,
     h: height,
     margin: margin,
     levels: 7,
     maxValue: 7,
-    startAngle: Math.PI / 10,
+    startAngle: 0,
     roundStrokes: false,
     color: d3.scaleOrdinal().range(['#EE7DB1']),
     format: '.1f'
   }
 
-  const svg_radar_big5 = RadarChart('.radar-big5', big5_default, radarOptionsBigFive)
-  const svg_radar_tipi = RadarChart('.radar-tipi', tipi_default, radarOptionsTipi)
+  // Originall sizes for resizing
+  const big5_original_size = radarOptionsBigFive.w
+  const tipi_original_size = radarOptionsTipi.w
+
+  resize()
+  window.onresize = resize
+
+  drawCharts()
 
   /// //////////////////////////////////////////////////////
   /// //////////// The Radar Chart Function ////////////////
@@ -472,13 +510,40 @@
         .attr('fill', '#393874')
         .text(d => d)
     }
-    rotateTipiChart(rScale, maxValue, angleSlice, cfg)
     return svg
   }
 
   /** * -------------------------------------------- ***/
   /** * ------------------ Functions --------------- ***/
   /** * -------------------------------------------- ***/
+
+  // Draws all charts
+  function drawCharts () {
+    RadarChart('.radar-big5', big5_default, radarOptionsBigFive)
+    RadarChart('.radar-tipi-pos', tipi_pos_default, radarOptionsTipi)
+    RadarChart('.radar-tipi-neg', tipi_neg_default, radarOptionsTipi)
+  }
+
+  // Resizes the radar charts
+  function resize () {
+    if (window.innerWidth < 1080) {
+      radarOptionsBigFive.w = big5_original_size - 50
+      radarOptionsTipi.w = tipi_original_size - 30
+      radarOptionsBigFive.margin = { top: 20, right: 20, bottom: 20, left: 20 }
+      radarOptionsTipi.margin = { top: 20, right: 25, bottom: 20, left: 25 }
+    } else if (window.innerWidth < 1200) {
+      radarOptionsBigFive.w = big5_original_size - 30
+      radarOptionsTipi.w = tipi_original_size - 15
+      radarOptionsBigFive.margin = { top: 20, right: 20, bottom: 20, left: 20 }
+      radarOptionsTipi.margin = { top: 20, right: 25, bottom: 20, left: 25 }
+    } else {
+      radarOptionsBigFive.w = big5_original_size
+      radarOptionsTipi.w = tipi_original_size
+      radarOptionsBigFive.margin = { top: 40, right: 20, bottom: 30, left: 20 }
+      radarOptionsTipi.margin = { top: 40, right: 25, bottom: 30, left: 25 }
+    }
+    drawCharts()
+  }
 
   // Shows information on the left section
   function showInfo (event, datum) {
@@ -492,19 +557,7 @@
       .attr('href', '#')
   }
 
-  // Rotates Tipi chart
-  function rotateTipiChart (rScale, maxValue, angleSlice, cfg) {
-    // d3.selectAll('.radar-tipi .axisLabel')
-    //   .attr('x', (d, i) => -i * 4 + 33)
-    //
-    // d3.selectAll('.radar-tipi .axis line')
-    //   .attr('x2', (d, i) => rScale(maxValue * 1.1) * Math.cos(angleSlice * i - 60 - (Math.PI / 2)))
-    //   .attr('y2', (d, i) => rScale(maxValue * 1.1) * Math.sin(angleSlice * i - 60 - (Math.PI / 2)))
-    //
-    // d3.selectAll('.radar-tipi .axis .legend tspan')
-    //   .attr('x', (d, i) => rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice * i - 60 - (Math.PI / 2)))
-    //   .attr('y', (d, i) => rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice * i - 60 - (Math.PI / 2)))
-  }
-
-  console.log('Radar charts - DONE!')
+  const t1 = performance.now()
+  const time = (t1 - t0) / 1000
+  console.log('%cRadar charts - DONE! (' + time.toFixed(2) + 's)', 'color: #EE7DB1; font-weight: bold')
 }())
