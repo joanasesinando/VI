@@ -16,38 +16,39 @@
     middle: 20
   }
 
-  /** * -------------------------------------------- ***/
-  /** * ------------------ Data -------------------- ***/
-  /** * -------------------------------------------- ***/
-
-  // Get data
-  const dataRaw = await d3.json('dist/data/big5_population.json')
-  const data = []
-
-  for (const key in dataRaw) {
-    const entry = dataRaw[key]
-    data.push({ age: entry.Age, male: entry.Agreeableness_M, female: entry.Agreeableness_F })
-  }
-
   const pyramidOptions = {
     w: width,
     h: height,
     margin: margin,
-    type: 'big5'
+    type: ''
   }
+
+  const data = []
+  data.push({ age: '10-15', male: 0, female: 0 })
+  data.push({ age: '16-20', male: 0, female: 0 })
+  data.push({ age: '21-25', male: 0, female: 0 })
+  data.push({ age: '26-30', male: 0, female: 0 })
+  data.push({ age: '31-35', male: 0, female: 0 })
+  data.push({ age: '36-40', male: 0, female: 0 })
+  data.push({ age: '41-45', male: 0, female: 0 })
+  data.push({ age: '46-50', male: 0, female: 0 })
+  data.push({ age: '51-55', male: 0, female: 0 })
+  data.push({ age: '56-60', male: 0, female: 0 })
+  data.push({ age: '61-65', male: 0, female: 0 })
+  data.push({ age: '66-70', male: 0, female: 0 })
 
   /** * ---------------------------------------------------- ***/
   /** * ------------------ Draw pyramid --------------------- ***/
   /** * ---------------------------------------------------- ***/
 
-  pyramidBuilder('.population-pyramid', data, pyramidOptions)
+  drawPopulationPyramid('.population-pyramid', data, pyramidOptions)
 
   const t1 = performance.now()
   const time = (t1 - t0) / 1000
   console.log('%cPyramid - DONE! (' + time.toFixed(2) + 's)', 'color: #8675FF; font-weight: bold')
 }())
 
-function pyramidBuilder (target, data, options) {
+function drawPopulationPyramid (target, data, options) {
   let w = typeof options.w === 'undefined' ? 400 : options.w
   let h = typeof options.h === 'undefined' ? 400 : options.h
   const w_full = w
@@ -81,7 +82,7 @@ function pyramidBuilder (target, data, options) {
   // the xScale goes from 0 to the width of a region
   //  it will be reversed for the left x-axis
   const xScale = d3.scaleLinear()
-    .domain(options.type === 'big5' ? [0, 1] : options.type === 'tipi' ? [1, 7] : [0, 0])
+    .domain(options.type === 'big5' ? [0, 1] : options.type === 'tipi' ? [1, 7] : [0, 1])
     .range([0, (sectorWidth - options.margin.middle)])
     .nice()
 
@@ -102,7 +103,7 @@ function pyramidBuilder (target, data, options) {
 
   const xAxisRight = d3.axisBottom()
     .scale(xScale)
-    .tickFormat(d3.format(options.type === 'big5' ? '.0%' : '.1f'))
+    .tickFormat(d3.format(options.type === 'big5' ? '.0%' : options.type === 'tipi' ? '.1f' : '.0%'))
 
   const xAxisRightRule = d3.axisBottom()
     .scale(xScale)
@@ -117,7 +118,7 @@ function pyramidBuilder (target, data, options) {
   const xAxisLeft = d3.axisBottom()
     // REVERSE THE X-AXIS SCALE ON THE LEFT SIDE BY REVERSING THE RANGE
     .scale(xScale.copy().range([leftBegin, 0]))
-    .tickFormat(d3.format(options.type === 'big5' ? '.0%' : '.1f'))
+    .tickFormat(d3.format(options.type === 'big5' ? '.0%' : options.type === 'tipi' ? '.1f' : '.0%'))
 
   // MAKE GROUPS FOR EACH SIDE OF CHART
   // scale(-1,1) is used to reverse the left side so the bars grow left instead of right
@@ -133,7 +134,7 @@ function pyramidBuilder (target, data, options) {
     .attr('class', 'bar left')
     .attr('x', 0)
     .attr('y', d => yScale(d.age) + options.margin.middle / 4)
-    .attr('width', d => options.type === 'big5' ? xScale(d.male) / 100 : xScale(d.male))
+    .attr('width', d => options.type === 'big5' ? xScale(d.male) / 100 : options.type === 'tipi' ? xScale(d.male) : xScale(d.male) / 100)
     .attr('height', (yScale.range()[0] / data.length) - options.margin.middle / 4)
     .on('mouseover', (event, d) => {
       tooltipDiv.transition()
@@ -155,7 +156,7 @@ function pyramidBuilder (target, data, options) {
     .attr('class', 'bar right')
     .attr('x', 0)
     .attr('y', d => yScale(d.age) + options.margin.middle / 4)
-    .attr('width', d => options.type === 'big5' ? xScale(d.female) / 100 : xScale(d.female))
+    .attr('width', d => options.type === 'big5' ? xScale(d.male) / 100 : options.type === 'tipi' ? xScale(d.male) : xScale(d.male) / 100)
     .attr('height', (yScale.range()[0] / data.length) - options.margin.middle / 4)
     .on('mouseover', (event, d) => {
       tooltipDiv.transition()
