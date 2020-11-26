@@ -41,7 +41,7 @@
   /** * ------------------ Draw pyramid --------------------- ***/
   /** * ---------------------------------------------------- ***/
 
-  drawPopulationPyramid('.population-pyramid', data, pyramidOptions)
+  // drawPopulationPyramid('.population-pyramid', data, pyramidOptions)
 
   const t1 = performance.now()
   const time = (t1 - t0) / 1000
