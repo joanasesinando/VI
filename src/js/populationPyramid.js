@@ -1,5 +1,6 @@
 (async function () {
-  console.log('Drawing pyramid...')
+  console.log('%cDrawing pyramid...', 'color: #8675FF; font-weight: bold')
+  const t0 = performance.now()
 
   /** * -------------------------------------------- ***/
   /** * ------------------ Set Up ------------------ ***/
@@ -265,5 +266,7 @@
     }
   }
 
-  console.log('Pyramid - DONE!')
+  const t1 = performance.now()
+  const time = (t1 - t0) / 1000
+  console.log('%cPyramid - DONE! (' + time.toFixed(2) + 's)', 'color: #8675FF; font-weight: bold')
 }())
