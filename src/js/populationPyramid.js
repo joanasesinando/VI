@@ -25,7 +25,7 @@
 
   for (const key in dataRaw) {
     const entry = dataRaw[key]
-    data.push({ age: entry.Age, male: entry.Openness_M, female: entry.Openness_F })
+    data.push({ age: entry.Age, male: entry.Neuroticism_M, female: entry.Neuroticism_F })
   }
 
   // const data = [
@@ -114,20 +114,20 @@
       .attr('class', 'inner-region')
       .attr('transform', translation(margin.left, margin.top))
 
-    // // find the maximum data value for whole dataset
-    // // and rounds up to nearest 5%
-    // //  since this will be shared by both of the x-axes
-    // const maxValue = Math.ceil(Math.max(
-    //   d3.max(data, d => d.male),
-    //   d3.max(data, d => d.female)
-    // ) / 0.05) * 0.05
+    // find the maximum data value for whole dataset
+    // and rounds up to nearest 5%
+    //  since this will be shared by both of the x-axes
+    const maxValue = Math.ceil(Math.max(
+      d3.max(data, d => d.male),
+      d3.max(data, d => d.female)
+    ) / 0.05) * 0.05
 
     // SET UP SCALES
 
     // the xScale goes from 0 to the width of a region
     //  it will be reversed for the left x-axis
     const xScale = d3.scaleLinear()
-      .domain([0, 1])
+      .domain([0, 0.8])
       .range([0, (sectorWidth - margin.middle)])
       .nice()
 
@@ -150,6 +150,16 @@
       .scale(xScale)
       .tickFormat(d3.format('.0%'))
 
+    const xAxisRightRule = d3.axisBottom()
+      .scale(xScale)
+      .tickSize(-h, 0, 0)
+      .tickFormat('')
+
+    const xAxisLeftRule = d3.axisBottom()
+      .scale(xScale.copy().range([leftBegin, 0]))
+      .tickSize(-h, 0, 0)
+      .tickFormat('')
+
     const xAxisLeft = d3.axisBottom()
       // REVERSE THE X-AXIS SCALE ON THE LEFT SIDE BY REVERSING THE RANGE
       .scale(xScale.copy().range([leftBegin, 0]))
@@ -161,29 +171,6 @@
       .attr('transform', translation(leftBegin, 0) + 'scale(-1,1)')
     const rightBarGroup = pyramid.append('g')
       .attr('transform', translation(rightBegin, 0))
-
-    // DRAW AXES
-    pyramid.append('g')
-      .attr('class', 'axis y left')
-      .attr('transform', translation(leftBegin, 0))
-      .call(yAxisLeft)
-      .selectAll('text')
-      .style('text-anchor', 'middle')
-
-    pyramid.append('g')
-      .attr('class', 'axis y right')
-      .attr('transform', translation(rightBegin, 0))
-      .call(yAxisRight)
-
-    pyramid.append('g')
-      .attr('class', 'axis x left')
-      .attr('transform', translation(0, h))
-      .call(xAxisLeft)
-
-    pyramid.append('g')
-      .attr('class', 'axis x right')
-      .attr('transform', translation(rightBegin, h))
-      .call(xAxisRight)
 
     // DRAW BARS
     leftBarGroup.selectAll('.bar.left')
@@ -214,7 +201,7 @@
       .attr('class', 'bar right')
       .attr('x', 0)
       .attr('y', d => yScale(d.age) + margin.middle / 4)
-      .attr('width', d => xScale(d.female))
+      .attr('width', d => xScale(d.female) / 100)
       .attr('height', (yScale.range()[0] / data.length) - margin.middle / 2)
       .on('mouseover', (event, d) => {
         tooltipDiv.transition()
@@ -229,6 +216,41 @@
           .duration(500)
           .style('opacity', 0)
       })
+
+    // DRAW AXES
+    pyramid.append('g')
+      .attr('class', 'axis y left')
+      .attr('transform', translation(leftBegin, 0))
+      .call(yAxisLeft)
+      .selectAll('text')
+      .style('text-anchor', 'middle')
+
+    pyramid.append('g')
+      .attr('class', 'axis y right')
+      .attr('transform', translation(rightBegin, 0))
+      .call(yAxisRight)
+
+    pyramid.append('g')
+      .attr('class', 'axis x left')
+      .attr('transform', translation(0, h))
+      .call(xAxisLeft)
+
+    pyramid.append('g')
+      .attr('class', 'grid')
+      .attr('transform', translation(0, h))
+      .call(xAxisLeftRule)
+      .style('opacity', 0.1)
+
+    pyramid.append('g')
+      .attr('class', 'axis x right')
+      .attr('transform', translation(rightBegin, h))
+      .call(xAxisRight)
+
+    pyramid.append('g')
+      .attr('class', 'grid')
+      .attr('transform', translation(rightBegin, h))
+      .call(xAxisRightRule)
+      .style('opacity', 0.1)
 
     /* HELPER FUNCTIONS */
 
