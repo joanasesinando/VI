@@ -31,6 +31,7 @@
 		.male {
 			span { color: color(primary, 1); }
 			&:hover {
+				span { color: color(primary, 2); }
 				img { content:url('../imgs/male-hover.svg'); }
 			}
 		}
@@ -38,6 +39,7 @@
 		.female {
 			span { color: color(secondary, 1); }
 			&:hover {
+				span { color: color(secondary, 2); }
 				img { content:url('../imgs/female-hover.svg'); }
 			}
 		}
