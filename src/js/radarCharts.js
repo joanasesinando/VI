@@ -505,7 +505,7 @@ function drawCharts () {
 
 // Select trait
 function selectTrait (event, datum) {
-  event.target.classList.contains('selected') ? hideInfo() : showInfo(datum)
+  showInfo(datum)
 
   // remove other selected if not same
   if (!event.target.classList.contains('selected')) {
@@ -513,8 +513,8 @@ function selectTrait (event, datum) {
     $('.axis.selected').removeClass('selected')
   }
 
-  event.target.classList.toggle('selected')
-  $('.axis.' + datum).toggleClass('selected')
+  event.target.classList.add('selected')
+  $('.axis.' + datum).addClass('selected')
 
   // Update population pyramid
   updatePopulationPyramid(datum)
