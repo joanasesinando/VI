@@ -13,7 +13,7 @@ let radarOptionsTipiNeg
 let big5_original_size
 let tipi_original_size
 
-const colors = ['#b9b9d2', '#8675FF', '#66C8FF', '#ff9065', '#EE7DB1', '#FFBA69', '#42CC7E'];
+const colors = ['#b9b9d2', '#8675FF', '#ff9065', '#42CC7E', '#66C8FF', '#EE7DB1', '#FFBA69'];
 
 (async function () {
   console.log('%cDrawing radar charts...', 'color: #EE7DB1; font-weight: bold')
@@ -421,7 +421,7 @@ function RadarChart (parent_selector, data, options) {
     .data(d => d.axes)
     .enter().append('circle')
     .attr('class', 'radarInvisibleCircle')
-    .attr('r', cfg.dotRadius * 4)
+    .attr('r', cfg.dotRadius + 1)
     .attr('cx', (d, i) => rScale(d.value) * Math.cos(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
     .attr('cy', (d, i) => rScale(d.value) * Math.sin(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
     .style('fill', 'none')
@@ -756,7 +756,7 @@ function addToSaved (id, type) {
 
   div.append('span')
     .attr('class', 'subtitle')
-    .text(formatText(id))
+    .text(id.includes('|') ? formatText(id) : id)
 
   // Render new icons
   eva.replace()
@@ -778,7 +778,7 @@ function addToSaved (id, type) {
       case 'age&gender':
         return {
           icon: 'bar-chart-outline',
-          title: 'Bar'
+          title: 'Population'
         }
     }
   }
@@ -790,15 +790,15 @@ function addToSaved (id, type) {
       case 1:
         return 'purple'
       case 2:
-        return 'blue'
-      case 3:
         return 'orange'
-      case 4:
-        return 'pink'
-      case 5:
-        return 'yellow'
-      case 6:
+      case 3:
         return 'green'
+      case 4:
+        return 'blue'
+      case 5:
+        return 'pink'
+      case 6:
+        return 'yellow'
     }
   }
 
