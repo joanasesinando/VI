@@ -1,4 +1,9 @@
 .saved-btn {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
 	height: 120px;
 	width: 100px;
 	border-radius: 10px;
@@ -41,21 +46,7 @@
 
 	.subtitle {
 		@include font-weight(light);
-		font-size: .7rem;
-	}
-}
-
-.saved-btn.muted {
-	background-color: color(bg, 2);
-	.icon {
-		background-color: darken(color(bg, 2), 5);
-		svg { fill: color(typography, 4) }
-	}
-	.title, .subtitle { color: color(typography, 4); }
-	&:hover {
-		background-color: darken(color(bg, 2), 2);
-		border: 2px solid #f5f7fb;
-		.icon { background-color: darken(color(bg, 2), 10); }
+		font-size: .6rem;
 	}
 }
 
@@ -116,5 +107,19 @@
 		background-color: darken(color(additional-4, 1), 2);
 		border: 2px solid color(additional-4, 3);
 		.icon { background-color: darken(color(additional-4, 2), 2); }
+	}
+}
+
+.saved-btn.muted {
+	background-color: color(bg, 2);
+	.icon {
+		background-color: darken(color(bg, 2), 5);
+		svg { fill: color(typography, 4) }
+	}
+	.title, .subtitle { color: color(typography, 4); }
+	&:hover {
+		background-color: darken(color(bg, 2), 2);
+		border: 2px solid #f5f7fb;
+		.icon { background-color: darken(color(bg, 2), 10); }
 	}
 }
