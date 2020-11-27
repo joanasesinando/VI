@@ -789,14 +789,17 @@ function addToSaved (id, type, color) {
 }
 
 function removeFromSaved (el, id) {
-  for (let i = 0; i < radarBig5Data.length; i++) {
+  for (let i = radarBig5Data.length - 1; i >= 0; i--) {
     if (radarBig5Data[i].name === 'big five - ' + id) {
       radarBig5Data.splice(i, 1)
-      radarTipiPosData.splice((i, 1))
-      radarTipiNegData.splice((i, 1))
+      radarTipiPosData.splice(i, 1)
+      radarTipiNegData.splice(i, 1)
     }
   }
 
+  console.log(radarBig5Data)
+  console.log(radarTipiPosData)
+  console.log(radarTipiNegData)
   drawCharts()
   $('.saved-btns #' + id).remove()
 }
