@@ -11,7 +11,7 @@ body {
 }
 
 .info, .radar-charts, .map-pyramid {
-	height: 55vh;
+	height: 60vh;
 	@include margin-top(large);
 }
 
@@ -39,7 +39,7 @@ body {
 
 .parallel-coordinates {
 	width: 100%;
-	height: 31.6vh;
+	height: 27vh;
 	@include margin-top(medium);
 	background-color: color(bg, 3);
 	border-top-left-radius: 30px;

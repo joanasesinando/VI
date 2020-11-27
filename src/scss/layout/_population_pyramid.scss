@@ -1,41 +1,73 @@
 .population-pyramid {
 	position: relative;
 
+	.age, .gender {
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+
+	.gender {
+		bottom: 0;
+	}
+
+	.gender-symbols {
+		position: absolute;
+		bottom: 10px;
+		width: 100%;
+		cursor: pointer;
+		img {
+			width: 18px;
+			&.male:hover {
+				content:url('../imgs/male-selected.svg');
+			}
+			&.female:hover {
+				content:url('../imgs/female-selected.svg');
+			}
+		}
+	}
+
 	svg {
 		max-width: 100%;
 		position: absolute;
 		top: 50%;
 		left: 52%;
 		transform: translate(-50%, -50%);
-	}
 
-	.axis {
-		line, path {
-			fill: transparent;
-			stroke: #555;
+		.axis {
+			line, path {
+				fill: transparent;
+				stroke: #dedef0;
+			}
 		}
-	}
 
-	.bar {
-		cursor: pointer;
-	}
-
-	.bar.left {
-		fill: color(primary, 1);
-		&:hover {
-			fill: color(primary, 2);
+		.bar {
+			cursor: pointer;
 		}
-	}
 
-	.bar.right {
-		fill: color(secondary, 1);
-		&:hover {
-			fill: color(secondary, 2);
+		.bar.left {
+			fill: color(primary, 1);
+			&:hover {
+				fill: color(primary, 2);
+			}
 		}
-	}
 
-	.tick text {
-		font-size: 8px;
-		@include font-weight(bold);
+		.bar.right {
+			fill: color(secondary, 1);
+			&:hover {
+				fill: color(secondary, 2);
+			}
+		}
+
+		.tick text {
+			font-size: 8px;
+			@include font-weight(bold);
+			color: color(typography, 1);
+		}
+
+		.axis.x.left .tick text,
+		.axis.x.right .tick text {
+			color: color(typography, 4);
+		}
 	}
 }

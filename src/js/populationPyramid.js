@@ -11,8 +11,8 @@ let yScalePyramid
   /** * -------------------------------------------- ***/
 
   const width = 470
-  const height = 224.4
-  const margin = { top: 20, right: 10, bottom: 20, left: 10, middle: 20 }
+  const height = 170
+  const margin = { top: 0, right: 10, bottom: 15, left: 10, middle: 20 }
 
   const pyramidOptions = {
     w: width,
@@ -139,9 +139,9 @@ function drawPopulationPyramid (target, data, options) {
     .enter().append('rect')
     .attr('class', 'bar left')
     .attr('x', 0)
-    .attr('y', d => yScalePyramid(d.age) + options.margin.middle / 4)
+    .attr('y', d => yScalePyramid(d.age) + 2)
     .attr('width', d => options.type === 'big5' ? xScalePyramid(d.male) / 100 : options.type === 'tipi' ? xScalePyramid((d.male - 1) * 100 / 6) / 100 : xScalePyramid(d.male) / 100)
-    .attr('height', (yScalePyramid.range()[0] / data.length) - options.margin.middle / 4)
+    .attr('height', (yScalePyramid.range()[0] / data.length) - 2)
     .on('mouseover', (event, d) => {
       tooltipDiv.transition()
         .duration(200)
@@ -162,9 +162,9 @@ function drawPopulationPyramid (target, data, options) {
     .enter().append('rect')
     .attr('class', 'bar right')
     .attr('x', 0)
-    .attr('y', d => yScalePyramid(d.age) + options.margin.middle / 4)
+    .attr('y', d => yScalePyramid(d.age) + 2)
     .attr('width', d => options.type === 'big5' ? xScalePyramid(d.female) / 100 : options.type === 'tipi' ? xScalePyramid((d.female - 1) * 100 / 6) / 100 : xScalePyramid(d.female) / 100)
-    .attr('height', (yScalePyramid.range()[0] / data.length) - options.margin.middle / 4)
+    .attr('height', (yScalePyramid.range()[0] / data.length) - 2)
     .on('mouseover', (event, d) => {
       tooltipDiv.transition()
         .duration(200)
@@ -247,9 +247,9 @@ async function updatePopulationPyramid (traitSelected) {
     .duration(1000)
     .ease(d3.easeCubic)
     .attr('x', 0)
-    .attr('y', d => yScalePyramid(d.age) + 5)
+    .attr('y', d => yScalePyramid(d.age) + 2)
     .attr('width', d => type === 'big5' ? xScalePyramid(d.male) / 100 : type === 'tipi' ? xScalePyramid((d.male - 1) * 100 / 6) / 100 : xScalePyramid(d.male) / 100)
-    .attr('height', (yScalePyramid.range()[0] / data.length) - 5)
+    .attr('height', (yScalePyramid.range()[0] / data.length) - 2)
 
   d3.selectAll('.bar.right')
     .data(populationPyramidData)
@@ -257,7 +257,7 @@ async function updatePopulationPyramid (traitSelected) {
     .duration(1000)
     .ease(d3.easeCubic)
     .attr('x', 0)
-    .attr('y', d => yScalePyramid(d.age) + 5)
+    .attr('y', d => yScalePyramid(d.age) + 2)
     .attr('width', d => type === 'big5' ? xScalePyramid(d.female) / 100 : type === 'tipi' ? xScalePyramid((d.female - 1) * 100 / 6) / 100 : xScalePyramid(d.female) / 100)
-    .attr('height', (yScalePyramid.range()[0] / data.length) - 5)
+    .attr('height', (yScalePyramid.range()[0] / data.length) - 2)
 }
