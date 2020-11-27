@@ -15,9 +15,9 @@
 		position: absolute;
 		bottom: 10px;
 		width: 100%;
-		cursor: pointer;
 
 		.male, .female {
+			cursor: pointer;
 			span { @include font-weight(medium); }
 			&:hover {
 				span { @include font-weight(semibold); }
