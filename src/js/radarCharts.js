@@ -538,22 +538,38 @@
 
     event.target.classList.toggle('selected')
     $('.axis.' + datum).toggleClass('selected')
-  }
 
-  // Shows information on the left section
-  function showInfo (datum) {
-    const info = getInfo(datum)
-    const text = d3.select('.info .text').style('display', 'block')
-    text.select('.title').text(info.title)
-    text.select('.description').text(info.description)
-    text.select('.source').text('Source: ' + info.source.text).attr('href', info.source.url)
-  }
-
-  function hideInfo () {
-    d3.select('.info .text').style('display', 'none')
+    // Update population pyramid
+    updatePopulationPyramid(datum)
   }
 
   const t1 = performance.now()
   const time = (t1 - t0) / 1000
   console.log('%cRadar charts - DONE! (' + time.toFixed(2) + 's)', 'color: #EE7DB1; font-weight: bold')
 }())
+
+function getRadarType (datum) {
+  switch (datum) {
+    case 'O':
+    case 'C':
+    case 'E':
+    case 'A':
+    case 'N':
+      return 'big5'
+
+    case 'Q1':
+    case 'Q2':
+    case 'Q3':
+    case 'Q4':
+    case 'Q5':
+    case 'Q6':
+    case 'Q7':
+    case 'Q8':
+    case 'Q9':
+    case 'Q10':
+      return 'tipi'
+
+    default:
+      return ''
+  }
+}

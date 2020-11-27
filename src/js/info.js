@@ -142,3 +142,17 @@ function getInfo (datum) {
 
   return { title, description, source }
 }
+
+// Shows info
+function showInfo (datum) {
+  const info = getInfo(datum)
+  const text = d3.select('.info .text').style('display', 'block')
+  text.select('.title').text(info.title)
+  text.select('.description').text(info.description)
+  text.select('.source').text('Source: ' + info.source.text).attr('href', info.source.url)
+}
+
+// Hides info
+function hideInfo () {
+  d3.select('.info .text').style('display', 'none')
+}

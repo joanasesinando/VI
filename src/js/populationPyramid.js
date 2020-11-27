@@ -1,3 +1,7 @@
+let populationPyramidData
+let xScalePyramid
+let yScalePyramid
+
 (async function () {
   console.log('%cDrawing pyramid...', 'color: #8675FF; font-weight: bold')
   const t0 = performance.now()
@@ -8,13 +12,7 @@
 
   const width = 500
   const height = 300
-  const margin = {
-    top: 50,
-    right: 10,
-    bottom: 20,
-    left: 10,
-    middle: 20
-  }
+  const margin = { top: 50, right: 10, bottom: 20, left: 10, middle: 20 }
 
   const pyramidOptions = {
     w: width,
@@ -23,25 +21,30 @@
     type: ''
   }
 
-  const data = []
-  data.push({ age: '10-15', male: 0, female: 0 })
-  data.push({ age: '16-20', male: 0, female: 0 })
-  data.push({ age: '21-25', male: 0, female: 0 })
-  data.push({ age: '26-30', male: 0, female: 0 })
-  data.push({ age: '31-35', male: 0, female: 0 })
-  data.push({ age: '36-40', male: 0, female: 0 })
-  data.push({ age: '41-45', male: 0, female: 0 })
-  data.push({ age: '46-50', male: 0, female: 0 })
-  data.push({ age: '51-55', male: 0, female: 0 })
-  data.push({ age: '56-60', male: 0, female: 0 })
-  data.push({ age: '61-65', male: 0, female: 0 })
-  data.push({ age: '66-70', male: 0, female: 0 })
+  /** * -------------------------------------------- ***/
+  /** * ---------------- Initial Data -------------- ***/
+  /** * -------------------------------------------- ***/
+
+  populationPyramidData = [
+    { age: '10-15', male: 0, female: 0 },
+    { age: '16-20', male: 0, female: 0 },
+    { age: '21-25', male: 0, female: 0 },
+    { age: '26-30', male: 0, female: 0 },
+    { age: '31-35', male: 0, female: 0 },
+    { age: '36-40', male: 0, female: 0 },
+    { age: '41-45', male: 0, female: 0 },
+    { age: '46-50', male: 0, female: 0 },
+    { age: '51-55', male: 0, female: 0 },
+    { age: '56-60', male: 0, female: 0 },
+    { age: '61-65', male: 0, female: 0 },
+    { age: '66-70', male: 0, female: 0 }
+  ]
 
   /** * ---------------------------------------------------- ***/
   /** * ------------------ Draw pyramid --------------------- ***/
   /** * ---------------------------------------------------- ***/
 
-  // drawPopulationPyramid('.population-pyramid', data, pyramidOptions)
+  drawPopulationPyramid('.population-pyramid', populationPyramidData, pyramidOptions)
 
   const t1 = performance.now()
   const time = (t1 - t0) / 1000
@@ -60,6 +63,9 @@ function drawPopulationPyramid (target, data, options) {
 
   w = (w - (options.margin.left + options.margin.right))
   h = (h - (options.margin.top + options.margin.bottom))
+
+  const parent = d3.select(target)
+  parent.select('svg').remove()
 
   const svg = d3.select(target).append('svg')
     .attr('width', w_full)
@@ -81,43 +87,43 @@ function drawPopulationPyramid (target, data, options) {
 
   // the xScale goes from 0 to the width of a region
   //  it will be reversed for the left x-axis
-  const xScale = d3.scaleLinear()
+  xScalePyramid = d3.scaleLinear()
     .domain(options.type === 'big5' ? [0, 1] : options.type === 'tipi' ? [1, 7] : [0, 1])
     .range([0, (sectorWidth - options.margin.middle)])
     .nice()
 
-  const yScale = d3.scaleBand()
+  yScalePyramid = d3.scaleBand()
     .domain(data.map(d => d.age))
     .range([h, 0], 0.1)
 
   // SET UP AXES
   const yAxisLeft = d3.axisRight()
-    .scale(yScale)
+    .scale(yScalePyramid)
     .tickSize(4, 0)
     .tickPadding(options.margin.middle - 4)
 
   const yAxisRight = d3.axisLeft()
-    .scale(yScale)
+    .scale(yScalePyramid)
     .tickSize(4, 0)
     .tickFormat('')
 
   const xAxisRight = d3.axisBottom()
-    .scale(xScale)
+    .scale(xScalePyramid)
     .tickFormat(d3.format(options.type === 'big5' ? '.0%' : options.type === 'tipi' ? '.1f' : '.0%'))
 
   const xAxisRightRule = d3.axisBottom()
-    .scale(xScale)
+    .scale(xScalePyramid)
     .tickSize(-h, 0, 0)
     .tickFormat('')
 
   const xAxisLeftRule = d3.axisBottom()
-    .scale(xScale.copy().range([leftBegin, 0]))
+    .scale(xScalePyramid.copy().range([leftBegin, 0]))
     .tickSize(-h, 0, 0)
     .tickFormat('')
 
   const xAxisLeft = d3.axisBottom()
     // REVERSE THE X-AXIS SCALE ON THE LEFT SIDE BY REVERSING THE RANGE
-    .scale(xScale.copy().range([leftBegin, 0]))
+    .scale(xScalePyramid.copy().range([leftBegin, 0]))
     .tickFormat(d3.format(options.type === 'big5' ? '.0%' : options.type === 'tipi' ? '.1f' : '.0%'))
 
   // MAKE GROUPS FOR EACH SIDE OF CHART
@@ -133,9 +139,9 @@ function drawPopulationPyramid (target, data, options) {
     .enter().append('rect')
     .attr('class', 'bar left')
     .attr('x', 0)
-    .attr('y', d => yScale(d.age) + options.margin.middle / 4)
-    .attr('width', d => options.type === 'big5' ? xScale(d.male) / 100 : options.type === 'tipi' ? xScale(d.male) : xScale(d.male) / 100)
-    .attr('height', (yScale.range()[0] / data.length) - options.margin.middle / 4)
+    .attr('y', d => yScalePyramid(d.age) + options.margin.middle / 4)
+    .attr('width', d => options.type === 'big5' ? xScalePyramid(d.male) / 100 : options.type === 'tipi' ? xScalePyramid((d.male - 1) * 100 / 6) / 100 : xScalePyramid(d.male) / 100)
+    .attr('height', (yScalePyramid.range()[0] / data.length) - options.margin.middle / 4)
     .on('mouseover', (event, d) => {
       tooltipDiv.transition()
         .duration(200)
@@ -155,14 +161,14 @@ function drawPopulationPyramid (target, data, options) {
     .enter().append('rect')
     .attr('class', 'bar right')
     .attr('x', 0)
-    .attr('y', d => yScale(d.age) + options.margin.middle / 4)
-    .attr('width', d => options.type === 'big5' ? xScale(d.male) / 100 : options.type === 'tipi' ? xScale(d.male) : xScale(d.male) / 100)
-    .attr('height', (yScale.range()[0] / data.length) - options.margin.middle / 4)
+    .attr('y', d => yScalePyramid(d.age) + options.margin.middle / 4)
+    .attr('width', d => options.type === 'big5' ? xScalePyramid(d.female) / 100 : options.type === 'tipi' ? xScalePyramid((d.female - 1) * 100 / 6) / 100 : xScalePyramid(d.female) / 100)
+    .attr('height', (yScalePyramid.range()[0] / data.length) - options.margin.middle / 4)
     .on('mouseover', (event, d) => {
       tooltipDiv.transition()
         .duration(200)
         .style('opacity', 1)
-      tooltipDiv.html('<strong>' + d.female + '%</strong>')
+      tooltipDiv.html(options.type === 'big5' ? '<strong>' + d.female + '%</strong>' : '<strong>' + d.female + '</strong>')
         .style('left', (event.pageX) + 'px')
         .style('top', (event.pageY - 28) + 'px')
     })
@@ -213,9 +219,43 @@ function drawPopulationPyramid (target, data, options) {
   function translation (x, y) {
     return 'translate(' + x + ',' + y + ')'
   }
+}
 
-  // numbers with commas
-  function prettyFormat (x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+async function updatePopulationPyramid (traitSelected) {
+  const type = getRadarType(traitSelected)
+
+  // Update data
+  populationPyramidData = []
+  const data = type === 'big5' ? await d3.json('dist/data/big5_population.json') : await d3.json('dist/data/tipi_population.json')
+  for (const key in data) {
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
+      const entry = data[key]
+      populationPyramidData.push({
+        age: entry.age,
+        male: entry[traitSelected + '_M'],
+        female: entry[traitSelected + '_F']
+      })
+    }
   }
+
+  // Update bars
+  d3.selectAll('.bar.left')
+    .data(populationPyramidData)
+    .transition()
+    .duration(1000)
+    .ease(d3.easeCubic)
+    .attr('x', 0)
+    .attr('y', d => yScalePyramid(d.age) + 5)
+    .attr('width', d => type === 'big5' ? xScalePyramid(d.male) / 100 : type === 'tipi' ? xScalePyramid((d.male - 1) * 100 / 6) / 100 : xScalePyramid(d.male) / 100)
+    .attr('height', (yScalePyramid.range()[0] / data.length) - 5)
+
+  d3.selectAll('.bar.right')
+    .data(populationPyramidData)
+    .transition()
+    .duration(1000)
+    .ease(d3.easeCubic)
+    .attr('x', 0)
+    .attr('y', d => yScalePyramid(d.age) + 5)
+    .attr('width', d => type === 'big5' ? xScalePyramid(d.female) / 100 : type === 'tipi' ? xScalePyramid((d.female - 1) * 100 / 6) / 100 : xScalePyramid(d.female) / 100)
+    .attr('height', (yScalePyramid.range()[0] / data.length) - 5)
 }
