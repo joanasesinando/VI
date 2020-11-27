@@ -16,13 +16,29 @@
 		bottom: 10px;
 		width: 100%;
 		cursor: pointer;
+
+		.male, .female {
+			span { @include font-weight(medium); }
+			&:hover {
+				span { @include font-weight(semibold); }
+			}
+		}
+
 		img {
 			width: 18px;
-			&.male:hover {
-				content:url('../imgs/male-selected.svg');
+		}
+
+		.male {
+			span { color: color(primary, 1); }
+			&:hover {
+				img { content:url('../imgs/male-hover.svg'); }
 			}
-			&.female:hover {
-				content:url('../imgs/female-selected.svg');
+		}
+
+		.female {
+			span { color: color(secondary, 1); }
+			&:hover {
+				img { content:url('../imgs/female-hover.svg'); }
 			}
 		}
 	}
@@ -60,7 +76,7 @@
 		}
 
 		.tick text {
-			font-size: 8px;
+			font-size: 7px;
 			@include font-weight(bold);
 			color: color(typography, 1);
 		}
@@ -68,6 +84,15 @@
 		.axis.x.left .tick text,
 		.axis.x.right .tick text {
 			color: color(typography, 4);
+		}
+
+		.axis.y.left .tick text {
+			font-size: 8px;
+			&:hover {
+				cursor: pointer;
+				color: color(primary, 1);
+				font-size: 12px;
+			}
 		}
 	}
 }

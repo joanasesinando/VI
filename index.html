@@ -141,8 +141,16 @@
 					<h6 class="gender">Gender</h6>
 
 					<div class="gender-symbols d-flex justify-content-around align-items-center">
-						<img class="male" src="dist/imgs/male.svg" alt="male symbol" onclick="updateRadarChartsGender('M')">
-						<img class="female" src="dist/imgs/female.svg" alt="female symbol" onclick="updateRadarChartsGender('F')">
+
+						<div class="male d-flex align-items-center" onclick="updateRadarChartsGender('M')">
+							<span class="mr-2">M</span>
+							<img src="dist/imgs/male.svg" alt="male symbol">
+						</div>
+						<div class="female d-flex align-items-center" onclick="updateRadarChartsGender('F')">
+							<img src="dist/imgs/female.svg" alt="female symbol">
+							<span class="ml-2">F</span>
+						</div>
+
 					</div>
 
 				</div>
