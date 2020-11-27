@@ -9,16 +9,72 @@
 		.radar-big5 {
 			width: 40%;
 			@media only screen and (max-width: 1080px) { width: 35%; }
+
+			.legend {
+				font-size: 13px;
+				& .hover {
+					font-size: 15px;
+				}
+			}
 		}
 
 		.radars-tipi {
 			width: 60%;
 			@media only screen and (max-width: 1080px) { width: 65%; }
+
+			.legend {
+				font-size: 12px;
+				& .hover {
+					font-size: 14px;
+				}
+			}
 		}
 
 		svg {
 			display: block;
 			margin: auto;
+		}
+
+		.gridCircle {
+			fill: #e3e5f4;
+			stroke: #e3e5f4;
+			filter: url(#glow);
+		}
+
+		.axisLabel {
+			fill: color(typography, 4);
+			font-size: 10px;
+		}
+
+		.line {
+			stroke: #dedef0;
+			stroke-width: 1px;
+		}
+
+		.axis.selected .line {
+			stroke: color(additional-4, 1);
+			stroke-width: 2px;
+		}
+
+		.legend {
+			fill: color(typography, 1);
+			@include font-family(base);
+			@include font-weight(semibold);
+			cursor: pointer;
+			user-select: none;
+			transition: 150ms ease-in-out;
+
+			.hover, .selected {
+				@include font-weight(bold);
+			}
+
+			.hover {
+				fill: color(primary, 1);
+			}
+
+			.selected {
+				fill: color(additional-4, 1);
+			}
 		}
 	}
 

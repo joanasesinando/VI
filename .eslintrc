@@ -7,6 +7,7 @@
 		"camelcase": "off",
 		"no-cond-assign": "warn",
 		"prefer-const": "warn",
-		"multiline-ternary": "warn"
+		"multiline-ternary": "warn",
+		"no-multi-str": "warn"
 	}
 }

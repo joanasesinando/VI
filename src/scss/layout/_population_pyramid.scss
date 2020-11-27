@@ -1,0 +1,41 @@
+.population-pyramid {
+	position: relative;
+
+	svg {
+		max-width: 100%;
+		position: absolute;
+		top: 50%;
+		left: 52%;
+		transform: translate(-50%, -50%);
+	}
+
+	.axis {
+		line, path {
+			fill: transparent;
+			stroke: #555;
+		}
+	}
+
+	.bar {
+		cursor: pointer;
+	}
+
+	.bar.left {
+		fill: color(primary, 1);
+		&:hover {
+			fill: color(primary, 2);
+		}
+	}
+
+	.bar.right {
+		fill: color(secondary, 1);
+		&:hover {
+			fill: color(secondary, 2);
+		}
+	}
+
+	.tick text {
+		font-size: 8px;
+		@include font-weight(bold);
+	}
+}
