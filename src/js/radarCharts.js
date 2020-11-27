@@ -107,11 +107,11 @@ let tipi_original_size
   ds = ds / data_tipi.length
   sw = sw / data_tipi.length
   oc = oc / data_tipi.length
-  cu = 7 - (cu / data_tipi.length)
-  rq = 7 - (rq / data_tipi.length)
-  cs = 7 - (cs / data_tipi.length)
-  dc = 7 - (dc / data_tipi.length)
-  cq = 7 - (cq / data_tipi.length)
+  cu = 8 - (cu / data_tipi.length)
+  rq = 8 - (rq / data_tipi.length)
+  cs = 8 - (cs / data_tipi.length)
+  dc = 8 - (dc / data_tipi.length)
+  cq = 8 - (cq / data_tipi.length)
 
   radarTipiPosData = [
     {
@@ -660,11 +660,11 @@ async function updateRadarCharts (event, barSelected) {
         radarTipiNegData.push({
           name: 'tipi neg - ' + age + '|' + gender,
           axes: [
-            { axis: 'Q10', value: entry['Q10_' + gender] },
-            { axis: 'Q6', value: entry['Q6_' + gender] },
-            { axis: 'Q9', value: entry['Q9_' + gender] },
-            { axis: 'Q8', value: entry['Q8_' + gender] },
-            { axis: 'Q2', value: entry['Q2_' + gender] }
+            { axis: 'Q10', value: 8 - entry['Q10_' + gender] },
+            { axis: 'Q6', value: 8 - entry['Q6_' + gender] },
+            { axis: 'Q9', value: 8 - entry['Q9_' + gender] },
+            { axis: 'Q8', value: 8 - entry['Q8_' + gender] },
+            { axis: 'Q2', value: 8 - entry['Q2_' + gender] }
           ]
         })
       }
