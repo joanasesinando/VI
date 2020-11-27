@@ -1,6 +1,6 @@
-let radarBig5Data
-let radarTipiPosData
-let radarTipiNegData
+const radarBig5Data = []
+const radarTipiPosData = []
+const radarTipiNegData = []
 
 let margin
 let width
@@ -30,114 +30,43 @@ let tipi_original_size
   /** * -------------------------------------------- ***/
 
   // Get Big Five data
-  const data_big5 = await d3.json('dist/data/bigfive.json')
+  const data = await d3.json('dist/data/global_averages.json')
 
-  let openness = 0
-  let extraversion = 0
-  let neuroticism = 0
-  let conscientiousness = 0
-  let agreeableness = 0
-
-  // Get sums
-  for (const key in data_big5) {
-    if (Object.prototype.hasOwnProperty.call(data_big5, key)) {
-      const entry = data_big5[key]
-      openness += entry.Openness
-      extraversion += entry.Extraversion
-      neuroticism += entry.Neuroticism
-      conscientiousness += entry.Conscientiousness
-      agreeableness += entry.Agreeableness
+  for (const key in data) {
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
+      const entry = data[key]
+      radarBig5Data.push({
+        name: 'big five',
+        axes: [
+          { axis: 'O', value: entry.O },
+          { axis: 'E', value: entry.E },
+          { axis: 'N', value: entry.N },
+          { axis: 'C', value: entry.C },
+          { axis: 'A', value: entry.A }
+        ]
+      })
+      radarTipiPosData.push({
+        name: 'tipi pos',
+        axes: [
+          { axis: 'Q5', value: entry.Q5 },
+          { axis: 'Q1', value: entry.Q1 },
+          { axis: 'Q4', value: entry.Q4 },
+          { axis: 'Q3', value: entry.Q3 },
+          { axis: 'Q7', value: entry.Q7 }
+        ]
+      })
+      radarTipiNegData.push({
+        name: 'tipi neg',
+        axes: [
+          { axis: 'Q10', value: 8 - entry.Q10 },
+          { axis: 'Q6', value: 8 - entry.Q6 },
+          { axis: 'Q9', value: 8 - entry.Q9 },
+          { axis: 'Q8', value: 8 - entry.Q8 },
+          { axis: 'Q2', value: 8 - entry.Q2 }
+        ]
+      })
     }
   }
-
-  // Get averages
-  openness = openness / data_big5.length
-  extraversion = extraversion / data_big5.length
-  neuroticism = neuroticism / data_big5.length
-  conscientiousness = conscientiousness / data_big5.length
-  agreeableness = agreeableness / data_big5.length
-
-  radarBig5Data = [
-    {
-      name: 'big five',
-      axes: [
-        { axis: 'O', value: openness },
-        { axis: 'E', value: extraversion },
-        { axis: 'N', value: neuroticism },
-        { axis: 'C', value: conscientiousness },
-        { axis: 'A', value: agreeableness }
-      ]
-    }
-  ]
-
-  // Get TIPI data
-  const data_tipi = await d3.json('dist/data/tipi.json')
-
-  let ee = 0
-  let cq = 0
-  let ds = 0
-  let au = 0
-  let oc = 0
-  let rq = 0
-  let sw = 0
-  let dc = 0
-  let cs = 0
-  let cu = 0
-
-  // Get sums
-  for (const key in data_tipi) {
-    if (Object.prototype.hasOwnProperty.call(data_tipi, key)) {
-      const entry = data_tipi[key]
-      ee += entry.TIPI1
-      cq += entry.TIPI2
-      ds += entry.TIPI3
-      au += entry.TIPI4
-      oc += entry.TIPI5
-      rq += entry.TIPI6
-      sw += entry.TIPI7
-      dc += entry.TIPI8
-      cs += entry.TIPI9
-      cu += entry.TIPI10
-    }
-  }
-
-  // Get averages
-  ee = ee / data_tipi.length
-  au = au / data_tipi.length
-  ds = ds / data_tipi.length
-  sw = sw / data_tipi.length
-  oc = oc / data_tipi.length
-  cu = 8 - (cu / data_tipi.length)
-  rq = 8 - (rq / data_tipi.length)
-  cs = 8 - (cs / data_tipi.length)
-  dc = 8 - (dc / data_tipi.length)
-  cq = 8 - (cq / data_tipi.length)
-
-  radarTipiPosData = [
-    {
-      name: 'tipi pos',
-      axes: [
-        { axis: 'Q5', value: oc },
-        { axis: 'Q1', value: ee },
-        { axis: 'Q4', value: au },
-        { axis: 'Q3', value: ds },
-        { axis: 'Q7', value: sw }
-      ]
-    }
-  ]
-
-  radarTipiNegData = [
-    {
-      name: 'tipi neg',
-      axes: [
-        { axis: 'Q10', value: cu },
-        { axis: 'Q6', value: rq },
-        { axis: 'Q9', value: cs },
-        { axis: 'Q8', value: dc },
-        { axis: 'Q2', value: cq }
-      ]
-    }
-  ]
 
   /** * ---------------------------------------------------- ***/
   /** * ------------------ Draw charts --------------------- ***/
@@ -617,7 +546,103 @@ function getRadarType (datum) {
   }
 }
 
-async function updateRadarCharts (event, barSelected) {
+/// //////////////////////////////////////////////////////
+/// ///// Radar Chart Selection Updates        ///////////
+/// //////////////////////////////////////////////////////
+
+async function updateRadarChartsAge (age) {
+  console.log('AGE : ' + age)
+  // Update data
+  const dataset = await d3.json('dist/data/age_range_averages.json')
+  console.log(dataset)
+  for (const key in dataset) {
+    if (Object.prototype.hasOwnProperty.call(dataset, key)) {
+      const entry = dataset[key]
+      if (entry.age === age) {
+        radarBig5Data.push({
+          name: 'big five - ' + age,
+          axes: [
+            { axis: 'O', value: entry.O },
+            { axis: 'E', value: entry.E },
+            { axis: 'N', value: entry.N },
+            { axis: 'C', value: entry.C },
+            { axis: 'A', value: entry.A }
+          ]
+        })
+        radarTipiPosData.push({
+          name: 'tipi pos - ' + age,
+          axes: [
+            { axis: 'Q5', value: entry.Q5 },
+            { axis: 'Q1', value: entry.Q1 },
+            { axis: 'Q4', value: entry.Q4 },
+            { axis: 'Q3', value: entry.Q3 },
+            { axis: 'Q7', value: entry.Q7 }
+          ]
+        })
+        radarTipiNegData.push({
+          name: 'tipi neg - ' + age,
+          axes: [
+            { axis: 'Q10', value: 8 - entry.Q10 },
+            { axis: 'Q6', value: 8 - entry.Q6 },
+            { axis: 'Q9', value: 8 - entry.Q9 },
+            { axis: 'Q8', value: 8 - entry.Q8 },
+            { axis: 'Q2', value: 8 - entry.Q2 }
+          ]
+        })
+      }
+    }
+  }
+
+  // Update radar
+  drawCharts()
+}
+
+async function updateRadarChartsGender (gender) {
+  // Update data
+  const dataset = await d3.json('dist/data/gender_averages.json')
+  for (const key in dataset) {
+    if (Object.prototype.hasOwnProperty.call(dataset, key)) {
+      const entry = dataset[key]
+      if (entry.gender === gender) {
+        radarBig5Data.push({
+          name: 'big five - ' + gender,
+          axes: [
+            { axis: 'O', value: entry.O },
+            { axis: 'E', value: entry.E },
+            { axis: 'N', value: entry.N },
+            { axis: 'C', value: entry.C },
+            { axis: 'A', value: entry.A }
+          ]
+        })
+        radarTipiPosData.push({
+          name: 'tipi pos - ' + gender,
+          axes: [
+            { axis: 'Q5', value: entry.Q5 },
+            { axis: 'Q1', value: entry.Q1 },
+            { axis: 'Q4', value: entry.Q4 },
+            { axis: 'Q3', value: entry.Q3 },
+            { axis: 'Q7', value: entry.Q7 }
+          ]
+        })
+        radarTipiNegData.push({
+          name: 'tipi neg - ' + gender,
+          axes: [
+            { axis: 'Q10', value: 8 - entry.Q10 },
+            { axis: 'Q6', value: 8 - entry.Q6 },
+            { axis: 'Q9', value: 8 - entry.Q9 },
+            { axis: 'Q8', value: 8 - entry.Q8 },
+            { axis: 'Q2', value: 8 - entry.Q2 }
+          ]
+        })
+      }
+    }
+  }
+
+  // Update radar
+  drawCharts()
+}
+
+async function updateRadarChartsPopulation (event, barSelected) {
   const age = barSelected.age
   const gender = event.target.classList.contains('left') ? 'M' : 'F'
 
