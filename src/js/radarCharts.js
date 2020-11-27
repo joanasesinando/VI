@@ -551,10 +551,9 @@ function getRadarType (datum) {
 /// //////////////////////////////////////////////////////
 
 async function updateRadarChartsAge (age) {
-  console.log('AGE : ' + age)
   // Update data
   const dataset = await d3.json('dist/data/age_range_averages.json')
-  console.log(dataset)
+
   for (const key in dataset) {
     if (Object.prototype.hasOwnProperty.call(dataset, key)) {
       const entry = dataset[key]
@@ -595,11 +594,15 @@ async function updateRadarChartsAge (age) {
 
   // Update radar
   drawCharts()
+
+  // Add to saved btns
+  addToSaved(age)
 }
 
 async function updateRadarChartsGender (gender) {
   // Update data
   const dataset = await d3.json('dist/data/gender_averages.json')
+
   for (const key in dataset) {
     if (Object.prototype.hasOwnProperty.call(dataset, key)) {
       const entry = dataset[key]
@@ -698,4 +701,8 @@ async function updateRadarChartsPopulation (event, barSelected) {
 
   // Update radar
   drawCharts()
+}
+
+function addToSaved () {
+
 }

@@ -80,6 +80,7 @@
 
 	.saved-results {
 		color: color(typography, 1);
-		@include margin-top(large);
+		position: absolute;
+		bottom: 20px;
 	}
 }
