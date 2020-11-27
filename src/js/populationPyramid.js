@@ -140,7 +140,7 @@ function drawPopulationPyramid (target, data, options) {
       tooltipDiv.transition()
         .duration(200)
         .style('opacity', 1)
-      tooltipDiv.html('<strong>' + d.male + '%</strong>')
+      tooltipDiv.html(options.type === 'big5' ? '<strong>' + d.male + '%</strong>' : '<strong>' + d.male + '</strong>')
         .style('left', (event.pageX) + 'px')
         .style('top', (event.pageY - 28) + 'px')
     })
