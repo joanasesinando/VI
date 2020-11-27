@@ -146,7 +146,7 @@ function getInfo (datum) {
 // Shows info
 function showInfo (datum) {
   const info = getInfo(datum)
-  const text = d3.select('.info .text').style('display', 'block')
+  const text = d3.select('.info .content').style('display', 'block')
   text.select('.title').text(info.title)
   text.select('.description').text(info.description)
   text.select('.source').text('Source: ' + info.source.text).attr('href', info.source.url)
@@ -154,5 +154,5 @@ function showInfo (datum) {
 
 // Hides info
 function hideInfo () {
-  d3.select('.info .text').style('display', 'none')
+  d3.select('.info .content').style('display', 'none')
 }

@@ -1,5 +1,6 @@
 (function () {
-  console.log('Drawing map...')
+  console.log('%cDrawing map...', 'color: #42CC7E; font-weight: bold')
+  const t0 = performance.now()
 
   const width = '100%'
   const height = '100%'
@@ -46,5 +47,7 @@
     zoom.scaleBy(svg.transition().duration(200), 0.5)
   })
 
-  console.log('Map - DONE!')
+  const t1 = performance.now()
+  const time = (t1 - t0) / 1000
+  console.log('%cMap - DONE! (' + time.toFixed(2) + 's)', 'color: #42CC7E; font-weight: bold')
 }())
