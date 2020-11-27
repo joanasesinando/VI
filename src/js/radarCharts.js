@@ -693,7 +693,7 @@ async function updateRadarChartsPopulation (event, barSelected) {
   const big5Dataset = await d3.json('dist/data/big5_population.json')
   const tipiDataset = await d3.json('dist/data/tipi_population.json')
 
-  const color = colorIndex++ & colors.length
+  const color = colorIndex++ % colors.length
 
   for (const key in big5Dataset) {
     if (Object.prototype.hasOwnProperty.call(big5Dataset, key)) {
@@ -755,6 +755,7 @@ async function updateRadarChartsPopulation (event, barSelected) {
 }
 
 function addToSaved (id, type, color) {
+  console.log(color)
   const btn = d3.select('.saved-btns')
     .append('div')
     .attr('class', 'saved-btn mx-1 ' + getBtnColor(color))
@@ -782,7 +783,7 @@ function addToSaved (id, type, color) {
 
   wrapper.append('span')
     .attr('class', 'subtitle')
-    .text(id.includes('|') ? formatText(id) : id)
+    .text(formatText(id))
 
   // Render new icons
   eva.replace()
@@ -861,7 +862,15 @@ function getBtnColor (colorIndex) {
 }
 
 function formatText (id) {
-  const age = id.split('|')[0]
-  const gender = id.split('|')[1]
-  return age + ' | ' + (gender === 'M' ? 'Male' : 'Female')
+  if (id.includes('|')) {
+    const age = id.split('|')[0]
+    const gender = id.split('|')[1]
+    return age + ' | ' + (gender === 'M' ? 'Male' : 'Female')
+  } else if (id === 'M') {
+    return 'Male'
+  } else if (id === 'F') {
+    return 'Female'
+  } else {
+    return id
+  }
 }
