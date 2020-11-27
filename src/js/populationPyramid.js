@@ -187,6 +187,7 @@ function drawPopulationPyramid (target, data, options) {
     .call(yAxisLeft)
     .selectAll('text')
     .style('text-anchor', 'middle')
+    .on('click', (event, datum) => updateRadarCharts(datum))
 
   pyramid.append('g')
     .attr('class', 'axis y right')
