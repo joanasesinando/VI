@@ -1,8 +1,12 @@
 .population-pyramid {
+	position: relative;
+
 	svg {
-		//max-width: 100%;
+		max-width: 100%;
 		position: absolute;
-		left: -100px;
+		top: 50%;
+		left: 52%;
+		transform: translate(-50%, -50%);
 	}
 
 	.axis {
@@ -10,6 +14,10 @@
 			fill: transparent;
 			stroke: #555;
 		}
+	}
+
+	.bar {
+		cursor: pointer;
 	}
 
 	.bar.left {
@@ -24,5 +32,10 @@
 		&:hover {
 			fill: color(secondary, 2);
 		}
+	}
+
+	.tick text {
+		font-size: 8px;
+		@include font-weight(bold);
 	}
 }

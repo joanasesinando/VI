@@ -10,9 +10,9 @@ let yScalePyramid
   /** * ------------------ Set Up ------------------ ***/
   /** * -------------------------------------------- ***/
 
-  const width = 500
-  const height = 300
-  const margin = { top: 50, right: 10, bottom: 20, left: 10, middle: 20 }
+  const width = 470
+  const height = 224.4
+  const margin = { top: 20, right: 10, bottom: 20, left: 10, middle: 20 }
 
   const pyramidOptions = {
     w: width,
@@ -155,6 +155,7 @@ function drawPopulationPyramid (target, data, options) {
         .duration(500)
         .style('opacity', 0)
     })
+    .on('click', (event, datum) => updateRadarCharts(event, datum))
 
   rightBarGroup.selectAll('.bar.right')
     .data(data)
@@ -177,6 +178,7 @@ function drawPopulationPyramid (target, data, options) {
         .duration(500)
         .style('opacity', 0)
     })
+    .on('click', (event, datum) => updateRadarCharts(event, datum))
 
   // DRAW AXES
   pyramid.append('g')
