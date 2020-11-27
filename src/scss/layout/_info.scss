@@ -7,6 +7,7 @@
 		.title {
 			position: relative;
 			color: white;
+			letter-spacing: .5px;
 
 			&::after {
 				content: '';
@@ -23,11 +24,12 @@
 			color: white;
 			font-size: .8rem;
 			margin-top: 2rem;
+			line-height: 20px;
 		}
 
 		.source {
 			color: #726FC0;
-			@include font-weight(regular);
+			@include font-weight(medium);
 			font-size: .7rem;
 			cursor: pointer;
 		}

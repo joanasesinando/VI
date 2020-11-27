@@ -102,11 +102,11 @@
     {
       name: 'default results: tipi pos',
       axes: [
-        { axis: 'O & C', value: oc },
-        { axis: 'E & E', value: ee },
-        { axis: 'A & U', value: au },
-        { axis: 'D & S', value: ds },
-        { axis: 'S & W', value: sw }
+        { axis: 'Q5', value: oc },
+        { axis: 'Q1', value: ee },
+        { axis: 'Q4', value: au },
+        { axis: 'Q3', value: ds },
+        { axis: 'Q7', value: sw }
       ]
     }
   ]
@@ -115,11 +115,11 @@
     {
       name: 'default results: tipi neg',
       axes: [
-        { axis: 'C & U', value: cu },
-        { axis: 'R & Q', value: rq },
-        { axis: 'C & S', value: cs },
-        { axis: 'D & C', value: dc },
-        { axis: 'C & Q', value: cq }
+        { axis: 'Q10', value: cu },
+        { axis: 'Q6', value: rq },
+        { axis: 'Q9', value: cs },
+        { axis: 'Q8', value: dc },
+        { axis: 'Q2', value: cq }
       ]
     }
   ]
@@ -135,6 +135,7 @@
     levels: 5,
     maxValue: 100,
     startAngle: 0,
+    labelFactor: 1.2,
     roundStrokes: false,
     color: d3.scaleOrdinal().range(['#EE7DB1']),
     format: '.1f',
@@ -153,7 +154,7 @@
     format: '.1f'
   }
 
-  // Originall sizes for resizing
+  // Original sizes for resizing
   const big5_original_size = radarOptionsBigFive.w
   const tipi_original_size = radarOptionsTipi.w
 
@@ -295,10 +296,7 @@
       .append('circle')
       .attr('class', 'gridCircle')
       .attr('r', d => radius / cfg.levels * d)
-      .style('fill', '#e3e5f4')
-      .style('stroke', '#e3e5f4')
       .style('fill-opacity', cfg.opacityCircles)
-      .style('filter', 'url(#glow)')
 
     // Text indicating at what % each level is
     axisGrid.selectAll('.axisLabel')
@@ -308,8 +306,6 @@
       .attr('x', 4)
       .attr('y', d => -d * radius / cfg.levels)
       .attr('dy', '0.4em')
-      .style('font-size', '10px')
-      .attr('fill', '#8484A0')
       .text(d => Format(maxValue * d / cfg.levels) + cfg.unit)
 
     /// //////////////////////////////////////////////////////
@@ -321,7 +317,7 @@
       .data(allAxis)
       .enter()
       .append('g')
-      .attr('class', 'axis')
+      .attr('class', d => 'axis ' + d)
     // Append the lines
     axis.append('line')
       .attr('x1', 0)
@@ -329,34 +325,19 @@
       .attr('x2', (d, i) => rScale(maxValue * 1.1) * Math.cos(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
       .attr('y2', (d, i) => rScale(maxValue * 1.1) * Math.sin(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
       .attr('class', 'line')
-      .style('stroke', '#dedef0')
-      .style('stroke-width', '1px')
 
     // Append the labels at each axis
     axis.append('text')
       .attr('class', 'legend')
-      .style('font-size', '10.2px')
-      .style('font-family', 'Poppins')
-      .style('font-weight', '500')
-      .style('cursor', 'pointer')
-      .style('user-select', 'none')
-      .attr('fill', '#393874')
       .attr('text-anchor', 'middle')
       .attr('dy', '0.35em')
       .attr('x', (d, i) => rScale(maxValue * cfg.labelFactor) * Math.cos(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
       .attr('y', (d, i) => rScale(maxValue * cfg.labelFactor) * Math.sin(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
       .text(d => d)
       .call(wrap, cfg.wrapWidth)
-      .on('mouseover', (event) => {
-        event.target.style.fill = '#8675FF'
-        event.target.style.fontSize = '11px'
-        event.target.style.transition = 'ease-in-out 200ms'
-      })
-      .on('mouseout', (event) => {
-        event.target.style.fill = '#393874'
-        event.target.style.fontSize = '10.2px'
-      })
-      .on('click', (event, datum) => showInfo(event, datum))
+      .on('mouseover', event => event.target.classList.toggle('hover'))
+      .on('mouseout', event => event.target.classList.toggle('hover'))
+      .on('click', (event, datum) => selectTrait(event, datum))
 
     /// //////////////////////////////////////////////////////
     /// ////////// Draw the radar chart blobs ////////////////
@@ -545,16 +526,31 @@
     drawCharts()
   }
 
+  // Select trait
+  function selectTrait (event, datum) {
+    event.target.classList.contains('selected') ? hideInfo() : showInfo(datum)
+
+    // remove other selected if not same
+    if (!event.target.classList.contains('selected')) {
+      $('.legend .selected').removeClass('selected')
+      $('.axis.selected').removeClass('selected')
+    }
+
+    event.target.classList.toggle('selected')
+    $('.axis.' + datum).toggleClass('selected')
+  }
+
   // Shows information on the left section
-  function showInfo (event, datum) {
+  function showInfo (datum) {
+    const info = getInfo(datum)
     const text = d3.select('.info .text').style('display', 'block')
-    text.select('.title').text(datum)
-    text.select('.description').text('Mollis maecenas eu orci vitae nibh euismod. Morbi bibendum tellus massa ultricies cras mattis aenean senectus. Et quis faucibus nulla enim volutpat amet. Pharetra, neque ipsum in lorem. Dictumst malesuada viverra felis, diam consequat non accumsan, tristique nulla. \n' +
-      '\n' +
-      'A amet dictumst aliquet aenean eget aenean nunc sed interdum.\n' +
-      'Dui lectus vulputate ultricies nunc, arcu volutpat lorem in amet.')
-    text.select('.source').text('Source: ' + 'wikipedia.org')
-      .attr('href', '#')
+    text.select('.title').text(info.title)
+    text.select('.description').text(info.description)
+    text.select('.source').text('Source: ' + info.source.text).attr('href', info.source.url)
+  }
+
+  function hideInfo () {
+    d3.select('.info .text').style('display', 'none')
   }
 
   const t1 = performance.now()
