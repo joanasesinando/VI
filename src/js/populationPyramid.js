@@ -126,60 +126,6 @@ function drawPopulationPyramid (target, data, options) {
     .scale(xScalePyramid.copy().range([leftBegin, 0]))
     .tickFormat(d3.format(options.type === 'big5' ? '.0%' : options.type === 'tipi' ? '.1f' : '.0%'))
 
-  // MAKE GROUPS FOR EACH SIDE OF CHART
-  // scale(-1,1) is used to reverse the left side so the bars grow left instead of right
-  const leftBarGroup = pyramid.append('g')
-    .attr('transform', translation(leftBegin, 0) + 'scale(-1,1)')
-  const rightBarGroup = pyramid.append('g')
-    .attr('transform', translation(rightBegin, 0))
-
-  // DRAW BARS
-  leftBarGroup.selectAll('.bar.left')
-    .data(data)
-    .enter().append('rect')
-    .attr('class', 'bar left')
-    .attr('x', 0)
-    .attr('y', d => yScalePyramid(d.age) + 2)
-    .attr('width', d => options.type === 'big5' ? xScalePyramid(d.male) / 100 : options.type === 'tipi' ? xScalePyramid((d.male - 1) * 100 / 6) / 100 : xScalePyramid(d.male) / 100)
-    .attr('height', (yScalePyramid.range()[0] / data.length) - 2)
-    .on('mouseover', (event, d) => {
-      tooltipDiv.transition()
-        .duration(200)
-        .style('opacity', 1)
-      tooltipDiv.html(options.type === 'big5' ? '<strong>' + d.male + '%</strong>' : '<strong>' + d.male + '</strong>')
-        .style('left', (event.pageX) + 'px')
-        .style('top', (event.pageY - 28) + 'px')
-    })
-    .on('mouseout', () => {
-      tooltipDiv.transition()
-        .duration(500)
-        .style('opacity', 0)
-    })
-    .on('click', (event, datum) => updateRadarChartsPopulation(event.target, datum))
-
-  rightBarGroup.selectAll('.bar.right')
-    .data(data)
-    .enter().append('rect')
-    .attr('class', 'bar right')
-    .attr('x', 0)
-    .attr('y', d => yScalePyramid(d.age) + 2)
-    .attr('width', d => options.type === 'big5' ? xScalePyramid(d.female) / 100 : options.type === 'tipi' ? xScalePyramid((d.female - 1) * 100 / 6) / 100 : xScalePyramid(d.female) / 100)
-    .attr('height', (yScalePyramid.range()[0] / data.length) - 2)
-    .on('mouseover', (event, d) => {
-      tooltipDiv.transition()
-        .duration(200)
-        .style('opacity', 1)
-      tooltipDiv.html(options.type === 'big5' ? '<strong>' + d.female + '%</strong>' : '<strong>' + d.female + '</strong>')
-        .style('left', (event.pageX) + 'px')
-        .style('top', (event.pageY - 28) + 'px')
-    })
-    .on('mouseout', () => {
-      tooltipDiv.transition()
-        .duration(500)
-        .style('opacity', 0)
-    })
-    .on('click', (event, datum) => updateRadarChartsPopulation(event.target, datum))
-
   // DRAW AXES
   pyramid.append('g')
     .attr('class', 'axis y left')
@@ -215,6 +161,60 @@ function drawPopulationPyramid (target, data, options) {
     .attr('transform', translation(rightBegin, h))
     .call(xAxisRightRule)
     .style('opacity', 0.1)
+
+  // MAKE GROUPS FOR EACH SIDE OF CHART
+  // scale(-1,1) is used to reverse the left side so the bars grow left instead of right
+  const leftBarGroup = pyramid.append('g')
+    .attr('transform', translation(leftBegin, 0) + 'scale(-1,1)')
+  const rightBarGroup = pyramid.append('g')
+    .attr('transform', translation(rightBegin, 0))
+
+  // DRAW BARS
+  leftBarGroup.selectAll('.bar.left')
+    .data(data)
+    .enter().append('rect')
+    .attr('class', 'bar left')
+    .attr('x', 0)
+    .attr('y', d => yScalePyramid(d.age) + 2)
+    .attr('width', d => options.type === 'big5' ? xScalePyramid(d.male) / 100 : options.type === 'tipi' ? xScalePyramid((d.male - 1) * 100 / 6) / 100 : xScalePyramid(d.male) / 100)
+    .attr('height', (yScalePyramid.range()[0] / data.length) - 2)
+    .on('mouseover', (event, d) => {
+      tooltipDiv.transition()
+        .duration(200)
+        .style('opacity', 1)
+      tooltipDiv.html(options.type === 'big5' ? '<strong>' + d.male + '%</strong>' : '<strong>' + d.male + '</strong>')
+        .style('left', (event.pageX - 20) + 'px')
+        .style('top', (event.pageY - 35) + 'px')
+    })
+    .on('mouseout', () => {
+      tooltipDiv.transition()
+        .duration(500)
+        .style('opacity', 0)
+    })
+    .on('click', (event, datum) => updateRadarChartsPopulation(event.target, datum))
+
+  rightBarGroup.selectAll('.bar.right')
+    .data(data)
+    .enter().append('rect')
+    .attr('class', 'bar right')
+    .attr('x', 0)
+    .attr('y', d => yScalePyramid(d.age) + 2)
+    .attr('width', d => options.type === 'big5' ? xScalePyramid(d.female) / 100 : options.type === 'tipi' ? xScalePyramid((d.female - 1) * 100 / 6) / 100 : xScalePyramid(d.female) / 100)
+    .attr('height', (yScalePyramid.range()[0] / data.length) - 2)
+    .on('mouseover', (event, d) => {
+      tooltipDiv.transition()
+        .duration(200)
+        .style('opacity', 1)
+      tooltipDiv.html(options.type === 'big5' ? '<strong>' + d.female + '%</strong>' : '<strong>' + d.female + '</strong>')
+        .style('left', (event.pageX - 20) + 'px')
+        .style('top', (event.pageY - 35) + 'px')
+    })
+    .on('mouseout', () => {
+      tooltipDiv.transition()
+        .duration(500)
+        .style('opacity', 0)
+    })
+    .on('click', (event, datum) => updateRadarChartsPopulation(event.target, datum))
 
   /* HELPER FUNCTIONS */
 
