@@ -1,13 +1,13 @@
 {
 	"extends": "standard",
 	"rules": {
-		"no-undef": "warn",
-		"no-unused-vars": "warn",
+		"no-undef": "off",
+		"no-unused-vars": "off",
 		"no-tabs": "off",
 		"camelcase": "off",
-		"no-cond-assign": "warn",
-		"prefer-const": "warn",
-		"multiline-ternary": "warn",
-		"no-multi-str": "warn"
+		"no-cond-assign": "off",
+		"prefer-const": "off",
+		"multiline-ternary": "off",
+		"no-multi-str": "off"
 	}
 }

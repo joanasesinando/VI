@@ -155,7 +155,7 @@ function drawPopulationPyramid (target, data, options) {
         .duration(500)
         .style('opacity', 0)
     })
-    .on('click', (event, datum) => updateRadarChartsPopulation(event, datum))
+    .on('click', (event, datum) => updateRadarChartsPopulation(event.target, datum))
 
   rightBarGroup.selectAll('.bar.right')
     .data(data)
@@ -178,7 +178,7 @@ function drawPopulationPyramid (target, data, options) {
         .duration(500)
         .style('opacity', 0)
     })
-    .on('click', (event, datum) => updateRadarChartsPopulation(event, datum))
+    .on('click', (event, datum) => updateRadarChartsPopulation(event.target, datum))
 
   // DRAW AXES
   pyramid.append('g')

@@ -1,39 +1,35 @@
+// Radar charts data arrays
 const radarBig5Data = []
 const radarTipiPosData = []
 const radarTipiNegData = []
 
-let margin
-let width
-let height
-
+// Individual options for the radar charts
 let radarOptionsBigFive
 let radarOptionsTipiPos
 let radarOptionsTipiNeg
 
-let big5_original_size
-let tipi_original_size
-
+// Color scheme to be used
 const colors = ['#8675FF', '#ff9065', '#42CC7E', '#66C8FF', '#EE7DB1', '#FFBA69']
-let colorIndex
+let colorIndex // used to pick the next color (when last, goes back to beginning of color array)
 
 (async function () {
   console.log('%cDrawing radar charts...', 'color: #EE7DB1; font-weight: bold')
   const t0 = performance.now()
 
-  /** * -------------------------------------------- ***/
-  /** * ------------------ Set Up ------------------ ***/
-  /** * -------------------------------------------- ***/
+  /** * --------------------------------------------- ***/
+  /** * ------------------- Set Up ------------------ ***/
+  /**  --------------------------------------------- ***/
 
-  margin = { top: 40, right: 50, bottom: 30, left: 50 }
-  width = 180
-  height = 180
+  const margin = { top: 40, right: 50, bottom: 30, left: 50 }
+  const width = 180
+  const height = 180
   colorIndex = 0
 
-  /** * -------------------------------------------- ***/
-  /** * ------------------ Data -------------------- ***/
-  /** * -------------------------------------------- ***/
+  /** * --------------------------------------------- ***/
+  /** * ------------------- Data -------------------- ***/
+  /** * --------------------------------------------- ***/
 
-  // Get Big Five data
+  // Get global averages data
   const data = await d3.json('dist/data/global_averages.json')
   radarBig5Data.push({
     name: 'big five',
@@ -72,9 +68,9 @@ let colorIndex
     ]
   })
 
-  /** * ---------------------------------------------------- ***/
-  /** * ------------------ Draw charts --------------------- ***/
-  /** * ---------------------------------------------------- ***/
+  /** * --------------------------------------------- ***/
+  /** * ---------------- Set Options ---------------- ***/
+  /** * --------------------------------------------- ***/
 
   radarOptionsBigFive = {
     w: width,
@@ -120,27 +116,26 @@ let colorIndex
     type: 'tipi_neg'
   }
 
+  /** * --------------------------------------------- ***/
+  /** * ----------------- Resizing ------------------ ***/
+  /** * --------------------------------------------- ***/
+
   // Original sizes for resizing
-  big5_original_size = radarOptionsBigFive.w
-  tipi_original_size = radarOptionsTipiPos.w
+  const big5_original_size = radarOptionsBigFive.w
+  const tipi_original_size = radarOptionsTipiPos.w
 
-  resize()
-  window.onresize = resize
+  resizeRadarCharts()
+  window.onresize = () => { resizeRadarCharts(); drawRadarCharts() }
 
-  drawCharts()
+  function resizeRadarCharts () { // FIXME: correct to be responsive
+    const windowWidth = window.innerWidth
 
-  /** * -------------------------------------------- ***/
-  /** * ------------------ Functions --------------- ***/
-  /** * -------------------------------------------- ***/
-
-  // Resizes the radar charts
-  function resize () {
-    if (window.innerWidth < 1080) {
+    if (windowWidth < 1080) {
       radarOptionsBigFive.w = big5_original_size - 50
       radarOptionsTipiPos.w = tipi_original_size - 30
       radarOptionsBigFive.margin = { top: 20, right: 20, bottom: 20, left: 20 }
       radarOptionsTipiPos.margin = { top: 20, right: 25, bottom: 20, left: 25 }
-    } else if (window.innerWidth < 1200) {
+    } else if (windowWidth < 1200) {
       radarOptionsBigFive.w = big5_original_size - 30
       radarOptionsTipiPos.w = tipi_original_size - 15
       radarOptionsBigFive.margin = { top: 20, right: 20, bottom: 20, left: 20 }
@@ -153,25 +148,31 @@ let colorIndex
       radarOptionsTipiPos.margin = { top: 40, right: 40, bottom: 30, left: 40 }
       radarOptionsTipiNeg.margin = { top: 40, right: 40, bottom: 30, left: 30 }
     }
-    drawCharts()
   }
+
+  /** * --------------------------------------------- ***/
+  /** * ---------------- Draw charts ---------------- ***/
+  /** * --------------------------------------------- ***/
+
+  drawRadarCharts()
 
   const t1 = performance.now()
   const time = (t1 - t0) / 1000
   console.log('%cRadar charts - DONE! (' + time.toFixed(2) + 's)', 'color: #EE7DB1; font-weight: bold')
 }())
 
-/// //////////////////////////////////////////////////////
-/// //////////// The Radar Chart Function ////////////////
-/// mthh - 2017 /////////////////////////////////////////
-// Inspired by the code of alangrafu and Nadieh Bremer //
-// (VisualCinnamon.com) and modified for d3 v4 //////////
-/// //////////////////////////////////////////////////////
+/** * --------------------------------------------- ***/
+/** * ----------------- Functions ----------------- ***/
+/** * --------------------------------------------- ***/
 
-/** * ---------------------------------------------------- ***/
-/** * ------------------ Main function ------------------- ***/
-/** * ---------------------------------------------------- ***/
-
+/* ---------------------------------------------------------------
+ * ------------ D3.js Radar Chart Function (adapted) -------------
+ * ---------------------------------------------------------------
+ * Description: function to draw radar charts in D3.js
+ * Author: Matthieu Viry (mthh - 2017)
+ * Site: https://bl.ocks.org/mthh
+ * Link: http://bl.ocks.org/mthh/7e17b680b35b83b49f1c22a3613bd89f
+ * --------------------------------------------------------------- */
 function RadarChart (parent_selector, data, options) {
   // Wraps SVG text - Taken from http://bl.ocks.org/mbostock/7555321
   const wrap = (text, width) => {
@@ -198,63 +199,50 @@ function RadarChart (parent_selector, data, options) {
         }
       }
     })
-  }// wrap
+  } // wrap
 
   const cfg = {
-    w: 600,				// Width of the circle
-    h: 600,				// Height of the circle
+    w: 600, // Width of the circle
+    h: 600, // Height of the circle
     margin: { top: 20, right: 20, bottom: 20, left: 20 }, // The margins of the SVG
-    levels: 3,				// How many levels or inner circles should there be drawn
+    levels: 3,				// How many levels or inner circles should be drawn
     minValue: 0, // What is the value that the center will represent
     maxValue: 0, 			// What is the value that the biggest circle will represent
-    startAngle: 0, // The starting angle for the radar, 0 means the 1st line is vertical
-    labelFactor: 1.25, 	// How much farther than the radius of the outer circle should the labels be placed
-    wrapWidth: 60, 		// The number of pixels after which a label needs to be given a new line
-    opacityArea: 0.35, 	// The opacity of the area of the blob
+    startAngle: 0, // The starting angle for the radar, 0 means the 1st axe is vertical
+    labelFactor: 1.25, // How much farther than the radius of the outer circle should the labels be placed
+    wrapWidth: 60, // The number of pixels after which a label needs to be given a new line
+    opacityArea: 0.35, // The opacity of the area of the blob
     dotRadius: 3, 			// The size of the colored circles of each blog
     opacityCircles: 0.1, 	// The opacity of the circles of each blob
     strokeWidth: 1, 		// The width of the stroke around each blob
     roundStrokes: false,	// If true the area and stroke will follow a round path (cardinal-closed)
-    color: d3.scaleOrdinal(d3.schemeCategory10),	// Color function,
+    color: d3.scaleOrdinal(d3.schemeCategory10), // Color function,
     format: '.2%',
-    unit: '',
-    legend: false
+    unit: ''
   }
 
   // Put all of the options into a variable called cfg
   if (typeof options !== 'undefined') {
     for (const i in options) {
       if (typeof options[i] !== 'undefined') { cfg[i] = options[i] }
-    }// for i
-  }// if
-
-  // If the supplied maxValue is smaller than the actual one, replace by the max in the data
-  // var maxValue = Math.max(cfg.maxValue, d3.max(data, function(i){return d3.max(i.map(function(o){return o.value;}))}));
-  let maxValue = 0
-  for (let j = 0; j < data.length; j++) {
-    for (let i = 0; i < data[j].axes.length; i++) {
-      data[j].axes[i].id = data[j].name
-      if (data[j].axes[i].value > maxValue) {
-        maxValue = data[j].axes[i].value
-      }
     }
   }
-  maxValue = Math.max(cfg.maxValue, maxValue)
 
-  const allAxis = data[0].axes.map((i, j) => i.axis)	// Names of each axis
-  const total = allAxis.length					// The number of different axes
-  const radius = Math.min(cfg.w / 2, cfg.h / 2) 	// Radius of the outermost circle
-  const Format = d3.format(cfg.format)			 	// Formatting
-  const angleSlice = Math.PI * 2 / total		// The width in radians of each "slice"
+  const allAxis = data[0].axes.map(i => i.axis) // Names of each axis
+  const total = allAxis.length // The number of different axes
+  const radius = Math.min(cfg.w / 2, cfg.h / 2) // Radius of the outermost circle
+  const Format = d3.format(cfg.format) // Formatting
+  const angleSlice = Math.PI * 2 / total // The width in radians of each "slice"
 
   // Scale for the radius
   const rScale = d3.scaleLinear()
     .range([0, radius])
-    .domain([options.minValue, maxValue])
+    .domain([cfg.minValue, cfg.maxValue])
 
-  /// //////////////////////////////////////////////////////
-  /// ///////// Create the container SVG and g /////////////
-  /// //////////////////////////////////////////////////////
+  /** * --------------------------------------------- ***/
+  /** * ------- Create the container SVG and g ------ ***/
+  /** * --------------------------------------------- ***/
+
   const parent = d3.select(parent_selector)
 
   // Remove whatever chart with the same id/class was present before
@@ -270,20 +258,20 @@ function RadarChart (parent_selector, data, options) {
   const g = svg.append('g')
     .attr('transform', 'translate(' + (cfg.w / 2 + cfg.margin.left) + ',' + (cfg.h / 2 + cfg.margin.top) + ')')
 
-  /// //////////////////////////////////////////////////////
-  /// /////// Glow filter for some extra pizzazz ///////////
-  /// //////////////////////////////////////////////////////
+  /** * --------------------------------------------- ***/
+  /** * ----- Glow filter for some extra pizzazz ---- ***/
+  /** * --------------------------------------------- ***/
 
   // Filter for the outside glow
   const filter = g.append('defs').append('filter').attr('id', 'glow')
-  const feGaussianBlur = filter.append('feGaussianBlur').attr('stdDeviation', '2.5').attr('result', 'coloredBlur')
+  filter.append('feGaussianBlur').attr('stdDeviation', '2.5').attr('result', 'coloredBlur')
   const feMerge = filter.append('feMerge')
-  const feMergeNode_1 = feMerge.append('feMergeNode').attr('in', 'coloredBlur')
-  const feMergeNode_2 = feMerge.append('feMergeNode').attr('in', 'SourceGraphic')
+  feMerge.append('feMergeNode').attr('in', 'coloredBlur')
+  feMerge.append('feMergeNode').attr('in', 'SourceGraphic')
 
-  /// //////////////////////////////////////////////////////
-  /// //////////// Draw the Circular grid //////////////////
-  /// //////////////////////////////////////////////////////
+  /** * --------------------------------------------- ***/
+  /** * ----------- Draw the circular grid ---------- ***/
+  /** * --------------------------------------------- ***/
 
   // Wrapper for the grid & axes
   const axisGrid = g.append('g').attr('class', 'axisWrapper')
@@ -306,14 +294,14 @@ function RadarChart (parent_selector, data, options) {
     .attr('y', d => -d * radius / cfg.levels)
     .attr('dy', '0.4em')
     .text(d => {
-      if (options.type === 'big5') return d3.format('.0f')(maxValue * d / cfg.levels) + cfg.unit
-      else if (options.type === 'tipi_pos') return d3.format('.0f')((maxValue - 1) * d / cfg.levels + 1) + cfg.unit
-      else if (options.type === 'tipi_neg') return d3.format('.0f')(8 - ((maxValue - 1) * d / cfg.levels + 1)) + cfg.unit
+      if (options.type === 'big5') return d3.format('.0f')(cfg.maxValue * d / cfg.levels) + cfg.unit
+      else if (options.type === 'tipi_pos') return d3.format('.0f')((cfg.maxValue - 1) * d / cfg.levels + 1) + cfg.unit
+      else if (options.type === 'tipi_neg') return d3.format('.0f')(8 - ((cfg.maxValue - 1) * d / cfg.levels + 1)) + cfg.unit
     })
 
-  /// //////////////////////////////////////////////////////
-  /// ///////////////// Draw the axes //////////////////////
-  /// //////////////////////////////////////////////////////
+  /** * --------------------------------------------- ***/
+  /** * ---------------- Draw the axes -------------- ***/
+  /** * --------------------------------------------- ***/
 
   // Create the straight lines radiating outward from the center
   const axis = axisGrid.selectAll('.axis')
@@ -321,12 +309,13 @@ function RadarChart (parent_selector, data, options) {
     .enter()
     .append('g')
     .attr('class', d => 'axis ' + d)
+
   // Append the lines
   axis.append('line')
     .attr('x1', 0)
     .attr('y1', 0)
-    .attr('x2', (d, i) => rScale(maxValue * 1.1) * Math.cos(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
-    .attr('y2', (d, i) => rScale(maxValue * 1.1) * Math.sin(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
+    .attr('x2', (d, i) => rScale(cfg.maxValue * 1.1) * Math.cos(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
+    .attr('y2', (d, i) => rScale(cfg.maxValue * 1.1) * Math.sin(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
     .attr('class', 'line')
 
   // Append the labels at each axis
@@ -334,17 +323,17 @@ function RadarChart (parent_selector, data, options) {
     .attr('class', 'legend')
     .attr('text-anchor', 'middle')
     .attr('dy', '0.35em')
-    .attr('x', (d, i) => rScale(maxValue * cfg.labelFactor) * Math.cos(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
-    .attr('y', (d, i) => rScale(maxValue * cfg.labelFactor) * Math.sin(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
+    .attr('x', (d, i) => rScale(cfg.maxValue * cfg.labelFactor) * Math.cos(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
+    .attr('y', (d, i) => rScale(cfg.maxValue * cfg.labelFactor) * Math.sin(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
     .text(d => d)
     .call(wrap, cfg.wrapWidth)
     .on('mouseover', event => event.target.classList.toggle('hover'))
     .on('mouseout', event => event.target.classList.toggle('hover'))
-    .on('click', (event, datum) => selectTrait(event, datum))
+    .on('click', (event, datum) => selectTrait(event.target, datum))
 
-  /// //////////////////////////////////////////////////////
-  /// ////////// Draw the radar chart blobs ////////////////
-  /// //////////////////////////////////////////////////////
+  /** * --------------------------------------------- ***/
+  /** * --------- Draw the radar chart blobs -------- ***/
+  /** * --------------------------------------------- ***/
 
   // The radial line function
   const radarLine = d3.radialLine()
@@ -367,13 +356,14 @@ function RadarChart (parent_selector, data, options) {
     .append('path')
     .attr('class', 'radarArea')
     .attr('d', d => radarLine(d.axes))
-    .style('fill', (d, i) => d.visibility ? d.color !== -1 ? cfg.color(d.color) : '#b9b9d2' : 'transparent')
+    .style('fill', d => d.visibility ? d.color !== -1 ? cfg.color(d.color) : '#b9b9d2' : 'transparent')
     .style('fill-opacity', cfg.opacityArea)
-    .on('mouseover', function (d, i) {
+    .on('mouseover', function () {
       // Dim all blobs
       parent.selectAll('.radarArea')
         .transition().duration(200)
         .style('fill-opacity', 0.1)
+
       // Bring back the hovered over blob
       d3.select(this)
         .transition().duration(200)
@@ -391,7 +381,7 @@ function RadarChart (parent_selector, data, options) {
     .attr('class', 'radarStroke')
     .attr('d', function (d, i) { return radarLine(d.axes) })
     .style('stroke-width', cfg.strokeWidth + 'px')
-    .style('stroke', (d, i) => d.visibility ? d.color !== -1 ? cfg.color(d.color) : '#b9b9d2' : 'transparent')
+    .style('stroke', d => d.visibility ? d.color !== -1 ? cfg.color(d.color) : '#b9b9d2' : 'transparent')
     .style('fill', 'none')
     .style('filter', 'url(#glow)')
 
@@ -407,9 +397,9 @@ function RadarChart (parent_selector, data, options) {
     .style('fill', (d) => d.visibility ? d.color !== -1 ? cfg.color(d.color) : '#b9b9d2' : 'transparent')
     .style('fill-opacity', 0.8)
 
-  /// //////////////////////////////////////////////////////
-  /// ///// Append invisible circles for tooltip ///////////
-  /// //////////////////////////////////////////////////////
+  /** * --------------------------------------------- ***/
+  /** * ---- Append invisible circles for tooltip --- ***/
+  /** * --------------------------------------------- ***/
 
   // Wrapper for the invisible circles on top
   const blobCircleWrapper = g.selectAll('.radarCircleWrapper')
@@ -449,6 +439,10 @@ function RadarChart (parent_selector, data, options) {
     else if (options.type === 'tipi_neg') return Format(8 - d.value) + cfg.unit
   }
 
+  /** * --------------------------------------------- ***/
+  /** * ------------------ Tooltip ------------------ ***/
+  /** * --------------------------------------------- ***/
+
   const tooltip = g.append('text')
     .attr('class', 'tooltip')
     .attr('x', 0)
@@ -460,74 +454,36 @@ function RadarChart (parent_selector, data, options) {
     .attr('text-anchor', 'middle')
     .attr('dy', '0.35em')
 
-  if (cfg.legend !== false && typeof cfg.legend === 'object') {
-    const legendZone = svg.append('g')
-    const names = data.map(el => el.name)
-    if (cfg.legend.title) {
-      const title = legendZone.append('text')
-        .attr('class', 'title')
-        .attr('transform', `translate(${cfg.legend.translateX},${cfg.legend.translateY})`)
-        .attr('x', cfg.w - 70)
-        .attr('y', 10)
-        .attr('font-size', '12px')
-        .attr('fill', '#404040')
-        .text(cfg.legend.title)
-    }
-    const legend = legendZone.append('g')
-      .attr('class', 'legend')
-      .attr('height', 100)
-      .attr('width', 200)
-      .attr('transform', `translate(${cfg.legend.translateX},${cfg.legend.translateY + 20})`)
-    // Create rectangles markers
-    legend.selectAll('rect')
-      .data(names)
-      .enter()
-      .append('rect')
-      .attr('x', cfg.w - 65)
-      .attr('y', (d, i) => i * 20)
-      .attr('width', 10)
-      .attr('height', 10)
-      .style('fill', (d, i) => cfg.color(i))
-    // Create labels
-    legend.selectAll('text')
-      .data(names)
-      .enter()
-      .append('text')
-      .attr('x', cfg.w - 52)
-      .attr('y', (d, i) => i * 20 + 9)
-      .attr('font-size', '11px')
-      .attr('fill', '#393874')
-      .text(d => d)
-  }
   return svg
 }
 
 // Draws all charts
-function drawCharts () {
+function drawRadarCharts () {
   RadarChart('.radar-big5', radarBig5Data, radarOptionsBigFive)
   RadarChart('.radar-tipi-pos', radarTipiPosData, radarOptionsTipiPos)
   RadarChart('.radar-tipi-neg', radarTipiNegData, radarOptionsTipiNeg)
 }
 
 // Select trait
-function selectTrait (event, datum) {
+function selectTrait (el, datum) {
   showInfo(datum)
 
-  // remove other selected if not same
-  if (!event.target.classList.contains('selected')) {
+  // Remove selected if not same
+  if (!el.classList.contains('selected')) {
     $('.legend .selected').removeClass('selected')
     $('.axis.selected').removeClass('selected')
   }
 
-  event.target.classList.add('selected')
+  el.classList.add('selected')
   $('.axis.' + datum).addClass('selected')
 
   // Update population pyramid
   updatePopulationPyramid(datum)
 }
 
-function getRadarType (datum) {
-  switch (datum) {
+// Return which radar the trait belongs to
+function getRadarType (trait) {
+  switch (trait) {
     case 'O':
     case 'C':
     case 'E':
@@ -552,10 +508,7 @@ function getRadarType (datum) {
   }
 }
 
-/// //////////////////////////////////////////////////////
-/// ///// Radar Chart Selection Updates        ///////////
-/// //////////////////////////////////////////////////////
-
+// Update radar charts when age picked
 async function updateRadarChartsAge (age) {
   // Don't add duplicates
   for (const data of radarBig5Data) {
@@ -564,12 +517,12 @@ async function updateRadarChartsAge (age) {
 
   // Update data
   const dataset = await d3.json('dist/data/age_range_averages.json')
-
   const color = colorIndex++ % colors.length
 
   for (const key in dataset) {
     if (Object.prototype.hasOwnProperty.call(dataset, key)) {
       const entry = dataset[key]
+
       if (entry.age === age) {
         radarBig5Data.push({
           name: 'big five - ' + age,
@@ -611,13 +564,14 @@ async function updateRadarChartsAge (age) {
     }
   }
 
-  // Update radar
-  drawCharts()
+  // Redraw radar charts
+  drawRadarCharts()
 
   // Add to saved btns
   addToSaved(age, 'age', color)
 }
 
+// Update radar charts when gender picked
 async function updateRadarChartsGender (gender) {
   // Don't add duplicates
   for (const data of radarBig5Data) {
@@ -626,12 +580,12 @@ async function updateRadarChartsGender (gender) {
 
   // Update data
   const dataset = await d3.json('dist/data/gender_averages.json')
-
   const color = colorIndex++ % colors.length
 
   for (const key in dataset) {
     if (Object.prototype.hasOwnProperty.call(dataset, key)) {
       const entry = dataset[key]
+
       if (entry.gender === gender) {
         radarBig5Data.push({
           name: 'big five - ' + gender,
@@ -673,16 +627,17 @@ async function updateRadarChartsGender (gender) {
     }
   }
 
-  // Update radar
-  drawCharts()
+  // Redraw radar charts
+  drawRadarCharts()
 
   // Add to saved btns
   addToSaved(gender, 'gender', color)
 }
 
-async function updateRadarChartsPopulation (event, barSelected) {
+// Update radar charts when bar clicked
+async function updateRadarChartsPopulation (el, barSelected) {
   const age = barSelected.age
-  const gender = event.target.classList.contains('left') ? 'M' : 'F'
+  const gender = el.classList.contains('left') ? 'M' : 'F'
 
   // Don't add duplicates
   for (const data of radarBig5Data) {
@@ -692,70 +647,64 @@ async function updateRadarChartsPopulation (event, barSelected) {
   // Update data
   const big5Dataset = await d3.json('dist/data/big5_population.json')
   const tipiDataset = await d3.json('dist/data/tipi_population.json')
-
   const color = colorIndex++ % colors.length
 
-  for (const key in big5Dataset) {
-    if (Object.prototype.hasOwnProperty.call(big5Dataset, key)) {
-      const entry = big5Dataset[key]
-      if (entry.age === age) {
-        radarBig5Data.push({
-          name: 'big five - ' + age + '-' + gender,
-          visibility: true,
-          color: color,
-          axes: [
-            { axis: 'O', value: entry['O_' + gender] },
-            { axis: 'E', value: entry['E_' + gender] },
-            { axis: 'N', value: entry['N_' + gender] },
-            { axis: 'C', value: entry['C_' + gender] },
-            { axis: 'A', value: entry['A_' + gender] }
-          ]
-        })
-      }
+  let index
+  for (let i = 0; i < big5Dataset.length; i++) {
+    const entry = big5Dataset[i]
+
+    if (entry.age === age) {
+      index = i
+      radarBig5Data.push({
+        name: 'big five - ' + age + '-' + gender,
+        visibility: true,
+        color: color,
+        axes: [
+          { axis: 'O', value: entry['O_' + gender] },
+          { axis: 'E', value: entry['E_' + gender] },
+          { axis: 'N', value: entry['N_' + gender] },
+          { axis: 'C', value: entry['C_' + gender] },
+          { axis: 'A', value: entry['A_' + gender] }
+        ]
+      })
     }
   }
 
-  for (const key in tipiDataset) {
-    if (Object.prototype.hasOwnProperty.call(tipiDataset, key)) {
-      const entry = tipiDataset[key]
-      if (entry.age === age) {
-        radarTipiPosData.push({
-          name: 'tipi pos - ' + age + '-' + gender,
-          visibility: true,
-          color: color,
-          axes: [
-            { axis: 'Q5', value: entry['Q5_' + gender] },
-            { axis: 'Q1', value: entry['Q1_' + gender] },
-            { axis: 'Q4', value: entry['Q4_' + gender] },
-            { axis: 'Q3', value: entry['Q3_' + gender] },
-            { axis: 'Q7', value: entry['Q7_' + gender] }
-          ]
-        })
-        radarTipiNegData.push({
-          name: 'tipi neg - ' + age + '-' + gender,
-          visibility: true,
-          color: color,
-          axes: [
-            { axis: 'Q10', value: 8 - entry['Q10_' + gender] },
-            { axis: 'Q6', value: 8 - entry['Q6_' + gender] },
-            { axis: 'Q9', value: 8 - entry['Q9_' + gender] },
-            { axis: 'Q8', value: 8 - entry['Q8_' + gender] },
-            { axis: 'Q2', value: 8 - entry['Q2_' + gender] }
-          ]
-        })
-      }
-    }
-  }
+  radarTipiPosData.push({
+    name: 'tipi pos - ' + age + '-' + gender,
+    visibility: true,
+    color: color,
+    axes: [
+      { axis: 'Q5', value: tipiDataset[index]['Q5_' + gender] },
+      { axis: 'Q1', value: tipiDataset[index]['Q1_' + gender] },
+      { axis: 'Q4', value: tipiDataset[index]['Q4_' + gender] },
+      { axis: 'Q3', value: tipiDataset[index]['Q3_' + gender] },
+      { axis: 'Q7', value: tipiDataset[index]['Q7_' + gender] }
+    ]
+  })
 
-  // Update radar
-  drawCharts()
+  radarTipiNegData.push({
+    name: 'tipi neg - ' + age + '-' + gender,
+    visibility: true,
+    color: color,
+    axes: [
+      { axis: 'Q10', value: 8 - tipiDataset[index]['Q10_' + gender] },
+      { axis: 'Q6', value: 8 - tipiDataset[index]['Q6_' + gender] },
+      { axis: 'Q9', value: 8 - tipiDataset[index]['Q9_' + gender] },
+      { axis: 'Q8', value: 8 - tipiDataset[index]['Q8_' + gender] },
+      { axis: 'Q2', value: 8 - tipiDataset[index]['Q2_' + gender] }
+    ]
+  })
+
+  // Redraw radar charts
+  drawRadarCharts()
 
   // Add to saved btns
   addToSaved(age + '-' + gender, 'age&gender', color)
 }
 
+// Add a btn to saved results
 function addToSaved (id, type, color) {
-  console.log(color)
   const btn = d3.select('.saved-btns')
     .append('div')
     .attr('class', 'saved-btn mx-1 ' + getBtnColor(color))
@@ -789,9 +738,8 @@ function addToSaved (id, type, color) {
   eva.replace()
 }
 
+// Remove btn from saved results
 function removeFromSaved (id) {
-  console.log(id)
-
   for (let i = radarBig5Data.length - 1; i >= 0; i--) {
     if (radarBig5Data[i].name === 'big five - ' + id) {
       radarBig5Data.splice(i, 1)
@@ -800,15 +748,13 @@ function removeFromSaved (id) {
     }
   }
 
-  console.log(radarBig5Data)
-  console.log(radarTipiPosData)
-  console.log(radarTipiNegData)
-  drawCharts()
+  drawRadarCharts()
   $('.saved-btns #' + id).remove()
 }
 
+// Toggle visibility of a blob
 function toggleVisibility (el, id) {
-  // if clicked on a child element, go back till reaches parent
+  // If clicked on a child element, go back till it reaches parent
   while (!el.classList.contains('saved-btn') && !el.classList.contains('close')) { el = el.parentElement }
   el.classList.toggle('muted')
 
@@ -821,7 +767,7 @@ function toggleVisibility (el, id) {
       break
     }
   }
-  drawCharts()
+  drawRadarCharts()
 }
 
 function getBtnInfo (type) {
@@ -865,15 +811,12 @@ function getBtnColor (colorIndex) {
 
 function formatText (id) {
   const splitted = id.split('-')
+
   if (splitted.length === 3) {
     const age = splitted[0] + '-' + splitted[1]
     const gender = splitted[2]
     return age + ' | ' + (gender === 'M' ? 'Male' : 'Female')
-  } else if (id === 'M') {
-    return 'Male'
-  } else if (id === 'F') {
-    return 'Female'
   } else {
-    return id
+    return id === 'M' ? 'Male' : id === 'F' ? 'Female' : id
   }
 }
