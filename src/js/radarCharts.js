@@ -686,7 +686,7 @@ async function updateRadarChartsPopulation (event, barSelected) {
 
   // Don't add duplicates
   for (const data of radarBig5Data) {
-    if (data.name === 'big five - ' + age + '|' + gender) { return }
+    if (data.name === 'big five - ' + age + '-' + gender) { return }
   }
 
   // Update data
@@ -700,7 +700,7 @@ async function updateRadarChartsPopulation (event, barSelected) {
       const entry = big5Dataset[key]
       if (entry.age === age) {
         radarBig5Data.push({
-          name: 'big five - ' + age + '|' + gender,
+          name: 'big five - ' + age + '-' + gender,
           visibility: true,
           color: color,
           axes: [
@@ -720,7 +720,7 @@ async function updateRadarChartsPopulation (event, barSelected) {
       const entry = tipiDataset[key]
       if (entry.age === age) {
         radarTipiPosData.push({
-          name: 'tipi pos - ' + age + '|' + gender,
+          name: 'tipi pos - ' + age + '-' + gender,
           visibility: true,
           color: color,
           axes: [
@@ -732,7 +732,7 @@ async function updateRadarChartsPopulation (event, barSelected) {
           ]
         })
         radarTipiNegData.push({
-          name: 'tipi neg - ' + age + '|' + gender,
+          name: 'tipi neg - ' + age + '-' + gender,
           visibility: true,
           color: color,
           axes: [
@@ -751,7 +751,7 @@ async function updateRadarChartsPopulation (event, barSelected) {
   drawCharts()
 
   // Add to saved btns
-  addToSaved(age + '|' + gender, 'age&gender', color)
+  addToSaved(age + '-' + gender, 'age&gender', color)
 }
 
 function addToSaved (id, type, color) {
@@ -763,7 +763,7 @@ function addToSaved (id, type, color) {
 
   const close = btn.append('div')
     .attr('class', 'close')
-    .on('click', (event) => removeFromSaved(event.target, id))
+    .on('click', () => removeFromSaved(id))
 
   close.append('i')
     .attr('data-eva', 'close-outline')
@@ -789,7 +789,9 @@ function addToSaved (id, type, color) {
   eva.replace()
 }
 
-function removeFromSaved (el, id) {
+function removeFromSaved (id) {
+  console.log(id)
+
   for (let i = radarBig5Data.length - 1; i >= 0; i--) {
     if (radarBig5Data[i].name === 'big five - ' + id) {
       radarBig5Data.splice(i, 1)
@@ -862,9 +864,10 @@ function getBtnColor (colorIndex) {
 }
 
 function formatText (id) {
-  if (id.includes('|')) {
-    const age = id.split('|')[0]
-    const gender = id.split('|')[1]
+  const splitted = id.split('-')
+  if (splitted.length === 3) {
+    const age = splitted[0] + '-' + splitted[1]
+    const gender = splitted[2]
     return age + ' | ' + (gender === 'M' ? 'Male' : 'Female')
   } else if (id === 'M') {
     return 'Male'
