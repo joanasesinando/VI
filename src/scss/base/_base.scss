@@ -48,6 +48,7 @@ body {
 
 ::-webkit-scrollbar {
 	width: 5px;
+	height: 5px;
 	background-color: color(primary, 1);
 	border-radius: 10px;
 }
@@ -63,6 +64,15 @@ body {
 
 	&:hover {
 		background-color: darken(color(primary, 1), 5);
+	}
+}
+
+.saved-btns::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background-color: #c8c8d3;
+
+	&:hover {
+		background-color: darken(#c8c8d3, 5);
 	}
 }
 

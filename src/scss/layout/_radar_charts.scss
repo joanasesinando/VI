@@ -82,9 +82,15 @@
 		color: color(typography, 1);
 		position: absolute;
 		bottom: 20px;
+		width: 95%;
 
 		h6 span {
 			font-size: .7rem;
+		}
+
+		.saved-btns {
+			overflow: auto;
+			white-space: nowrap;
 		}
 	}
 }
