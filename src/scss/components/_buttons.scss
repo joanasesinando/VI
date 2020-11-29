@@ -136,6 +136,72 @@
 	}
 }
 
+.saved-btn.dark-blue {
+	background-color: color(additional-9, 1);
+	.icon { background-color: color(additional-9, 2); }
+	&:hover {
+		background-color: darken(color(additional-9, 1), 2);
+		border: 2px solid color(additional-9, 3);
+		.icon { background-color: darken(color(additional-9, 2), 2); }
+		.close svg { fill: darken(color(additional-9, 2), 20); }
+	}
+}
+
+.saved-btn.violet {
+	background-color: color(additional-6, 1);
+	.icon { background-color: color(additional-6, 2); }
+	&:hover {
+		background-color: darken(color(additional-6, 1), 2);
+		border: 2px solid color(additional-6, 3);
+		.icon { background-color: darken(color(additional-6, 2), 2); }
+		.close svg { fill: darken(color(additional-6, 2), 20); }
+	}
+}
+
+.saved-btn.red {
+	background-color: color(additional-5, 1);
+	.icon { background-color: color(additional-5, 2); }
+	&:hover {
+		background-color: darken(color(additional-5, 1), 2);
+		border: 2px solid color(additional-5, 3);
+		.icon { background-color: darken(color(additional-5, 2), 2); }
+		.close svg { fill: darken(color(additional-5, 2), 20); }
+	}
+}
+
+.saved-btn.light-green {
+	background-color: color(additional-8, 1);
+	.icon { background-color: color(additional-8, 2); }
+	&:hover {
+		background-color: darken(color(additional-8, 1), 2);
+		border: 2px solid color(additional-8, 3);
+		.icon { background-color: darken(color(additional-8, 2), 2); }
+		.close svg { fill: darken(color(additional-8, 2), 20); }
+	}
+}
+
+.saved-btn.brown {
+	background-color: color(additional-10, 1);
+	.icon { background-color: color(additional-10, 2); }
+	&:hover {
+		background-color: darken(color(additional-10, 1), 2);
+		border: 2px solid color(additional-10, 3);
+		.icon { background-color: darken(color(additional-10, 2), 2); }
+		.close svg { fill: darken(color(additional-10, 2), 20); }
+	}
+}
+
+.saved-btn.teal {
+	background-color: color(additional-7, 1);
+	.icon { background-color: color(additional-7, 2); }
+	&:hover {
+		background-color: darken(color(additional-7, 1), 2);
+		border: 2px solid color(additional-7, 3);
+		.icon { background-color: darken(color(additional-7, 2), 2); }
+		.close svg { fill: darken(color(additional-7, 2), 20); }
+	}
+}
+
 .saved-btn.muted {
 	background-color: color(bg, 2);
 	.icon {

@@ -9,7 +9,7 @@ let radarOptionsTipiPos
 let radarOptionsTipiNeg
 
 // Color scheme to be used
-const colors = ['#8675FF', '#ff9065', '#42CC7E', '#66C8FF', '#EE7DB1', '#FFBA69']
+const colors = ['#8675FF', '#ff9065', '#42CC7E', '#66C8FF', '#EE7DB1', '#FFBA69', '#5C6BC0', '#DE4744', '#BA68C8', '#61C8BE', '#8D6E63', '#AED581']
 let colorIndex // used to pick the next color (when last, goes back to beginning of color array)
 
 (async function () {
@@ -806,6 +806,18 @@ function getBtnColor (colorIndex) {
       return 'pink'
     case 5:
       return 'yellow'
+    case 6:
+      return 'dark-blue'
+    case 7:
+      return 'red'
+    case 8:
+      return 'violet'
+    case 9:
+      return 'teal'
+    case 10:
+      return 'brown'
+    case 11:
+      return 'light-green'
   }
 }
 
