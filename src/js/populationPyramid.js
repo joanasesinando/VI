@@ -74,7 +74,7 @@ function drawPopulationPyramid (target, data, options) {
   /** * ------------------ Draw tooltip ------------------- ***/
 
   const tooltipDiv = d3.select('body').append('div')
-    .attr('class', 'tooltip')
+    .attr('class', 'tooltip tooltip-pyramid')
     .style('opacity', 0)
 
   /** * ------------------ Draw pyramid ------------------- ***/

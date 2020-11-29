@@ -270,6 +270,14 @@ function RadarChart (parent_selector, data, options) {
   feMerge.append('feMergeNode').attr('in', 'SourceGraphic')
 
   /** * --------------------------------------------- ***/
+  /** * ------------------ Tooltip ------------------ ***/
+  /** * --------------------------------------------- ***/
+
+  const tooltipDiv = d3.select('body').append('div')
+    .attr('class', 'tooltip tooltip-radar')
+    .style('opacity', 0)
+
+  /** * --------------------------------------------- ***/
   /** * ----------- Draw the circular grid ---------- ***/
   /** * --------------------------------------------- ***/
 
@@ -417,42 +425,24 @@ function RadarChart (parent_selector, data, options) {
     .attr('cy', (d, i) => rScale(d.value) * Math.sin(cfg.startAngle + angleSlice * i - (Math.PI / 2)))
     .style('fill', 'none')
     .style('pointer-events', 'all')
-    .on('mouseover', function (e, d) {
-      tooltip
-        .attr('x', this.cx.baseVal.value - 10)
-        .attr('y', this.cy.baseVal.value - 10)
-        .transition()
-        .style('display', 'block')
-        .style('opacity', '1')
-        .style('user-select', 'none')
-        .text(text(d))
+    .on('mouseover', (event, d) => {
+      tooltipDiv.transition()
+        .duration(200)
+        .style('opacity', 1)
+      tooltipDiv.html('<strong>' + text(d) + '</strong>')
+        .style('left', (event.pageX - 20) + 'px')
+        .style('top', (event.pageY - 35) + 'px')
     })
-    .on('mouseout', function () {
-      tooltip.transition()
-        .style('display', 'none')
-        .style('opacity', '0')
-        .text('')
+    .on('mouseout', () => {
+      tooltipDiv.transition()
+        .duration(500)
+        .style('opacity', 0)
     })
 
   function text (d) {
     if (options.type === 'big5' || options.type === 'tipi_pos') return Format(d.value) + cfg.unit
     else if (options.type === 'tipi_neg') return Format(8 - d.value) + cfg.unit
   }
-
-  /** * --------------------------------------------- ***/
-  /** * ------------------ Tooltip ------------------ ***/
-  /** * --------------------------------------------- ***/
-
-  const tooltip = g.append('text')
-    .attr('class', 'tooltip')
-    .attr('x', 0)
-    .attr('y', 0)
-    .style('font-size', '13px')
-    .style('font-family', 'Poppins')
-    .style('font-weight', '600')
-    .style('display', 'none')
-    .attr('text-anchor', 'middle')
-    .attr('dy', '0.35em')
 
   return svg
 }

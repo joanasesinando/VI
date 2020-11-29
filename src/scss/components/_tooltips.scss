@@ -8,7 +8,7 @@
 	border-radius: 10px;
 	box-shadow: 0 1.77778px 8.88889px 8.88889px rgba(0, 0, 0, 0.16);
 
-	&:after {
+	:not(&.tooltip-radar):after {
 		content: '';
 		display: block;
 		position: absolute;
