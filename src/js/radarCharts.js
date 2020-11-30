@@ -151,10 +151,11 @@ let colorIndex // used to pick the next color (when last, goes back to beginning
   }
 
   /** * --------------------------------------------- ***/
-  /** * ---------------- Draw charts ---------------- ***/
+  /** * ----- Draw charts & Default selections ------ ***/
   /** * --------------------------------------------- ***/
 
   drawRadarCharts()
+  selectTrait($('.axis.O .legend tspan')[0], 'O')
 
   const t1 = performance.now()
   const time = (t1 - t0) / 1000
