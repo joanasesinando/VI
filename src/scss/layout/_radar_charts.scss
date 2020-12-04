@@ -4,6 +4,10 @@
 	.radars {
 		h5 {
 			color: color(typography, 1);
+			&:hover {
+				color: color(primary, 1);
+				cursor: pointer;
+			}
 		}
 
 		.radar-big5 {

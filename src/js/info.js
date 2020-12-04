@@ -4,6 +4,24 @@ function getInfo (datum) {
   let source
 
   switch (datum) {
+    case 'Big Five':
+      title = 'Big Five Personality Test'
+      description = 'Mollis maecenas eu orci vitae nibh euismod. Morbi bibendum tellus massa ultricies cras mattis ' +
+        'aenean senectus. Et quis faucibus nulla enim volutpat amet. Pharetra, neque ipsum in lorem. Dictumst ' +
+        'malesuada viverra felis, diam consequat non accumsan, tristique nulla. A amet dictumst aliquet aenean eget ' +
+        'aenean nunc sed interdum. Dui lectus vulputate ultricies nunc, arcu volutpat lorem in amet.'
+      source = { url: '#', text: 'wikipedia.org' }
+      break
+
+    case 'TIPI':
+      title = 'Ten Item Personality Measure (TIPI)'
+      description = 'Mollis maecenas eu orci vitae nibh euismod. Morbi bibendum tellus massa ultricies cras mattis ' +
+        'aenean senectus. Et quis faucibus nulla enim volutpat amet. Pharetra, neque ipsum in lorem. Dictumst ' +
+        'malesuada viverra felis, diam consequat non accumsan, tristique nulla. A amet dictumst aliquet aenean eget ' +
+        'aenean nunc sed interdum. Dui lectus vulputate ultricies nunc, arcu volutpat lorem in amet.'
+      source = { url: '#', text: 'wikipedia.org' }
+      break
+
     case 'O':
       title = 'Openness'
       description = 'Mollis maecenas eu orci vitae nibh euismod. Morbi bibendum tellus massa ultricies cras mattis ' +
