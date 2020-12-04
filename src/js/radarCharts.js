@@ -12,6 +12,9 @@ let radarOptionsTipiNeg
 const colors = ['#8675FF', '#ff9065', '#42CC7E', '#66C8FF', '#EE7DB1', '#FFBA69', '#5C6BC0', '#DE4744', '#BA68C8', '#61C8BE', '#8D6E63', '#AED581']
 let colorIndex // used to pick the next color (when last, goes back to beginning of color array)
 
+// Current trait selected
+let currentTrait
+
 (async function () {
   console.log('%cDrawing radar charts...', 'color: #EE7DB1; font-weight: bold')
   const t0 = performance.now()
@@ -154,8 +157,8 @@ let colorIndex // used to pick the next color (when last, goes back to beginning
   /** * ----- Draw charts & Default selections ------ ***/
   /** * --------------------------------------------- ***/
 
+  currentTrait = 'O'
   drawRadarCharts()
-  selectTrait($('.axis.O .legend tspan')[0], 'O')
 
   const t1 = performance.now()
   const time = (t1 - t0) / 1000
@@ -453,10 +456,13 @@ function drawRadarCharts () {
   RadarChart('.radar-big5', radarBig5Data, radarOptionsBigFive)
   RadarChart('.radar-tipi-pos', radarTipiPosData, radarOptionsTipiPos)
   RadarChart('.radar-tipi-neg', radarTipiNegData, radarOptionsTipiNeg)
+
+  selectTrait($('.axis.' + currentTrait + ' .legend tspan')[0], currentTrait)
 }
 
 // Select trait
 function selectTrait (el, datum) {
+  currentTrait = datum
   showInfo(datum)
 
   // Remove selected if not same
