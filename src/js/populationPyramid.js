@@ -126,42 +126,6 @@ function drawPopulationPyramid (target, data, options) {
     .scale(xScalePyramid.copy().range([leftBegin, 0]))
     .tickFormat(d3.format(options.type === 'big5' ? '.0%' : options.type === 'tipi' ? '.1f' : '.0%'))
 
-  // DRAW AXES
-  pyramid.append('g')
-    .attr('class', 'axis y left')
-    .attr('transform', translation(leftBegin, 0))
-    .call(yAxisLeft)
-    .selectAll('text')
-    .style('text-anchor', 'middle')
-    .on('click', (event, datum) => updateRadarChartsAge(datum))
-
-  pyramid.append('g')
-    .attr('class', 'axis y right')
-    .attr('transform', translation(rightBegin, 0))
-    .call(yAxisRight)
-
-  pyramid.append('g')
-    .attr('class', 'axis x left')
-    .attr('transform', translation(0, h))
-    .call(xAxisLeft)
-
-  pyramid.append('g')
-    .attr('class', 'grid')
-    .attr('transform', translation(0, h))
-    .call(xAxisLeftRule)
-    .style('opacity', 0.1)
-
-  pyramid.append('g')
-    .attr('class', 'axis x right')
-    .attr('transform', translation(rightBegin, h))
-    .call(xAxisRight)
-
-  pyramid.append('g')
-    .attr('class', 'grid')
-    .attr('transform', translation(rightBegin, h))
-    .call(xAxisRightRule)
-    .style('opacity', 0.1)
-
   // MAKE GROUPS FOR EACH SIDE OF CHART
   // scale(-1,1) is used to reverse the left side so the bars grow left instead of right
   const leftBarGroup = pyramid.append('g')
@@ -215,6 +179,42 @@ function drawPopulationPyramid (target, data, options) {
         .style('opacity', 0)
     })
     .on('click', (event, datum) => updateRadarChartsPopulation(event.target, datum))
+
+  // DRAW AXES
+  pyramid.append('g')
+    .attr('class', 'axis y left')
+    .attr('transform', translation(leftBegin, 0))
+    .call(yAxisLeft)
+    .selectAll('text')
+    .style('text-anchor', 'middle')
+    .on('click', (event, datum) => updateRadarChartsAge(datum))
+
+  pyramid.append('g')
+    .attr('class', 'axis y right')
+    .attr('transform', translation(rightBegin, 0))
+    .call(yAxisRight)
+
+  pyramid.append('g')
+    .attr('class', 'axis x left')
+    .attr('transform', translation(0, h))
+    .call(xAxisLeft)
+
+  pyramid.append('g')
+    .attr('class', 'grid')
+    .attr('transform', translation(0, h))
+    .call(xAxisLeftRule)
+    .style('opacity', 0.1)
+
+  pyramid.append('g')
+    .attr('class', 'axis x right')
+    .attr('transform', translation(rightBegin, h))
+    .call(xAxisRight)
+
+  pyramid.append('g')
+    .attr('class', 'grid')
+    .attr('transform', translation(rightBegin, h))
+    .call(xAxisRightRule)
+    .style('opacity', 0.1)
 
   /* HELPER FUNCTIONS */
 
