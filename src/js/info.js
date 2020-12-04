@@ -1,3 +1,4 @@
+// Gets information to be shown on the left section
 function getInfo (datum) {
   let title
   let description

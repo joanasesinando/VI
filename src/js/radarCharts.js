@@ -83,7 +83,7 @@ let colorIndex // used to pick the next color (when last, goes back to beginning
     labelFactor: 1.2,
     roundStrokes: false,
     color: d3.scaleOrdinal().range(colors),
-    format: '.1f',
+    format: '.2f',
     unit: '%',
     type: 'big5'
   }
@@ -98,7 +98,7 @@ let colorIndex // used to pick the next color (when last, goes back to beginning
     startAngle: 0,
     roundStrokes: false,
     color: d3.scaleOrdinal().range(colors),
-    format: '.1f',
+    format: '.2f',
     type: 'tipi_pos'
   }
 
@@ -112,7 +112,7 @@ let colorIndex // used to pick the next color (when last, goes back to beginning
     startAngle: 0,
     roundStrokes: false,
     color: d3.scaleOrdinal().range(colors),
-    format: '.1f',
+    format: '.2f',
     type: 'tipi_neg'
   }
 

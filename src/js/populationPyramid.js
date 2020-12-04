@@ -1,4 +1,10 @@
-let populationPyramidData
+// Population pyramid data array
+let populationPyramidData = []
+
+// Options for the pyramid
+let pyramidOptions
+
+// Scales for both axes
 let xScalePyramid
 let yScalePyramid
 
@@ -10,21 +16,15 @@ let yScalePyramid
   /** * ------------------ Set Up ------------------ ***/
   /** * -------------------------------------------- ***/
 
+  const margin = { top: 0, right: 10, bottom: 15, left: 10, middle: 20 }
   const width = 470
   const height = 170
-  const margin = { top: 0, right: 10, bottom: 15, left: 10, middle: 20 }
 
-  const pyramidOptions = {
-    w: width,
-    h: height,
-    margin: margin,
-    type: ''
-  }
+  /** * --------------------------------------------- ***/
+  /** * ------------------- Data -------------------- ***/
+  /** * --------------------------------------------- ***/
 
-  /** * -------------------------------------------- ***/
-  /** * ---------------- Initial Data -------------- ***/
-  /** * -------------------------------------------- ***/
-
+  // Initial data
   populationPyramidData = [
     { age: '10-15', male: 0, female: 0 },
     { age: '16-20', male: 0, female: 0 },
@@ -40,9 +40,20 @@ let yScalePyramid
     { age: '66-70', male: 0, female: 0 }
   ]
 
-  /** * ---------------------------------------------------- ***/
-  /** * ------------------ Draw pyramid --------------------- ***/
-  /** * ---------------------------------------------------- ***/
+  /** * --------------------------------------------- ***/
+  /** * ---------------- Set Options ---------------- ***/
+  /** * --------------------------------------------- ***/
+
+  pyramidOptions = {
+    w: width,
+    h: height,
+    margin: margin,
+    type: 'big5'
+  }
+
+  /** * --------------------------------------------- ***/
+  /** * --------------- Draw pyramid ---------------- ***/
+  /** * --------------------------------------------- ***/
 
   drawPopulationPyramid('.population-pyramid', populationPyramidData, pyramidOptions)
 
@@ -51,6 +62,18 @@ let yScalePyramid
   console.log('%cPyramid - DONE! (' + time.toFixed(2) + 's)', 'color: #8675FF; font-weight: bold')
 }())
 
+/** * --------------------------------------------- ***/
+/** * ----------------- Functions ----------------- ***/
+/** * --------------------------------------------- ***/
+
+/* ---------------------------------------------------------------
+ * -------- D3.js Population Pyramid Function (adapted) ----------
+ * ---------------------------------------------------------------
+ * Description: function to draw a population pyramid in D3.js
+ * Author: doylek
+ * Site: https://github.com/doylek/D3-Population-Pyramid
+ * Link: https://doylek.github.io/D3-Population-Pyramid/
+ * --------------------------------------------------------------- */
 function drawPopulationPyramid (target, data, options) {
   let w = typeof options.w === 'undefined' ? 400 : options.w
   let h = typeof options.h === 'undefined' ? 400 : options.h
@@ -64,26 +87,36 @@ function drawPopulationPyramid (target, data, options) {
   w = (w - (options.margin.left + options.margin.right))
   h = (h - (options.margin.top + options.margin.bottom))
 
+  /** * --------------------------------------------- ***/
+  /** * ------- Create the container SVG and g ------ ***/
+  /** * --------------------------------------------- ***/
+
   const parent = d3.select(target)
+
+  // Remove whatever pyramid with the same id/class was present before
   parent.select('svg').remove()
 
-  const svg = d3.select(target).append('svg')
+  // Initiate the pyramid SVG
+  const svg = parent.append('svg')
     .attr('width', w_full)
     .attr('height', h_full)
 
-  /** * ------------------ Draw tooltip ------------------- ***/
+  // Append a g element
+  const pyramid = svg.append('g')
+    .attr('class', 'inner-region')
+    .attr('transform', translation(options.margin.left, options.margin.top))
+
+  /** * --------------------------------------------- ***/
+  /** * ------------------ Tooltip ------------------ ***/
+  /** * --------------------------------------------- ***/
 
   const tooltipDiv = d3.select('body').append('div')
     .attr('class', 'tooltip tooltip-pyramid')
     .style('opacity', 0)
 
-  /** * ------------------ Draw pyramid ------------------- ***/
-
-  const pyramid = svg.append('g')
-    .attr('class', 'inner-region')
-    .attr('transform', translation(options.margin.left, options.margin.top))
-
-  // SET UP SCALES
+  /** * --------------------------------------------- ***/
+  /** * ---------------- Set up scales -------------- ***/
+  /** * --------------------------------------------- ***/
 
   // the xScale goes from 0 to the width of a region
   //  it will be reversed for the left x-axis
@@ -96,7 +129,10 @@ function drawPopulationPyramid (target, data, options) {
     .domain(data.map(d => d.age))
     .range([h, 0], 0.1)
 
-  // SET UP AXES
+  /** * --------------------------------------------- ***/
+  /** * ----------------- Set up axes --------------- ***/
+  /** * --------------------------------------------- ***/
+
   const yAxisLeft = d3.axisRight()
     .scale(yScalePyramid)
     .tickSize(4, 0)
@@ -109,7 +145,7 @@ function drawPopulationPyramid (target, data, options) {
 
   const xAxisRight = d3.axisBottom()
     .scale(xScalePyramid)
-    .tickFormat(d3.format(options.type === 'big5' ? '.0%' : options.type === 'tipi' ? '.1f' : '.0%'))
+    .tickFormat(d3.format('.0%'))
 
   const xAxisRightRule = d3.axisBottom()
     .scale(xScalePyramid)
@@ -124,7 +160,11 @@ function drawPopulationPyramid (target, data, options) {
   const xAxisLeft = d3.axisBottom()
     // REVERSE THE X-AXIS SCALE ON THE LEFT SIDE BY REVERSING THE RANGE
     .scale(xScalePyramid.copy().range([leftBegin, 0]))
-    .tickFormat(d3.format(options.type === 'big5' ? '.0%' : options.type === 'tipi' ? '.1f' : '.0%'))
+    .tickFormat(d3.format('.0%'))
+
+  /** * --------------------------------------------- ***/
+  /** * ------------------ Draw bars ---------------- ***/
+  /** * --------------------------------------------- ***/
 
   // MAKE GROUPS FOR EACH SIDE OF CHART
   // scale(-1,1) is used to reverse the left side so the bars grow left instead of right
@@ -180,7 +220,10 @@ function drawPopulationPyramid (target, data, options) {
     })
     .on('click', (event, datum) => updateRadarChartsPopulation(event.target, datum))
 
-  // DRAW AXES
+  /** * --------------------------------------------- ***/
+  /** * ------------------ Draw axes ---------------- ***/
+  /** * --------------------------------------------- ***/
+
   pyramid.append('g')
     .attr('class', 'axis y left')
     .attr('transform', translation(leftBegin, 0))
@@ -216,14 +259,13 @@ function drawPopulationPyramid (target, data, options) {
     .call(xAxisRightRule)
     .style('opacity', 0.1)
 
-  /* HELPER FUNCTIONS */
-
   // string concat for translate
   function translation (x, y) {
     return 'translate(' + x + ',' + y + ')'
   }
 }
 
+// Update population pyramid when trait selected
 async function updatePopulationPyramid (traitSelected) {
   const type = getRadarType(traitSelected)
 
@@ -261,4 +303,25 @@ async function updatePopulationPyramid (traitSelected) {
     .attr('y', d => yScalePyramid(d.age) + 2)
     .attr('width', d => type === 'big5' ? xScalePyramid(d.female) / 100 : type === 'tipi' ? xScalePyramid((d.female - 1) * 100 / 6) / 100 : xScalePyramid(d.female) / 100)
     .attr('height', (yScalePyramid.range()[0] / data.length) - 2)
+
+  // Set tooltip format
+  const tooltipDiv = d3.select('.tooltip.tooltip-pyramid')
+
+  d3.selectAll('.bar.left').on('mouseover', (event, d) => {
+    tooltipDiv.transition()
+      .duration(200)
+      .style('opacity', 1)
+    tooltipDiv.html(type === 'big5' ? '<strong>' + d.male + '%</strong>' : '<strong>' + d.male + '</strong>')
+      .style('left', (event.pageX - 20) + 'px')
+      .style('top', (event.pageY - 35) + 'px')
+  })
+
+  d3.selectAll('.bar.right').on('mouseover', (event, d) => {
+    tooltipDiv.transition()
+      .duration(200)
+      .style('opacity', 1)
+    tooltipDiv.html(type === 'big5' ? '<strong>' + d.female + '%</strong>' : '<strong>' + d.female + '</strong>')
+      .style('left', (event.pageX - 20) + 'px')
+      .style('top', (event.pageY - 35) + 'px')
+  })
 }
