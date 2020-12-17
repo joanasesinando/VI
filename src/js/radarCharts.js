@@ -476,6 +476,7 @@ function selectTrait (el, datum) {
 
   // Update population pyramid
   updatePopulationPyramid(datum)
+  updateChoroplethMap(datum)
 }
 
 // Return which radar the trait belongs to
@@ -700,6 +701,70 @@ async function updateRadarChartsPopulation (el, barSelected) {
   addToSaved(age + '-' + gender, 'age&gender', color)
 }
 
+// Update radar charts when country picked
+async function updateRadarChartsCountry (country) {
+  const countryName = country.__data__.properties.name
+  console.log(countryName)
+  // Don't add duplicates
+  for (const data of radarBig5Data) {
+    if (data.name === 'big five - ' + countryName) { return }
+  }
+
+  // Update data
+  const dataset = await d3.json('dist/data/country_averages.json')
+  const color = colorIndex++ % colors.length
+
+  for (const key in dataset) {
+    if (Object.prototype.hasOwnProperty.call(dataset, key)) {
+      const entry = dataset[key]
+
+      if (entry.country === countryName) {
+        radarBig5Data.push({
+          name: 'big five - ' + countryName,
+          visibility: true,
+          color: color,
+          axes: [
+            { axis: 'O', value: entry.O },
+            { axis: 'E', value: entry.E },
+            { axis: 'N', value: entry.N },
+            { axis: 'C', value: entry.C },
+            { axis: 'A', value: entry.A }
+          ]
+        })
+        radarTipiPosData.push({
+          name: 'tipi pos - ' + countryName,
+          visibility: true,
+          color: color,
+          axes: [
+            { axis: 'Q5', value: entry.Q5 },
+            { axis: 'Q1', value: entry.Q1 },
+            { axis: 'Q4', value: entry.Q4 },
+            { axis: 'Q3', value: entry.Q3 },
+            { axis: 'Q7', value: entry.Q7 }
+          ]
+        })
+        radarTipiNegData.push({
+          name: 'tipi neg - ' + countryName,
+          visibility: true,
+          color: color,
+          axes: [
+            { axis: 'Q10', value: 8 - entry.Q10 },
+            { axis: 'Q6', value: 8 - entry.Q6 },
+            { axis: 'Q9', value: 8 - entry.Q9 },
+            { axis: 'Q8', value: 8 - entry.Q8 },
+            { axis: 'Q2', value: 8 - entry.Q2 }
+          ]
+        })
+      }
+    }
+  }
+
+  // Redraw radar charts
+  drawRadarCharts()
+  // Add to saved btns
+  addToSaved(countryName, 'country', color)
+}
+
 // Add a btn to saved results
 function addToSaved (id, type, color) {
   const btn = d3.select('.saved-btns')
@@ -786,6 +851,12 @@ function getBtnInfo (type) {
         icon: 'bar-chart-outline',
         title: 'Population'
       }
+
+    case 'country':
+      return {
+        icon: 'globe-2-outline',
+        title: 'Country'
+      }
   }
 }
 
@@ -826,6 +897,12 @@ function formatText (id) {
     const gender = splitted[2]
     return age + ' | ' + (gender === 'M' ? 'Male' : 'Female')
   } else {
-    return id === 'M' ? 'Male' : id === 'F' ? 'Female' : id
+    if (id === 'M') {
+      return 'Male'
+    } else if (id === 'F') {
+      return 'Female'
+    } else {
+      return id
+    }
   }
 }
