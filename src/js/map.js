@@ -92,13 +92,13 @@ function drawChoroplethMap (target, data, options) {
     data.forEach(d => {
       traitValue[d.country] = d.trait
     })
-    console.log(traitValue)
+    // console.log(traitValue)
     const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries)
 
     colorScale
       .domain(countries.features.map(d => traitValue[d.properties.name]))
       .domain(colorScale.domain().sort())
-    console.log(colorScale.domain())
+    // console.log(colorScale.domain())
 
     map.selectAll('path')
       .data(countries.features)
