@@ -1,9 +1,13 @@
 .map {
-	//fill: color(typography, 4);
 	position: relative;
+	background: #66C8FF;
 
 	svg {
 		border-radius: 10px;
+	}
+
+	rect {
+		stroke: black;
 	}
 
 	.country:hover {

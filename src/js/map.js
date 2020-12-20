@@ -1,4 +1,4 @@
-let choroplethMapData = []
+// let choroplethMapData = []
 let mapOptions
 
 (async function () {
@@ -12,7 +12,7 @@ let mapOptions
     w: width,
     h: height
   }
-  choroplethMapData = []
+  const choroplethMapData = []
   const data = await d3.json('dist/data/country_averages.json')
   for (const key in data) {
     if (Object.prototype.hasOwnProperty.call(data, key)) {
@@ -24,14 +24,16 @@ let mapOptions
     }
   }
 
-  drawChoroplethMap('.map', choroplethMapData, mapOptions)
+  const type = 'big5'
+
+  drawChoroplethMap('.map', choroplethMapData, mapOptions, type)
 
   const t1 = performance.now()
   const time = (t1 - t0) / 1000
   console.log('%cMap - DONE! (' + time.toFixed(2) + 's)', 'color: #42CC7E; font-weight: bold')
 }())
 
-function drawChoroplethMap (target, data, options) {
+function drawChoroplethMap (target, data, options, dataType) {
   const w = typeof options.w === 'undefined' ? '100%' : options.w
   const h = typeof options.h === 'undefined' ? '100%' : options.h
   const w_full = w
@@ -51,64 +53,61 @@ function drawChoroplethMap (target, data, options) {
   const path = d3.geoPath().projection(projection)
 
   // Color scale
-  const colorScale = d3.scaleOrdinal(d3.schemePurples[7])
-
-  // const colorValue = d => d.properties.trait
+  const colorScale = d3.scaleOrdinal()
 
   const map = svg.append('g')
-
-  // Promise.all([
-  //   d3.json('dist/data/country_averages.json'),
-  //   d3.json('dist/data/countries-110m.json')
-  // ]).then(([personalityData, topoJSONdata]) => {
-  //   const traitValue = {}
-  //   data.forEach(d => {
-  //     traitValue[d.country] = d.trait
-  //   })
-  //
-  //   console.log(traitValue)
-  //
-  //   const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries)
-  //
-  //   colorScale
-  //     .domain(countries.features.map(d => d.properties.name))
-  //     .domain(colorScale.domain().sort())
-  //
-  //   g.selectAll('.map')
-  //     .data(countries.features)
-  //     .enter().append('path')
-  //     .attr('class', 'country')
-  //     .attr('d', path)
-  //     .attr('fill', d => colorScale(traitValue[d.properties.name]))
-  //     .append('title')
-  //     .text(d => d.properties.name)
-  //     .on('click', (event, datum) => updateRadarChartsCountry(event.target, datum))
-  // })
-
-  // d3.json('dist/data/country_averages.json').then(data => { console.log(data) })
 
   d3.json('dist/data/countries-110m.json').then(topoJSONdata => {
     const traitValue = {}
     data.forEach(d => {
       traitValue[d.country] = d.trait
     })
-    // console.log(traitValue)
+
     const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries)
 
     colorScale
-      .domain(countries.features.map(d => traitValue[d.properties.name]))
+      .domain(dataType === 'big5' ? [48, 53, 58, 63, 68, 73, 79] : [0, 1, 2, 4, 5, 6, 7])
       .domain(colorScale.domain().sort())
-    // console.log(colorScale.domain())
+      .range(d3.schemePurples[colorScale.domain().length])
+
+    /** * --------------------------------------------- ***/
+    /** * --------------- Create Legend --------------- ***/
+    /** * --------------------------------------------- ***/
+
+    const groups = map.selectAll('path')
+      .data(colorScale.domain())
+    const groupsEnter = groups.enter().append('g')
+    groupsEnter
+      .merge(groups)
+      .attr('transform', (d, i) => `translate(4,${i * 15 + 159})`)
+    groups.exit().remove()
+
+    groupsEnter.append('rect')
+      .merge(groups.select('rect'))
+      .attr('width', 20)
+      .attr('height', 15)
+      .attr('fill', colorScale)
+
+    groupsEnter.append('text')
+      .merge(groups.select('text'))
+      .text(d => d)
+      .attr('y', 18)
+      .attr('x', 23)
+      .attr('font-size', '10px')
+
+    /** * --------------------------------------------- ***/
+    /** * ----------------- Create Map ---------------- ***/
+    /** * --------------------------------------------- ***/
 
     map.selectAll('path')
       .data(countries.features)
       .enter().append('path')
       .attr('class', 'country')
       .attr('d', path)
-      .attr('fill', d => colorScale(traitValue[d.properties.name]))
+      .attr('fill', d => traitValue[d.properties.name] === undefined ? '#FFFFFF' : colorScale(traitValue[d.properties.name]))
       .on('click', (event, datum) => updateRadarChartsCountry(event.target, datum))
       .append('title')
-      .text(d => d.properties.name + ' : ' + traitValue[d.properties.name])
+      .text(d => d.properties.name + ' : ' + (traitValue[d.properties.name] === undefined ? 'No Data' : traitValue[d.properties.name]))
   })
 
   const zoom = d3.zoom()
@@ -135,7 +134,7 @@ function drawChoroplethMap (target, data, options) {
 
 async function updateChoroplethMap (traitSelected) {
   // Update data
-  choroplethMapData = []
+  const choroplethMapData = []
   const data = await d3.json('dist/data/country_averages.json')
   for (const key in data) {
     if (Object.prototype.hasOwnProperty.call(data, key)) {
@@ -146,6 +145,7 @@ async function updateChoroplethMap (traitSelected) {
       })
     }
   }
+  const type = getRadarType(traitSelected)
 
-  drawChoroplethMap('.map', choroplethMapData, mapOptions)
+  drawChoroplethMap('.map', choroplethMapData, mapOptions, type)
 }
