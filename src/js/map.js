@@ -4,6 +4,8 @@ let choroplethMapData = []
 // Options for the map
 let mapOptions
 
+let globalAverage
+
 (async function () {
   console.log('%cDrawing map...', 'color: #42CC7E; font-weight: bold')
   const t0 = performance.now()
@@ -38,6 +40,8 @@ let mapOptions
     h: height,
     type: 'big5'
   }
+
+  globalAverage = 0
 
   /** * --------------------------------------------- ***/
   /** * -------- Draw map & Default selection ------- ***/
@@ -112,8 +116,44 @@ function drawChoroplethMap (target, data, options) {
     const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries)
 
     colorScale
-      .domain(mapOptions.type === 'big5' ? [48, 53, 58, 63, 68, 73, 79] : [0, 1, 2, 4, 5, 6, 7])
-      .range(d3.schemePurples[colorScale.domain().length])
+      .domain([(globalAverage - globalAverage * 0.15).toFixed(2), (globalAverage - globalAverage * 0.1).toFixed(2), (globalAverage - globalAverage * 0.05).toFixed(2), globalAverage, (globalAverage + globalAverage * 0.05).toFixed(2),
+        (globalAverage + globalAverage * 0.1).toFixed(2), (globalAverage + globalAverage * 0.15).toFixed(2)])
+      .domain(colorScale.domain().sort())
+      .range(d3.schemeRdBu[colorScale.domain().length - 1])
+
+    /** * --------------------------------------------- ***/
+    /** * --------------- Create Legend --------------- ***/
+    /** * --------------------------------------------- ***/
+
+    const groups = map.selectAll('path')
+      .data(colorScale.domain())
+    const groupsEnter = groups.enter().append('g')
+    groupsEnter
+      .merge(groups)
+      .attr('transform', (d, i) => i === 6 ? 'translate(-20,-20)' : `translate(${i * 23.5 + 8},250)`)
+    groups.exit().remove()
+
+    groupsEnter.append('rect')
+      .merge(groups.select('rect'))
+      .attr('class', 'legendSquare')
+      .attr('fill', colorScale)
+
+    groupsEnter.append('text')
+      .merge(groups.select('text'))
+      .text((d, i) => {
+        if (i === 0) return '-15%'
+        else if (i === 1) return '-10%'
+        else if (i === 2) return '-5%'
+        else if (i === 3) return '0%'
+        else if (i === 4) return '5%'
+        else if (i === 5) return '10%'
+        else if (i === 6) return '15%'
+      })
+      .attr('transform', (d, i) => i === 6 ? 'translate(138,271)' : 'translate(-30,1)')
+      .attr('y', -5)
+      .attr('x', 23)
+      .attr('font-size', '8px')
+      .attr('fill', '#8484A0')
 
     /** * --------------------------------------------- ***/
     /** * ----------------- Create Map ---------------- ***/
@@ -147,29 +187,6 @@ function drawChoroplethMap (target, data, options) {
           .style('opacity', 0)
       })
   })
-
-  /** * --------------------------------------------- ***/
-  /** * --------------- Create legend --------------- ***/
-  /** * --------------------------------------------- ***/
-
-  // const legend = d3.select(target)
-  //   .append('svg')
-  //   .attr('class', 'legend')
-  //
-  // legend.selectAll('path')
-  //   .data(colorScale.domain())
-  //   .enter()
-  //   .append('g')
-  //   .attr('transform', (d, i) => `translate(4,${i * 15 + 159})`)
-  //   .append('rect')
-  //   .attr('width', 20)
-  //   .attr('height', 15)
-  //   .attr('fill', colorScale)
-  //   .append('text')
-  //   .text(d => d)
-  //   .attr('y', 18)
-  //   .attr('x', 23)
-  //   .attr('font-size', '10px')
 
   /** * --------------------------------------------- ***/
   /** * ------- Set zoom & Create zoom controls ----- ***/
@@ -211,6 +228,9 @@ async function updateChoroplethMap (traitSelected) {
     }
   }
   mapOptions.type = getRadarType(traitSelected)
+
+  const globalData = await d3.json('dist/data/global_averages.json')
+  globalAverage = globalData[traitSelected]
 
   drawChoroplethMap('.map', choroplethMapData, mapOptions)
 }
