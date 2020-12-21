@@ -126,7 +126,13 @@ function drawChoroplethMap (target, data, options) {
       .attr('class', 'country')
       .attr('d', path)
       .attr('fill', d => traitValue[d.properties.name] === undefined ? 'white' : colorScale(traitValue[d.properties.name]))
-      .on('click', (event, datum) => updateRadarChartsCountry(event.target, datum))
+      .on('click', (event, d) => {
+        if (traitValue[d.properties.name]) updateRadarChartsCountry(event.target)
+
+        tooltipDiv.transition()
+          .duration(500)
+          .style('opacity', 0)
+      })
       .on('mouseover', (event, d) => {
         tooltipDiv.transition()
           .duration(200)

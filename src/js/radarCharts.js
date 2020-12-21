@@ -707,7 +707,7 @@ async function updateRadarChartsCountry (country) {
 
   // Don't add duplicates
   for (const data of radarBig5Data) {
-    if (data.name === 'big five - ' + countryName) { return }
+    if (data.name === 'big five - ' + countryName.replaceAll(' ', '_').replaceAll('.', '0')) { return }
   }
 
   // Update data
@@ -720,7 +720,7 @@ async function updateRadarChartsCountry (country) {
 
       if (entry.country === countryName) {
         radarBig5Data.push({
-          name: 'big five - ' + countryName,
+          name: 'big five - ' + countryName.replaceAll(' ', '_').replaceAll('.', '0'),
           visibility: true,
           color: color,
           axes: [
@@ -732,7 +732,7 @@ async function updateRadarChartsCountry (country) {
           ]
         })
         radarTipiPosData.push({
-          name: 'tipi pos - ' + countryName,
+          name: 'tipi pos - ' + countryName.replaceAll(' ', '_').replaceAll('.', '0'),
           visibility: true,
           color: color,
           axes: [
@@ -744,7 +744,7 @@ async function updateRadarChartsCountry (country) {
           ]
         })
         radarTipiNegData.push({
-          name: 'tipi neg - ' + countryName,
+          name: 'tipi neg - ' + countryName.replaceAll(' ', '_').replaceAll('.', '0'),
           visibility: true,
           color: color,
           axes: [
@@ -761,8 +761,9 @@ async function updateRadarChartsCountry (country) {
 
   // Redraw radar charts
   drawRadarCharts()
+
   // Add to saved btns
-  addToSaved(countryName.replaceAll(' ', '-').replaceAll('.', '0'), 'country', color)
+  addToSaved(countryName.replaceAll(' ', '_').replaceAll('.', '0'), 'country', color)
 }
 
 // Add a btn to saved results
@@ -902,7 +903,7 @@ function formatText (id) {
     } else if (id === 'F') {
       return 'Female'
     } else {
-      return id
+      return id.replaceAll('_', ' ').replaceAll('0', '.')
     }
   }
 }
