@@ -37,17 +37,15 @@ let globalAverage
 
   mapOptions = {
     w: width,
-    h: height,
-    type: 'big5'
+    h: height
   }
 
   globalAverage = 0
 
   /** * --------------------------------------------- ***/
-  /** * -------- Draw map & Default selection ------- ***/
+  /** * ------------------ Draw map ----------------- ***/
   /** * --------------------------------------------- ***/
 
-  currentTrait = 'O'
   drawChoroplethMap('.map', choroplethMapData, mapOptions)
 
   const t1 = performance.now()
@@ -78,6 +76,7 @@ function drawChoroplethMap (target, data, options) {
   const svg = parent.append('svg')
     .attr('width', w_full)
     .attr('height', h_full)
+    .attr('class', 'map-svg')
 
   const map = svg.append('g')
 
@@ -118,11 +117,10 @@ function drawChoroplethMap (target, data, options) {
     colorScale
       .domain([(globalAverage - globalAverage * 0.15).toFixed(2), (globalAverage - globalAverage * 0.1).toFixed(2), (globalAverage - globalAverage * 0.05).toFixed(2), globalAverage, (globalAverage + globalAverage * 0.05).toFixed(2),
         (globalAverage + globalAverage * 0.1).toFixed(2), (globalAverage + globalAverage * 0.15).toFixed(2)])
-      .domain(colorScale.domain().sort())
-      .range(d3.schemeRdBu[colorScale.domain().length - 1])
+      .range(d3.schemeRdBu[6])
 
     /** * --------------------------------------------- ***/
-    /** * --------------- Create Legend --------------- ***/
+    /** * ---------------- Draw Legend ---------------- ***/
     /** * --------------------------------------------- ***/
 
     const groups = map.selectAll('path')
@@ -166,13 +164,6 @@ function drawChoroplethMap (target, data, options) {
       .attr('class', 'country')
       .attr('d', path)
       .attr('fill', d => traitValue[d.properties.name] === undefined ? 'white' : colorScale(traitValue[d.properties.name]))
-      .on('click', (event, d) => {
-        if (traitValue[d.properties.name]) updateRadarChartsCountry(event.target)
-
-        tooltipDiv.transition()
-          .duration(500)
-          .style('opacity', 0)
-      })
       .on('mouseover', (event, d) => {
         tooltipDiv.transition()
           .duration(200)
@@ -186,6 +177,7 @@ function drawChoroplethMap (target, data, options) {
           .duration(500)
           .style('opacity', 0)
       })
+      .on('click', (event, d) => { if (traitValue[d.properties.name]) updateRadarChartsCountry(event.target) })
   })
 
   /** * --------------------------------------------- ***/
@@ -210,13 +202,13 @@ function drawChoroplethMap (target, data, options) {
   })
 }
 
-/** * ------------------------------------------------- ***/
-/** * ---------------- Update The Map ----------------- ***/
-/** * ------------------------------------------------- ***/
-
+// Update map when trait selected
 async function updateChoroplethMap (traitSelected) {
+  console.log('update')
+  const colorScale = d3.scaleOrdinal()
+
   // Update data
-  const choroplethMapData = []
+  choroplethMapData = []
   const data = await d3.json('dist/data/country_averages.json')
   for (const key in data) {
     if (Object.prototype.hasOwnProperty.call(data, key)) {
@@ -227,10 +219,28 @@ async function updateChoroplethMap (traitSelected) {
       })
     }
   }
-  mapOptions.type = getRadarType(traitSelected)
 
-  const globalData = await d3.json('dist/data/global_averages.json')
-  globalAverage = globalData[traitSelected]
+  // Update map
+  d3.json('dist/data/countries-110m.json').then(async topoJSONdata => {
+    const traitValue = {}
+    choroplethMapData.forEach(d => { traitValue[d.country] = d.trait })
 
-  drawChoroplethMap('.map', choroplethMapData, mapOptions)
+    const globalData = await d3.json('dist/data/global_averages.json')
+    globalAverage = globalData[traitSelected]
+
+    const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries)
+
+    colorScale
+      .domain([(globalAverage - globalAverage * 0.15).toFixed(2), (globalAverage - globalAverage * 0.1).toFixed(2), (globalAverage - globalAverage * 0.05).toFixed(2), globalAverage, (globalAverage + globalAverage * 0.05).toFixed(2),
+        (globalAverage + globalAverage * 0.1).toFixed(2), (globalAverage + globalAverage * 0.15).toFixed(2)])
+      .domain(colorScale.domain().sort())
+      .range(d3.schemeRdBu[colorScale.domain().length - 1])
+
+    d3.selectAll('.map-svg path')
+      .data(countries.features)
+      .transition()
+      .duration(1000)
+      .ease(d3.easeCubic)
+      .attr('fill', d => traitValue[d.properties.name] === undefined ? 'white' : colorScale(traitValue[d.properties.name]))
+  })
 }

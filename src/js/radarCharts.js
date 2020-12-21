@@ -476,6 +476,8 @@ function selectTrait (el, datum) {
 
   // Update population pyramid
   updatePopulationPyramid(datum)
+
+  // Update map
   updateChoroplethMap(datum)
 }
 

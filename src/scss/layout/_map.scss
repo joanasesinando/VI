@@ -6,17 +6,15 @@
 		border-radius: 10px;
 	}
 
-	rect {
-		stroke: black;
-	}
-
 	.legendSquare{
+		position: relative;
+		bottom: 10px;
+		left: 10px;
 		width: 23px;
 		height: 10px;
 		stroke: lighten(color(typography, 4), 12);
 		stroke-width: .3px;
 		z-index: -1;
-		position: relative;
 	}
 
 	.country {
