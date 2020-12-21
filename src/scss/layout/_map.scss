@@ -1,6 +1,6 @@
 .map {
 	position: relative;
-	background: #66C8FF;
+	background: #b3d5ff;
 
 	svg {
 		border-radius: 10px;
@@ -8,6 +8,11 @@
 
 	rect {
 		stroke: black;
+	}
+
+	.country {
+		stroke: lighten(color(typography, 4), 12);
+		stroke-width: .3px;
 	}
 
 	.country:hover {

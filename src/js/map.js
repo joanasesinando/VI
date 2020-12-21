@@ -1,50 +1,85 @@
-// let choroplethMapData = []
+// Map data array
+let choroplethMapData = []
+
+// Options for the map
 let mapOptions
 
 (async function () {
   console.log('%cDrawing map...', 'color: #42CC7E; font-weight: bold')
   const t0 = performance.now()
 
+  /** * -------------------------------------------- ***/
+  /** * ------------------ Set Up ------------------ ***/
+  /** * -------------------------------------------- ***/
+
   const width = '100%'
   const height = '100%'
 
-  mapOptions = {
-    w: width,
-    h: height
-  }
-  const choroplethMapData = []
+  /** * --------------------------------------------- ***/
+  /** * ------------------- Data -------------------- ***/
+  /** * --------------------------------------------- ***/
+
+  // Get global averages data
   const data = await d3.json('dist/data/country_averages.json')
+
   for (const key in data) {
     if (Object.prototype.hasOwnProperty.call(data, key)) {
       const entry = data[key]
-      choroplethMapData.push({
-        country: entry.country,
-        trait: 0
-      })
+      choroplethMapData.push({ country: entry.country, trait: 0 })
     }
   }
 
-  const type = 'big5'
+  /** * --------------------------------------------- ***/
+  /** * ---------------- Set Options ---------------- ***/
+  /** * --------------------------------------------- ***/
 
-  drawChoroplethMap('.map', choroplethMapData, mapOptions, type)
+  mapOptions = {
+    w: width,
+    h: height,
+    type: 'big5'
+  }
+
+  /** * --------------------------------------------- ***/
+  /** * -------- Draw map & Default selection ------- ***/
+  /** * --------------------------------------------- ***/
+
+  currentTrait = 'O'
+  drawChoroplethMap('.map', choroplethMapData, mapOptions)
 
   const t1 = performance.now()
   const time = (t1 - t0) / 1000
   console.log('%cMap - DONE! (' + time.toFixed(2) + 's)', 'color: #42CC7E; font-weight: bold')
 }())
 
-function drawChoroplethMap (target, data, options, dataType) {
+/** * --------------------------------------------- ***/
+/** * ----------------- Functions ----------------- ***/
+/** * --------------------------------------------- ***/
+
+function drawChoroplethMap (target, data, options) {
   const w = typeof options.w === 'undefined' ? '100%' : options.w
   const h = typeof options.h === 'undefined' ? '100%' : options.h
   const w_full = w
   const h_full = h
 
-  const parent = d3.select(target)
-  parent.select('svg').remove()
+  /** * --------------------------------------------- ***/
+  /** * ------- Create the container SVG and g ------ ***/
+  /** * --------------------------------------------- ***/
 
+  const parent = d3.select(target)
+
+  // Remove whatever map with the same id/class was present before
+  parent.select('svg:not(.eva)').remove()
+
+  // Initiate the map SVG
   const svg = parent.append('svg')
     .attr('width', w_full)
     .attr('height', h_full)
+
+  const map = svg.append('g')
+
+  /** * --------------------------------------------- ***/
+  /** * --------------- Set projections ------------- ***/
+  /** * --------------------------------------------- ***/
 
   const projection = d3.geoMercator()
     .scale(100)
@@ -52,48 +87,33 @@ function drawChoroplethMap (target, data, options, dataType) {
 
   const path = d3.geoPath().projection(projection)
 
-  // Color scale
+  /** * --------------------------------------------- ***/
+  /** * --------------- Set color scale ------------- ***/
+  /** * --------------------------------------------- ***/
+
   const colorScale = d3.scaleOrdinal()
 
-  const map = svg.append('g')
+  /** * --------------------------------------------- ***/
+  /** * ------------------ Tooltip ------------------ ***/
+  /** * --------------------------------------------- ***/
+
+  const tooltipDiv = d3.select('body').append('div')
+    .attr('class', 'tooltip tooltip-map')
+    .style('opacity', 0)
+
+  /** * --------------------------------------------- ***/
+  /** * ----------- Initialize topojson ------------- ***/
+  /** * --------------------------------------------- ***/
 
   d3.json('dist/data/countries-110m.json').then(topoJSONdata => {
     const traitValue = {}
-    data.forEach(d => {
-      traitValue[d.country] = d.trait
-    })
+    data.forEach(d => { traitValue[d.country] = d.trait })
 
     const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries)
 
     colorScale
-      .domain(dataType === 'big5' ? [48, 53, 58, 63, 68, 73, 79] : [0, 1, 2, 4, 5, 6, 7])
-      .domain(colorScale.domain().sort())
+      .domain(mapOptions.type === 'big5' ? [48, 53, 58, 63, 68, 73, 79] : [0, 1, 2, 4, 5, 6, 7])
       .range(d3.schemePurples[colorScale.domain().length])
-
-    /** * --------------------------------------------- ***/
-    /** * --------------- Create Legend --------------- ***/
-    /** * --------------------------------------------- ***/
-
-    const groups = map.selectAll('path')
-      .data(colorScale.domain())
-    const groupsEnter = groups.enter().append('g')
-    groupsEnter
-      .merge(groups)
-      .attr('transform', (d, i) => `translate(4,${i * 15 + 159})`)
-    groups.exit().remove()
-
-    groupsEnter.append('rect')
-      .merge(groups.select('rect'))
-      .attr('width', 20)
-      .attr('height', 15)
-      .attr('fill', colorScale)
-
-    groupsEnter.append('text')
-      .merge(groups.select('text'))
-      .text(d => d)
-      .attr('y', 18)
-      .attr('x', 23)
-      .attr('font-size', '10px')
 
     /** * --------------------------------------------- ***/
     /** * ----------------- Create Map ---------------- ***/
@@ -101,14 +121,53 @@ function drawChoroplethMap (target, data, options, dataType) {
 
     map.selectAll('path')
       .data(countries.features)
-      .enter().append('path')
+      .enter()
+      .append('path')
       .attr('class', 'country')
       .attr('d', path)
-      .attr('fill', d => traitValue[d.properties.name] === undefined ? '#FFFFFF' : colorScale(traitValue[d.properties.name]))
+      .attr('fill', d => traitValue[d.properties.name] === undefined ? 'white' : colorScale(traitValue[d.properties.name]))
       .on('click', (event, datum) => updateRadarChartsCountry(event.target, datum))
-      .append('title')
-      .text(d => d.properties.name + ' : ' + (traitValue[d.properties.name] === undefined ? 'No Data' : traitValue[d.properties.name]))
+      .on('mouseover', (event, d) => {
+        tooltipDiv.transition()
+          .duration(200)
+          .style('opacity', 1)
+        tooltipDiv.html('<strong>' + d.properties.name + ' - ' + (traitValue[d.properties.name] === undefined ? 'No Data' : traitValue[d.properties.name]) + '</strong>')
+          .style('left', (event.pageX - 35) + 'px')
+          .style('top', (event.pageY - 35) + 'px')
+      })
+      .on('mouseout', () => {
+        tooltipDiv.transition()
+          .duration(500)
+          .style('opacity', 0)
+      })
   })
+
+  /** * --------------------------------------------- ***/
+  /** * --------------- Create legend --------------- ***/
+  /** * --------------------------------------------- ***/
+
+  // const legend = d3.select(target)
+  //   .append('svg')
+  //   .attr('class', 'legend')
+  //
+  // legend.selectAll('path')
+  //   .data(colorScale.domain())
+  //   .enter()
+  //   .append('g')
+  //   .attr('transform', (d, i) => `translate(4,${i * 15 + 159})`)
+  //   .append('rect')
+  //   .attr('width', 20)
+  //   .attr('height', 15)
+  //   .attr('fill', colorScale)
+  //   .append('text')
+  //   .text(d => d)
+  //   .attr('y', 18)
+  //   .attr('x', 23)
+  //   .attr('font-size', '10px')
+
+  /** * --------------------------------------------- ***/
+  /** * ------- Set zoom & Create zoom controls ----- ***/
+  /** * --------------------------------------------- ***/
 
   const zoom = d3.zoom()
     .scaleExtent([1, 8])
@@ -145,7 +204,7 @@ async function updateChoroplethMap (traitSelected) {
       })
     }
   }
-  const type = getRadarType(traitSelected)
+  mapOptions.type = getRadarType(traitSelected)
 
-  drawChoroplethMap('.map', choroplethMapData, mapOptions, type)
+  drawChoroplethMap('.map', choroplethMapData, mapOptions)
 }

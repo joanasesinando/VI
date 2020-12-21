@@ -704,7 +704,7 @@ async function updateRadarChartsPopulation (el, barSelected) {
 // Update radar charts when country picked
 async function updateRadarChartsCountry (country) {
   const countryName = country.__data__.properties.name
-  console.log(countryName)
+
   // Don't add duplicates
   for (const data of radarBig5Data) {
     if (data.name === 'big five - ' + countryName) { return }
@@ -762,7 +762,7 @@ async function updateRadarChartsCountry (country) {
   // Redraw radar charts
   drawRadarCharts()
   // Add to saved btns
-  addToSaved(countryName, 'country', color)
+  addToSaved(countryName.replaceAll(' ', '-').replaceAll('.', '0'), 'country', color)
 }
 
 // Add a btn to saved results
@@ -854,7 +854,7 @@ function getBtnInfo (type) {
 
     case 'country':
       return {
-        icon: 'globe-2-outline',
+        icon: 'pin-outline',
         title: 'Country'
       }
   }
