@@ -111,14 +111,12 @@ function drawChoroplethMap (target, data, options) {
   d3.json('dist/data/countries-110m.json').then(topoJSONdata => {
     const traitValue = {}
     data.forEach(d => { traitValue[d.country] = d.trait })
-    console.log(traitValue)
 
     const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries)
 
     colorScale
       .domain([(globalAverage - globalAverage * 0.512), (globalAverage - globalAverage * 0.341), (globalAverage - globalAverage * 0.171), globalAverage, (globalAverage + globalAverage * 0.171),
         (globalAverage + globalAverage * 0.341), (globalAverage + globalAverage * 0.512)])
-    console.log(colorScale.domain())
 
     /** * --------------------------------------------- ***/
     /** * ---------------- Draw Legend ---------------- ***/
@@ -243,7 +241,6 @@ function drawChoroplethMap (target, data, options) {
 
 // Update map when trait selected
 async function updateChoroplethMap (traitSelected) {
-  console.log('update')
   const colorScale = d3.scaleOrdinal()
 
   // Update data
@@ -273,7 +270,6 @@ async function updateChoroplethMap (traitSelected) {
       .domain([(globalAverage - globalAverage * 0.512), (globalAverage - globalAverage * 0.341), (globalAverage - globalAverage * 0.171), (globalAverage + globalAverage * 0.171),
         (globalAverage + globalAverage * 0.341), (globalAverage + globalAverage * 0.512)])
       .range(d3.schemeRdBu[6])
-    console.log(colorScale.domain())
 
     d3.selectAll('.map-svg path')
       .data(countries.features)
