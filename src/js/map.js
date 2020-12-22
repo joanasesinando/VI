@@ -121,7 +121,6 @@ function drawChoroplethMap (target, data, options) {
     colorScale
       .domain([(globalAverage - 24), (globalAverage - 18), (globalAverage - 12), (globalAverage - 6), (globalAverage + 6),
         (globalAverage + 12), (globalAverage + 18), (globalAverage + 24)])
-    console.log(colorScale.domain())
 
     /** * --------------------------------------------- ***/
     /** * ----------------- Create Map ---------------- ***/
@@ -250,7 +249,6 @@ async function updateChoroplethMap (traitSelected) {
       }
     }
   }
-  console.log(choroplethMapData)
 
   // Update map
   d3.json('dist/data/countries-110m.json').then(async topoJSONdata => {
@@ -270,7 +268,6 @@ async function updateChoroplethMap (traitSelected) {
       .domain([(globalAverage - 24), (globalAverage - 18), (globalAverage - 12), (globalAverage - 6), (globalAverage + 6),
         (globalAverage + 12), (globalAverage + 18), (globalAverage + 24)])
       .range(d3.schemeRdBu[8])
-    console.log(colorScale.domain())
 
     d3.selectAll('.map-svg path')
       .data(countries.features)
