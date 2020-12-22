@@ -700,6 +700,107 @@ async function updateRadarChartsPopulation (el, barSelected) {
   addToSaved(age + '-' + gender, 'age&gender', color)
 }
 
+// Update radar charts when parallel coordinates data is picked
+async function updateRadarChartsParallelCoordinates (name, selectedData) {
+  const selectedDataLength = selectedData.length
+
+  // Don't add duplicates
+  for (const data of radarBig5Data) {
+    if (data.name === 'big five - ' + name) {
+      $('#sameTagName').css('display', 'block')
+      return
+    }
+  }
+
+  // Calculate averages
+  const averages = {
+    O: 0,
+    C: 0,
+    E: 0,
+    A: 0,
+    N: 0,
+    Q1: 0,
+    Q2: 0,
+    Q3: 0,
+    Q4: 0,
+    Q5: 0,
+    Q6: 0,
+    Q7: 0,
+    Q8: 0,
+    Q9: 0,
+    Q10: 0
+  }
+  for (const user of selectedData) {
+    averages.O += user.openness
+    averages.C += user.conscientiousness
+    averages.E += user.extraversion
+    averages.A += user.agreeableness
+    averages.N += user.neuroticism
+    averages.Q1 += user.Q1
+    averages.Q2 += user.Q2
+    averages.Q3 += user.Q3
+    averages.Q4 += user.Q4
+    averages.Q5 += user.Q5
+    averages.Q6 += user.Q6
+    averages.Q7 += user.Q7
+    averages.Q8 += user.Q8
+    averages.Q9 += user.Q9
+    averages.Q10 += user.Q10
+  }
+
+  for (const key in averages) {
+    if (Object.prototype.hasOwnProperty.call(averages, key)) {
+      const entry = averages[key]
+      averages[key] = entry / selectedDataLength
+    }
+  }
+
+  const color = colorIndex++ % colors.length
+
+  radarBig5Data.push({
+    name: 'big five - ' + name,
+    visibility: true,
+    color: color,
+    axes: [
+      { axis: 'O', value: averages.O },
+      { axis: 'E', value: averages.E },
+      { axis: 'N', value: averages.N },
+      { axis: 'C', value: averages.C },
+      { axis: 'A', value: averages.A }
+    ]
+  })
+  radarTipiPosData.push({
+    name: 'tipi pos - ' + name,
+    visibility: true,
+    color: color,
+    axes: [
+      { axis: 'Q5', value: averages.Q5 },
+      { axis: 'Q1', value: averages.Q1 },
+      { axis: 'Q4', value: averages.Q4 },
+      { axis: 'Q3', value: averages.Q3 },
+      { axis: 'Q7', value: averages.Q7 }
+    ]
+  })
+  radarTipiNegData.push({
+    name: 'tipi neg - ' + name,
+    visibility: true,
+    color: color,
+    axes: [
+      { axis: 'Q10', value: 8 - averages.Q10 },
+      { axis: 'Q6', value: 8 - averages.Q6 },
+      { axis: 'Q9', value: 8 - averages.Q9 },
+      { axis: 'Q8', value: 8 - averages.Q8 },
+      { axis: 'Q2', value: 8 - averages.Q2 }
+    ]
+  })
+
+  // Redraw radar charts
+  drawRadarCharts()
+
+  // Add to saved btns
+  addToSaved(name, 'parallel-coordinates', color)
+}
+
 // Add a btn to saved results
 function addToSaved (id, type, color) {
   const btn = d3.select('.saved-btns')
@@ -729,7 +830,7 @@ function addToSaved (id, type, color) {
 
   wrapper.append('span')
     .attr('class', 'subtitle')
-    .text(formatText(id))
+    .text(type !== 'parallel-coordinates' ? formatText(id) : id)
 
   // Render new icons
   eva.replace()
@@ -785,6 +886,12 @@ function getBtnInfo (type) {
       return {
         icon: 'bar-chart-outline',
         title: 'Population'
+      }
+
+    case 'parallel-coordinates':
+      return {
+        icon: 'activity-outline',
+        title: 'Selection'
       }
   }
 }

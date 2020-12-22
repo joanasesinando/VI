@@ -181,6 +181,26 @@
 
 		<!-- Parallel Coordinates -->
 		<div class="parallel-coordinates">
+			<div class="count">
+				<span id="selectedNumber"></span>
+				<span class="mx-1">/</span>
+				<span id="totalParallel"></span>
+			</div>
+
+			<button id="selectBtn" class="btn btn-sm btn-outline-light" onclick="showForm()">Select</button>
+
+			<div id="formNameTag" class="input-group input-group-sm" style="width: 13rem">
+				<input type="text" class="form-control" placeholder="Add a name tag" value="">
+				<div class="input-group-append">
+					<button type="submit" class="btn btn-sm btn-outline-light" onclick="addSelection()">OK</button>
+				</div>
+			</div>
+
+			<div class="titles d-flex align-items-center">
+				<h6 class="big5">Big Five</h6>
+				<h6 class="mbti">M B T I</h6>
+				<h6 class="tipi">T I P I</h6>
+			</div>
 		</div>
 
 	</div>
@@ -195,6 +215,13 @@
 		</div>
 	</footer>
 
+	<div id="sameTagName" class="alert alert-danger alert-dismissible fade show" role="alert">
+		<strong>Invalid action</strong> Tag name already exists. Choose a different one.
+		<button type="button" class="close" data-dismiss="alert">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
 	<!-- Warning about device width -->
 	<img class="warning" src="dist/imgs/warning.svg" alt="warning">
 
@@ -205,6 +232,7 @@
 	<script src="dist/js/radarCharts.js"></script>
 	<script src="dist/js/map.js"></script>
 	<script src="dist/js/populationPyramid.js"></script>
+	<script src="dist/js/parallelCoordinates.js"></script>
 
 </body>
 
