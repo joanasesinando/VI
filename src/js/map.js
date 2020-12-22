@@ -98,7 +98,7 @@ function drawChoroplethMap (target, data, options) {
   /** * --------------- Set color scale ------------- ***/
   /** * --------------------------------------------- ***/
 
-  const colorScale = d3.scaleOrdinal(d3.schemeRdBu[8])
+  const colorScale = d3.scaleOrdinal()
 
   /** * --------------------------------------------- ***/
   /** * ------------------ Tooltip ------------------ ***/
@@ -123,8 +123,10 @@ function drawChoroplethMap (target, data, options) {
   /** * ---------------- Set colors ----------------- ***/
   /** * --------------------------------------------- ***/
 
-  colorScale.domain([(globalAverage - 24), (globalAverage - 18), (globalAverage - 12), (globalAverage - 6), (globalAverage + 6),
-    (globalAverage + 12), (globalAverage + 18), (globalAverage + 24)])
+  colorScale
+    .domain([(globalAverage - 24), (globalAverage - 20), (globalAverage - 16), (globalAverage - 12), (globalAverage - 8), (globalAverage - 4), (globalAverage + 4),
+      (globalAverage + 8), (globalAverage + 12), (globalAverage + 16), (globalAverage + 20), (globalAverage + 24)])
+    .range(['#bb4111', '#ed551a', '#ff6d35', '#ff8353', '#ffa27d', '#fec2aa', '#c8d0ff', '#adb8f3', '#7d8de5', '#5c6bc0', '#424f98', '#2e3972'])
 
   /** * --------------------------------------------- ***/
   /** * ----------------- Create Map ---------------- ***/
@@ -200,26 +202,38 @@ function drawChoroplethMap (target, data, options) {
   d3.select('.map .legend .textNeg24')
     .text('-24')
 
-  d3.select('.map .legend .textNeg18')
-    .text('-18')
+  d3.select('.map .legend .textNeg20')
+    .text('-20')
+
+  d3.select('.map .legend .textNeg16')
+    .text('-16')
 
   d3.select('.map .legend .textNeg12')
     .text('-12')
 
-  d3.select('.map .legend .textNeg6')
-    .text('-6')
+  d3.select('.map .legend .textNeg8')
+    .text('-8')
+
+  d3.select('.map .legend .textNeg4')
+    .text('-4')
 
   d3.select('.map .legend .textNeutral')
     .text('0')
 
-  d3.select('.map .legend .textPos6')
-    .text('+6')
+  d3.select('.map .legend .textPos4')
+    .text('+4')
+
+  d3.select('.map .legend .textPos8')
+    .text('+8')
 
   d3.select('.map .legend .textPos12')
     .text('+12')
 
-  d3.select('.map .legend .textPos18')
-    .text('+18')
+  d3.select('.map .legend .textPos16')
+    .text('+16')
+
+  d3.select('.map .legend .textPos20')
+    .text('+20')
 
   d3.select('.map .legend .textPos24')
     .text('+24')
@@ -247,7 +261,7 @@ function updateChoroplethMap (traitSelected) {
       } else {
         choroplethMapData.push({
           country: entry.country,
-          trait: ((entry[traitSelected] - 1) * 100 / 6)
+          trait: (((entry[traitSelected] - 1) * 100) / 6).toFixed(2)
         })
       }
     }
@@ -263,15 +277,15 @@ function updateChoroplethMap (traitSelected) {
   if (dataType === 'big5') {
     globalAverage = globalData[traitSelected]
   } else {
-    globalAverage = ((globalData[traitSelected] - 1) * 100 / 6)
+    globalAverage = (((globalData[traitSelected] - 1) * 100) / 6)
   }
 
   const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries)
 
   colorScale
-    .domain([(globalAverage - 24), (globalAverage - 18), (globalAverage - 12), (globalAverage - 6), (globalAverage + 6),
-      (globalAverage + 12), (globalAverage + 18), (globalAverage + 24)])
-    .range(d3.schemeRdBu[8])
+    .domain([(globalAverage - 24), (globalAverage - 20), (globalAverage - 16), (globalAverage - 12), (globalAverage - 8), (globalAverage - 4), (globalAverage + 4),
+      (globalAverage + 8), (globalAverage + 12), (globalAverage + 16), (globalAverage + 20), (globalAverage + 24)])
+    .range(['#bb4111', '#ed551a', '#ff6d35', '#ff8353', '#ffa27d', '#fec2aa', '#c8d0ff', '#adb8f3', '#7d8de5', '#5c6bc0', '#424f98', '#2e3972'])
 
   d3.selectAll('.map-svg .country')
     .data(countries.features)
@@ -281,21 +295,29 @@ function updateChoroplethMap (traitSelected) {
     .attr('fill', d => {
       if (traitValue[d.properties.name] === undefined) {
         return 'white'
-      } else if (traitValue[d.properties.name] >= (globalAverage - 24) && traitValue[d.properties.name] < (globalAverage - 18)) {
+      } else if (traitValue[d.properties.name] >= (globalAverage - 24) && traitValue[d.properties.name] < (globalAverage - 20)) {
         return colorScale((globalAverage - 24))
-      } else if (traitValue[d.properties.name] >= (globalAverage - 18) && traitValue[d.properties.name] < (globalAverage - 12)) {
-        return colorScale((globalAverage - 18))
-      } else if (traitValue[d.properties.name] >= (globalAverage - 12) && traitValue[d.properties.name] < (globalAverage - 6)) {
+      } else if (traitValue[d.properties.name] >= (globalAverage - 20) && traitValue[d.properties.name] < (globalAverage - 16)) {
+        return colorScale((globalAverage - 20))
+      } else if (traitValue[d.properties.name] >= (globalAverage - 16) && traitValue[d.properties.name] < (globalAverage - 12)) {
+        return colorScale((globalAverage - 16))
+      } else if (traitValue[d.properties.name] >= (globalAverage - 12) && traitValue[d.properties.name] < (globalAverage - 8)) {
         return colorScale((globalAverage - 12))
-      } else if (traitValue[d.properties.name] >= (globalAverage - 6) && traitValue[d.properties.name] < globalAverage) {
-        return colorScale((globalAverage - 6))
-      } else if (traitValue[d.properties.name] >= globalAverage && traitValue[d.properties.name] < (globalAverage + 6)) {
-        return colorScale((globalAverage + 6))
-      } else if (traitValue[d.properties.name] >= (globalAverage + 6) && traitValue[d.properties.name] < (globalAverage + 12)) {
+      } else if (traitValue[d.properties.name] >= (globalAverage - 8) && traitValue[d.properties.name] < (globalAverage - 4)) {
+        return colorScale((globalAverage - 8))
+      } else if (traitValue[d.properties.name] >= (globalAverage - 4) && traitValue[d.properties.name] < globalAverage) {
+        return colorScale((globalAverage - 4))
+      } else if (traitValue[d.properties.name] >= globalAverage && traitValue[d.properties.name] < (globalAverage + 4)) {
+        return colorScale((globalAverage + 4))
+      } else if (traitValue[d.properties.name] >= (globalAverage + 4) && traitValue[d.properties.name] < (globalAverage + 8)) {
+        return colorScale((globalAverage + 8))
+      } else if (traitValue[d.properties.name] >= (globalAverage + 8) && traitValue[d.properties.name] < (globalAverage + 12)) {
         return colorScale((globalAverage + 12))
-      } else if (traitValue[d.properties.name] >= (globalAverage + 12) && traitValue[d.properties.name] < (globalAverage + 18)) {
-        return colorScale((globalAverage + 18))
-      } else if (traitValue[d.properties.name] >= (globalAverage + 18) && traitValue[d.properties.name] < (globalAverage + 24)) {
+      } else if (traitValue[d.properties.name] >= (globalAverage + 12) && traitValue[d.properties.name] < (globalAverage + 16)) {
+        return colorScale((globalAverage + 16))
+      } else if (traitValue[d.properties.name] >= (globalAverage + 16) && traitValue[d.properties.name] < (globalAverage + 20)) {
+        return colorScale((globalAverage + 20))
+      } else if (traitValue[d.properties.name] >= (globalAverage + 20) && traitValue[d.properties.name] < (globalAverage + 24)) {
         return colorScale((globalAverage + 24))
       }
     })
@@ -306,7 +328,7 @@ function updateChoroplethMap (traitSelected) {
     tooltipDiv.transition()
       .duration(200)
       .style('opacity', 1)
-    tooltipDiv.html('<strong>' + d.properties.name + ' - ' + (traitValue[d.properties.name] === undefined ? 'No Data' : (traitValue[d.properties.name] + ' (Deviation: ' + ((traitValue[d.properties.name] - globalAverage).toFixed(2)) + '%)')) + '</strong>')
+    tooltipDiv.html('<strong>' + d.properties.name + ' - ' + (traitValue[d.properties.name] === undefined ? 'No Data' : (dataType === 'big5' ? traitValue[d.properties.name] + ' (Deviation: ' + ((traitValue[d.properties.name] - globalAverage).toFixed(2)) + '%)' : (((traitValue[d.properties.name] * 6) / 100) + 1).toFixed(2) + ' (Deviation: ' + ((traitValue[d.properties.name] - globalAverage).toFixed(2)) + '%)')) + '</strong>')
       .style('left', (event.pageX - 35) + 'px')
       .style('top', (event.pageY - 35) + 'px')
   })
