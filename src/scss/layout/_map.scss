@@ -1,20 +1,126 @@
 .map {
-	fill: color(typography, 4);
 	position: relative;
+	background: #b3d5ff;
 
 	svg {
 		border-radius: 10px;
 	}
 
+
+	.country {
+		stroke: lighten(color(typography, 4), 12);
+		stroke-width: .3px;
+	}
+
 	.country:hover {
-		fill: color(secondary, 1);
+		fill: color(additional-4, 1);
 		cursor: pointer;
+	}
+
+	.legend{
+		position: absolute;
+		bottom: 10px;
+		left: 10px;
+		height: 10px;
+		width: 138px;
+		border-radius: 5px;
+
+		.textNeg15, .textNeg10, .textNeg5, .textNeutral, .textPos5, .textPos10, .textPos15, .textNoData {
+			width: 50px;
+			height: 10px;
+			font-size: 8px;
+			color: color(typography, 1);
+			position: absolute;
+			line-height: 8px;
+			font-weight: 700;
+		}
+
+		.textNeg15 {
+			transform: translate(-8px, -12px);
+		}
+
+		.textNeg10 {
+			transform: translate(15px, -12px);
+		}
+
+		.textNeg5 {
+			transform: translate(38px, -12px)
+		}
+
+		.textNeutral {
+			transform: translate(63px, -12px);
+		}
+
+		.textPos5 {
+			transform: translate(88px, -12px);
+		}
+
+		.textPos10 {
+			transform: translate(111px, -12px);
+		}
+
+		.textPos15 {
+			transform: translate(134px, -12px);
+		}
+
+		.textNoData {
+			transform: translate(0, -42px);
+		}
+
+		.squareNeg15, .squareNeg10, .squareNeg5, .squarePos5, .squarePos10, .squarePos15, .squareNoData {
+			width: 23px;
+			height: 10px;
+			font-size: 8px;
+			color: #8484A0;
+			position: absolute;
+			box-shadow: 0 1.91304px 7.569px #C7BADB;
+
+		}
+
+		.squareNeg15 {
+			background: #b2182b;
+			border-top-left-radius: 3px;
+			border-bottom-left-radius: 3px;
+		}
+
+		.squareNeg10 {
+			background: #ef8a62;
+			transform: translate(23px, 0);
+		}
+
+		.squareNeg5 {
+			background: #fddbc7;
+			transform: translate(46px, 0)
+		}
+
+		.squarePos5 {
+			background: #d1e5f0;
+			transform: translate(69px, 0);
+		}
+
+		.squarePos10 {
+			background: #67a9cf;
+			transform: translate(92px, 0);
+		}
+
+		.squarePos15 {
+			background: #2166ac;
+			transform: translate(115px, 0);
+			border-top-right-radius: 3px;
+			border-bottom-right-radius: 3px;
+		}
+
+		.squareNoData {
+			background: white;
+			transform: translate(0, -30px);
+			border-radius: 3px;
+		}
 	}
 
 	.zoom {
 		width: 30px;
 		border-radius: 5px;
-		box-shadow: 0 1.91304px 7.569px #C7BADB;
+		box-shadow: 0 1.91304px 7.569px #000000;
 		position: absolute;
 		bottom: 10px;
 		right: 10px;
