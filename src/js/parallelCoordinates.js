@@ -49,6 +49,7 @@ let usersSelected = [];
     })
   }
 
+  // Set columns and ranges for each
   const traits = [
     { name: 'openness', range: [0, 100] },
     { name: 'conscientiousness', range: [0, 100] },
@@ -166,9 +167,6 @@ function drawParallelCoordinates (target, data, traits, options) {
       .on('end', (event) => brushEventHandler(event, key))
   }
 
-  // Paths for data
-  const lineGenerator = d3.line()
-
   /** * --------------------------------------------- ***/
   /** * ---------- Create the container SVG --------- ***/
   /** * --------------------------------------------- ***/
@@ -234,18 +232,15 @@ function drawParallelCoordinates (target, data, traits, options) {
     .attr('class', 'legend')
     .attr('text-anchor', 'middle')
     .attr('y', h - options.padding / 4)
-    .text(d => formatTitle(d.name))
-    .on('click', (event, datum) => showInfo(formatTitle(datum.name)))
+    .text(d => formatTitle(d.name, 'title'))
+    .on('click', (event, datum) => showInfo(formatTitle(datum.name, 'info')))
 
-  traitAxisG
-    .append('text')
-    .attr('class', 'legend')
-    .attr('text-anchor', 'middle')
-    .attr('y', options.padding / 2)
-    .text(d => isMbti(d.name) ? formatTitleTop(d.name) : null)
-    .on('click', (event, datum) => showInfo(datum))
+  /** * --------------------------------------------- ***/
+  /** * -------------- Helper functions ------------- ***/
+  /** * --------------------------------------------- ***/
 
   function linePath (d) {
+    const lineGenerator = d3.line()
     const data = []
     for (const [key, value] of Object.entries(d)) {
       if (key !== 'id') {
@@ -256,7 +251,6 @@ function drawParallelCoordinates (target, data, traits, options) {
     return (lineGenerator(points))
   }
 
-  // Each brush generator
   function brushEventHandler (e, trait) {
     if (e && e.type === 'zoom') return
     if (e.selection != null) {
@@ -293,8 +287,24 @@ function drawParallelCoordinates (target, data, traits, options) {
   }
 }
 
-function formatTitle (name) {
+function formatTitle (name, type) {
   if (name[0] === 'Q') return name
+
+  if (type === 'info' && isMbti(name)) {
+    switch (name) {
+      case 'extraverted':
+        return 'MBTI-E'
+
+      case 'intuitive':
+        return 'MBTI-N'
+
+      case 'thinking':
+        return 'MBTI-T'
+
+      case 'judging':
+        return 'MBTI-J'
+    }
+  }
 
   switch (name) {
     case 'openness':
@@ -308,13 +318,11 @@ function formatTitle (name) {
       return 'E'
 
     case 'neuroticism':
+    case 'intuitive':
       return 'N'
 
     case 'agreeableness':
       return 'A'
-
-    case 'intuitive':
-      return 'N'
 
     case 'thinking':
       return 'T'
@@ -325,22 +333,6 @@ function formatTitle (name) {
     case 'big5Accuracy':
     case 'mbtiAccuracy':
       return 'Acc'
-  }
-}
-
-function formatTitleTop (name) {
-  switch (name) {
-    case 'extraverted':
-      return 'I'
-
-    case 'intuitive':
-      return 'S'
-
-    case 'thinking':
-      return 'F'
-
-    case 'judging':
-      return 'P'
   }
 }
 

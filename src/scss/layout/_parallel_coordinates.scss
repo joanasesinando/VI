@@ -11,7 +11,7 @@
 	.count {
 		position: absolute;
 		top: 8px;
-		left: 13px;
+		left: 15px;
 
 		span {
 			font-size: 12px;
@@ -44,8 +44,13 @@
 
 	.titles {
 		position: relative;
-		top: 1.3rem;
+		top: 1.5rem;
 		color: color(typography, 1);
+
+		h6:hover {
+			cursor: pointer;
+			color: color(primary, 1);
+		}
 
 		.big5 {
 			position: absolute;
