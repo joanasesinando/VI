@@ -1,7 +1,7 @@
 // Users selected
 let usersSelected = [];
 
-(async function () {
+(function () {
   console.log('%cDrawing parallel coordinates...', 'color: #66C8FF; font-weight: bold')
   const t0 = performance.now()
 
@@ -21,7 +21,7 @@ let usersSelected = [];
 
   // Get all tests' data
   const parallelCoordinatesData = []
-  const data = await d3.json('dist/data/all_tests.json')
+  const data = getAllTestsData()
   for (const x of data) {
     parallelCoordinatesData.push({
       id: x.id,

@@ -8,7 +8,7 @@ let pyramidOptions
 let xScalePyramid
 let yScalePyramid
 
-(async function () {
+(function () {
   console.log('%cDrawing pyramid...', 'color: #8675FF; font-weight: bold')
   const t0 = performance.now()
 
@@ -266,12 +266,12 @@ function drawPopulationPyramid (target, data, options) {
 }
 
 // Update population pyramid when trait selected
-async function updatePopulationPyramid (traitSelected) {
+function updatePopulationPyramid (traitSelected) {
   const type = getRadarType(traitSelected)
 
   // Update data
   populationPyramidData = []
-  const data = type === 'big5' ? await d3.json('dist/data/big5_population.json') : await d3.json('dist/data/tipi_population.json')
+  const data = type === 'big5' ? getBigFivePopulation() : getTipiPopulation()
   for (const key in data) {
     if (Object.prototype.hasOwnProperty.call(data, key)) {
       const entry = data[key]

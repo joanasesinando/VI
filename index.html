@@ -46,6 +46,17 @@
 	<script src="dist/libraries/d3.v6.min.js" charset="utf-8"></script>
 	<script src="dist/libraries/topojson.v3.min.js"></script>
 
+	<!-- Data
+  	================================================== -->
+	<script src="dist/data/age_range_averages.js"></script>
+	<script src="dist/data/all_tests.js"></script>
+	<script src="dist/data/big5_population.js"></script>
+	<script src="dist/data/countries-110m.js"></script>
+	<script src="dist/data/country_averages.js"></script>
+	<script src="dist/data/gender_averages.js"></script>
+	<script src="dist/data/global_averages.js"></script>
+	<script src="dist/data/tipi_population.js"></script>
+
 </head>
 
 <body>
@@ -240,6 +251,13 @@
 		</button>
 	</div>
 
+	<div id="noTagName" class="alert alert-danger alert-dismissible fade show" role="alert">
+		<strong>Invalid action</strong> Tag name is required. Please add one.
+		<button type="button" class="close" data-dismiss="alert">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
 	<!-- Warning about device width -->
 	<img class="warning" src="dist/imgs/warning.svg" alt="warning">
 
@@ -247,9 +265,9 @@
 	================================================== -->
 	<script src="dist/js/main.js"></script>
 	<script src="dist/js/info.js"></script>
-	<script src="dist/js/radarCharts.js"></script>
 	<script src="dist/js/map.js"></script>
 	<script src="dist/js/populationPyramid.js"></script>
+	<script src="dist/js/radarCharts.js"></script>
 	<script src="dist/js/parallelCoordinates.js"></script>
 
 </body>

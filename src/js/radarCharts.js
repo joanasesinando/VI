@@ -15,7 +15,7 @@ let colorIndex // used to pick the next color (when last, goes back to beginning
 // Current trait selected
 let currentTrait
 
-(async function () {
+(function () {
   console.log('%cDrawing radar charts...', 'color: #EE7DB1; font-weight: bold')
   const t0 = performance.now()
 
@@ -33,7 +33,7 @@ let currentTrait
   /** * --------------------------------------------- ***/
 
   // Get global averages data
-  const data = await d3.json('dist/data/global_averages.json')
+  const data = getGlobalAverages()
   radarBig5Data.push({
     name: 'big five',
     visibility: true,
@@ -437,7 +437,6 @@ function RadarChart (parent_selector, data, options) {
     .style('fill', 'none')
     .style('pointer-events', 'all')
     .on('mouseover', (event, d) => {
-      console.log(d)
       tooltipDiv.transition()
         .duration(200)
         .style('opacity', 1)
@@ -517,14 +516,14 @@ function getRadarType (trait) {
 }
 
 // Update radar charts when age picked
-async function updateRadarChartsAge (age) {
+function updateRadarChartsAge (age) {
   // Don't add duplicates
   for (const data of radarBig5Data) {
     if (data.name === 'big five - ' + age) { return }
   }
 
   // Update data
-  const dataset = await d3.json('dist/data/age_range_averages.json')
+  const dataset = getAgeRangeAverages()
   const color = colorIndex++ % colors.length
 
   for (const key in dataset) {
@@ -580,14 +579,14 @@ async function updateRadarChartsAge (age) {
 }
 
 // Update radar charts when gender picked
-async function updateRadarChartsGender (gender) {
+function updateRadarChartsGender (gender) {
   // Don't add duplicates
   for (const data of radarBig5Data) {
     if (data.name === 'big five - ' + gender) { return }
   }
 
   // Update data
-  const dataset = await d3.json('dist/data/gender_averages.json')
+  const dataset = getGenderAverages()
   const color = colorIndex++ % colors.length
 
   for (const key in dataset) {
@@ -643,7 +642,7 @@ async function updateRadarChartsGender (gender) {
 }
 
 // Update radar charts when bar clicked
-async function updateRadarChartsPopulation (el, barSelected) {
+function updateRadarChartsPopulation (el, barSelected) {
   const age = barSelected.age
   const gender = el.classList.contains('left') ? 'M' : 'F'
 
@@ -653,8 +652,8 @@ async function updateRadarChartsPopulation (el, barSelected) {
   }
 
   // Update data
-  const big5Dataset = await d3.json('dist/data/big5_population.json')
-  const tipiDataset = await d3.json('dist/data/tipi_population.json')
+  const big5Dataset = getBigFivePopulation()
+  const tipiDataset = getTipiPopulation()
   const color = colorIndex++ % colors.length
 
   let index
@@ -712,8 +711,14 @@ async function updateRadarChartsPopulation (el, barSelected) {
 }
 
 // Update radar charts when parallel coordinates data is picked
-async function updateRadarChartsParallelCoordinates (name, selectedData) {
+function updateRadarChartsParallelCoordinates (name, selectedData) {
   const selectedDataLength = selectedData.length
+
+  // Enforce a name tag
+  if (name === '') {
+    $('#noTagName').css('display', 'block')
+    return
+  }
 
   // Don't add duplicates
   for (const data of radarBig5Data) {
@@ -813,7 +818,7 @@ async function updateRadarChartsParallelCoordinates (name, selectedData) {
 }
 
 // Update radar charts when country picked
-async function updateRadarChartsCountry (country) {
+function updateRadarChartsCountry (country) {
   const countryName = country.__data__.properties.name
 
   // Don't add duplicates
@@ -822,7 +827,7 @@ async function updateRadarChartsCountry (country) {
   }
 
   // Update data
-  const dataset = await d3.json('dist/data/country_averages.json')
+  const dataset = getCountryAverages()
   const color = colorIndex++ % colors.length
 
   for (const key in dataset) {
