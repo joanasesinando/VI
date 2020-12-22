@@ -116,10 +116,8 @@ function drawChoroplethMap (target, data, options) {
     const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries)
 
     colorScale
-      .domain([(globalAverage - globalAverage * 0.15), (globalAverage - globalAverage * 0.1), (globalAverage - globalAverage * 0.05), globalAverage, (globalAverage + globalAverage * 0.05),
-        (globalAverage + globalAverage * 0.1), (globalAverage + globalAverage * 0.15)])
-      // .domain([(globalAverage - globalAverage * 0.15), (globalAverage + globalAverage * 0.15)])
-      // .range(['yellow', 'red'])
+      .domain([(globalAverage - globalAverage * 0.512), (globalAverage - globalAverage * 0.341), (globalAverage - globalAverage * 0.171), globalAverage, (globalAverage + globalAverage * 0.171),
+        (globalAverage + globalAverage * 0.341), (globalAverage + globalAverage * 0.512)])
     console.log(colorScale.domain())
 
     /** * --------------------------------------------- ***/
@@ -166,7 +164,21 @@ function drawChoroplethMap (target, data, options) {
       .append('path')
       .attr('class', 'country')
       .attr('d', path)
-      .attr('fill', d => traitValue[d.properties.name] === undefined ? 'white' : colorScale(traitValue[d.properties.name]))
+      .attr('fill', d => {
+        if (traitValue[d.properties.name] === undefined) { return 'white' } else if (traitValue[d.properties.name] >= (globalAverage - globalAverage * 0.512) && traitValue[d.properties.name] < (globalAverage - globalAverage * 0.341)) {
+          return colorScale((globalAverage - globalAverage * 0.512))
+        } else if (traitValue[d.properties.name] >= (globalAverage - globalAverage * 0.341) && traitValue[d.properties.name] < (globalAverage - globalAverage * 0.171)) {
+          return colorScale((globalAverage - globalAverage * 0.341))
+        } else if (traitValue[d.properties.name] >= (globalAverage - globalAverage * 0.171) && traitValue[d.properties.name] < globalAverage) {
+          return colorScale((globalAverage - globalAverage * 0.171))
+        } else if (traitValue[d.properties.name] >= globalAverage && traitValue[d.properties.name] <= (globalAverage + globalAverage * 0.171)) {
+          return colorScale((globalAverage + globalAverage * 0.171))
+        } else if (traitValue[d.properties.name] >= (globalAverage + globalAverage * 0.171) && traitValue[d.properties.name] < (globalAverage + globalAverage * 0.341)) {
+          return colorScale((globalAverage + globalAverage * 0.341))
+        } else if (traitValue[d.properties.name] >= (globalAverage + globalAverage * 0.341) && traitValue[d.properties.name] < (globalAverage + globalAverage * 0.512)) {
+          return colorScale((globalAverage + globalAverage * 0.512))
+        }
+      })
       .on('mouseover', (event, d) => {
         tooltipDiv.transition()
           .duration(200)
@@ -258,15 +270,30 @@ async function updateChoroplethMap (traitSelected) {
     const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries)
 
     colorScale
-      .domain([(globalAverage - globalAverage * 0.15), (globalAverage - globalAverage * 0.1), (globalAverage - globalAverage * 0.05), globalAverage, (globalAverage + globalAverage * 0.05),
-        (globalAverage + globalAverage * 0.1), (globalAverage + globalAverage * 0.15)])
+      .domain([(globalAverage - globalAverage * 0.512), (globalAverage - globalAverage * 0.341), (globalAverage - globalAverage * 0.171), (globalAverage + globalAverage * 0.171),
+        (globalAverage + globalAverage * 0.341), (globalAverage + globalAverage * 0.512)])
       .range(d3.schemeRdBu[6])
+    console.log(colorScale.domain())
 
     d3.selectAll('.map-svg path')
       .data(countries.features)
       .transition()
       .duration(1000)
       .ease(d3.easeCubic)
-      .attr('fill', d => traitValue[d.properties.name] === undefined ? 'white' : colorScale(traitValue[d.properties.name]))
+      .attr('fill', d => {
+        if (traitValue[d.properties.name] === undefined) { return 'white' } else if (traitValue[d.properties.name] >= (globalAverage - globalAverage * 0.512) && traitValue[d.properties.name] < (globalAverage - globalAverage * 0.341)) {
+          return colorScale((globalAverage - globalAverage * 0.512))
+        } else if (traitValue[d.properties.name] >= (globalAverage - globalAverage * 0.341) && traitValue[d.properties.name] < (globalAverage - globalAverage * 0.171)) {
+          return colorScale((globalAverage - globalAverage * 0.341))
+        } else if (traitValue[d.properties.name] >= (globalAverage - globalAverage * 0.171) && traitValue[d.properties.name] < globalAverage) {
+          return colorScale((globalAverage - globalAverage * 0.171))
+        } else if (traitValue[d.properties.name] >= globalAverage && traitValue[d.properties.name] < (globalAverage + globalAverage * 0.171)) {
+          return colorScale((globalAverage + globalAverage * 0.171))
+        } else if (traitValue[d.properties.name] >= (globalAverage + globalAverage * 0.171) && traitValue[d.properties.name] < (globalAverage + globalAverage * 0.341)) {
+          return colorScale((globalAverage + globalAverage * 0.341))
+        } else if (traitValue[d.properties.name] >= (globalAverage + globalAverage * 0.341) && traitValue[d.properties.name] < (globalAverage + globalAverage * 0.512)) {
+          return colorScale((globalAverage + globalAverage * 0.512))
+        }
+      })
   })
 }
