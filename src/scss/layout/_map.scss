@@ -25,7 +25,7 @@
 		width: 138px;
 		border-radius: 5px;
 
-		.textNeg15, .textNeg10, .textNeg5, .textNeutral, .textPos5, .textPos10, .textPos15, .textNoData {
+		.textNeg24, .textNeg18, .textNeg12, .textNeg6, .textNeutral, .textPos6, .textPos12, .textPos18, .textPos24, .textNoData {
 			width: 50px;
 			height: 10px;
 			font-size: 8px;
@@ -35,39 +35,47 @@
 			font-weight: 700;
 		}
 
-		.textNeg15 {
+		.textNeg24 {
 			transform: translate(-8px, -12px);
 		}
 
-		.textNeg10 {
+		.textNeg18 {
 			transform: translate(15px, -12px);
 		}
 
-		.textNeg5 {
+		.textNeg12 {
 			transform: translate(38px, -12px)
 		}
 
+		.textNeg6 {
+			transform: translate(63px, -12px)
+		}
+
 		.textNeutral {
-			transform: translate(63px, -12px);
+			transform: translate(89px, -12px);
 		}
 
-		.textPos5 {
-			transform: translate(88px, -12px);
+		.textPos6 {
+			transform: translate(107px, -12px);
 		}
 
-		.textPos10 {
-			transform: translate(111px, -12px);
+		.textPos12 {
+			transform: translate(130px, -12px);
 		}
 
-		.textPos15 {
-			transform: translate(134px, -12px);
+		.textPos18 {
+			transform: translate(153px, -12px);
+		}
+
+		.textPos24 {
+			transform: translate(176px, -12px);
 		}
 
 		.textNoData {
 			transform: translate(0, -42px);
 		}
 
-		.squareNeg15, .squareNeg10, .squareNeg5, .squarePos5, .squarePos10, .squarePos15, .squareNoData {
+		.squareNeg24, .squareNeg18, .squareNeg12, .squareNeg6, .squarePos6, .squarePos12, .squarePos18, .squarePos24, .squareNoData {
 			width: 23px;
 			height: 10px;
 			font-size: 8px;
@@ -77,35 +85,45 @@
 
 		}
 
-		.squareNeg15 {
+		.squareNeg24 {
 			background: #b2182b;
 			border-top-left-radius: 3px;
 			border-bottom-left-radius: 3px;
 		}
 
-		.squareNeg10 {
-			background: #ef8a62;
+		.squareNeg18 {
+			background: rgb(214, 96, 77);
 			transform: translate(23px, 0);
 		}
 
-		.squareNeg5 {
+		.squareNeg12 {
+			background: #ef8a62;
+			transform: translate(46px, 0);
+		}
+
+		.squareNeg6 {
 			background: #fddbc7;
-			transform: translate(46px, 0)
+			transform: translate(69px, 0)
 		}
 
-		.squarePos5 {
+		.squarePos6 {
 			background: #d1e5f0;
-			transform: translate(69px, 0);
-		}
-
-		.squarePos10 {
-			background: #67a9cf;
 			transform: translate(92px, 0);
 		}
 
-		.squarePos15 {
-			background: #2166ac;
+		.squarePos12 {
+			background: #67a9cf;
 			transform: translate(115px, 0);
+		}
+
+		.squarePos18 {
+			background: rgb(67, 147, 195);
+			transform: translate(138px, 0);
+		}
+
+		.squarePos24 {
+			background: #2166ac;
+			transform: translate(161px, 0);
 			border-top-right-radius: 3px;
 			border-bottom-right-radius: 3px;
 		}
