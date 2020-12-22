@@ -158,7 +158,7 @@ function drawParallelCoordinates (target, data, traits, options) {
   const yBrushes = {}
   for (const [key, value] of Object.entries(yScales)) {
     let extent = [
-      [-(options.brushWidth / 2), options.padding],
+      [-(options.brushWidth / 2), options.padding / 2],
       [options.brushWidth / 2, h - options.padding]
     ]
     yBrushes[key] = d3.brushY()
@@ -280,10 +280,12 @@ function drawParallelCoordinates (target, data, traits, options) {
 
   function selected (d) {
     const _filters = Object.entries(options.filters)
-    return _filters.every(f => {
-      if (f[1][1] <= d[f[0]] && d[f[0]] <= f[1][0]) usersSelected.push(d)
+    if (_filters.length === 0) return false
+    const allFiltersTrue = _filters.every(f => {
       return f[1][1] <= d[f[0]] && d[f[0]] <= f[1][0]
     })
+    if (allFiltersTrue) usersSelected.push(d)
+    return allFiltersTrue
   }
 }
 
