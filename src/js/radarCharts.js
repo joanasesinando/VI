@@ -419,8 +419,15 @@ function RadarChart (parent_selector, data, options) {
     .enter().append('g')
     .attr('class', 'radarCircleWrapper')
 
+  // Wrapper for a group of invisible circles
+  const blobCircleGroup = blobCircleWrapper.selectAll('.radarCircleGroup')
+    .data(data)
+    .enter().append('g')
+    .attr('class', 'radarCircleGroup')
+    .style('display', d => d.visibility ? 'block' : 'none')
+
   // Append a set of invisible circles on top for the mouseover pop-up
-  blobCircleWrapper.selectAll('.radarInvisibleCircle')
+  blobCircleGroup.selectAll('.radarInvisibleCircle')
     .data(d => d.axes)
     .enter().append('circle')
     .attr('class', 'radarInvisibleCircle')
@@ -430,6 +437,7 @@ function RadarChart (parent_selector, data, options) {
     .style('fill', 'none')
     .style('pointer-events', 'all')
     .on('mouseover', (event, d) => {
+      console.log(d)
       tooltipDiv.transition()
         .duration(200)
         .style('opacity', 1)
