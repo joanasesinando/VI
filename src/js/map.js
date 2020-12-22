@@ -124,54 +124,53 @@ function drawChoroplethMap (target, data, options) {
   /** * --------------------------------------------- ***/
 
   colorScale.domain([(globalAverage - 24), (globalAverage - 18), (globalAverage - 12), (globalAverage - 6), (globalAverage + 6),
-      (globalAverage + 12), (globalAverage + 18), (globalAverage + 24)])
+    (globalAverage + 12), (globalAverage + 18), (globalAverage + 24)])
 
   /** * --------------------------------------------- ***/
   /** * ----------------- Create Map ---------------- ***/
   /** * --------------------------------------------- ***/
 
-    map.selectAll('path')
-      .data(countries.features)
-      .enter()
-      .append('path')
-      .attr('class', 'country')
-      .attr('d', path)
-      .attr('fill', d => {
-        if (traitValue[d.properties.name] === undefined) {
-          return 'white'
-        } else if (traitValue[d.properties.name] >= (globalAverage - 24) && traitValue[d.properties.name] < (globalAverage - 18)) {
-          return colorScale((globalAverage - 24))
-        } else if (traitValue[d.properties.name] >= (globalAverage - 18) && traitValue[d.properties.name] < (globalAverage - 12)) {
-          return colorScale((globalAverage - 18))
-        } else if (traitValue[d.properties.name] >= (globalAverage - 12) && traitValue[d.properties.name] < (globalAverage - 6)) {
-          return colorScale((globalAverage - 12))
-        } else if (traitValue[d.properties.name] >= (globalAverage - 6) && traitValue[d.properties.name] < globalAverage) {
-          return colorScale((globalAverage - 6))
-        } else if (traitValue[d.properties.name] >= globalAverage && traitValue[d.properties.name] < (globalAverage + 6)) {
-          return colorScale((globalAverage + 6))
-        } else if (traitValue[d.properties.name] >= (globalAverage + 6) && traitValue[d.properties.name] < (globalAverage + 12)) {
-          return colorScale((globalAverage + 12))
-        } else if (traitValue[d.properties.name] >= (globalAverage + 12) && traitValue[d.properties.name] < (globalAverage + 18)) {
-          return colorScale((globalAverage + 18))
-        } else if (traitValue[d.properties.name] >= (globalAverage + 18) && traitValue[d.properties.name] < (globalAverage + 24)) {
-          return colorScale((globalAverage + 24))
-        }
-      })
-      .on('mouseover', (event, d) => {
-        tooltipDiv.transition()
-          .duration(200)
-          .style('opacity', 1)
-        tooltipDiv.html('<strong>' + d.properties.name + ' - ' + (traitValue[d.properties.name] === undefined ? 'No Data' : (traitValue[d.properties.name] + ' (Deviation: ' + ((traitValue[d.properties.name] - globalAverage).toFixed(2)) + '%)')) + '</strong>')
-          .style('left', (event.pageX - 35) + 'px')
-          .style('top', (event.pageY - 35) + 'px')
-      })
-      .on('mouseout', () => {
-        tooltipDiv.transition()
-          .duration(500)
-          .style('opacity', 0)
-      })
-      .on('click', (event, d) => { if (traitValue[d.properties.name]) updateRadarChartsCountry(event.target) })
-  })
+  map.selectAll('path')
+    .data(countries.features)
+    .enter()
+    .append('path')
+    .attr('class', 'country')
+    .attr('d', path)
+    .attr('fill', d => {
+      if (traitValue[d.properties.name] === undefined) {
+        return 'white'
+      } else if (traitValue[d.properties.name] >= (globalAverage - 24) && traitValue[d.properties.name] < (globalAverage - 18)) {
+        return colorScale((globalAverage - 24))
+      } else if (traitValue[d.properties.name] >= (globalAverage - 18) && traitValue[d.properties.name] < (globalAverage - 12)) {
+        return colorScale((globalAverage - 18))
+      } else if (traitValue[d.properties.name] >= (globalAverage - 12) && traitValue[d.properties.name] < (globalAverage - 6)) {
+        return colorScale((globalAverage - 12))
+      } else if (traitValue[d.properties.name] >= (globalAverage - 6) && traitValue[d.properties.name] < globalAverage) {
+        return colorScale((globalAverage - 6))
+      } else if (traitValue[d.properties.name] >= globalAverage && traitValue[d.properties.name] < (globalAverage + 6)) {
+        return colorScale((globalAverage + 6))
+      } else if (traitValue[d.properties.name] >= (globalAverage + 6) && traitValue[d.properties.name] < (globalAverage + 12)) {
+        return colorScale((globalAverage + 12))
+      } else if (traitValue[d.properties.name] >= (globalAverage + 12) && traitValue[d.properties.name] < (globalAverage + 18)) {
+        return colorScale((globalAverage + 18))
+      } else if (traitValue[d.properties.name] >= (globalAverage + 18) && traitValue[d.properties.name] < (globalAverage + 24)) {
+        return colorScale((globalAverage + 24))
+      }
+    })
+    .on('mouseover', (event, d) => {
+      tooltipDiv.transition()
+        .duration(200)
+        .style('opacity', 1)
+      tooltipDiv.html('<strong>' + d.properties.name + ' - ' + (traitValue[d.properties.name] === undefined ? 'No Data' : (traitValue[d.properties.name] + ' (Deviation: ' + ((traitValue[d.properties.name] - globalAverage).toFixed(2)) + '%)')) + '</strong>')
+        .style('left', (event.pageX - 35) + 'px')
+        .style('top', (event.pageY - 35) + 'px')
+    })
+    .on('mouseout', () => {
+      tooltipDiv.transition()
+        .duration(500)
+        .style('opacity', 0)
+    })
+    .on('click', (event, d) => { if (traitValue[d.properties.name]) updateRadarChartsCountry(event.target) })
 
   /** * --------------------------------------------- ***/
   /** * ------- Set zoom & Create zoom controls ----- ***/
@@ -269,36 +268,50 @@ function updateChoroplethMap (traitSelected) {
 
   const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries)
 
-    colorScale
-      .domain([(globalAverage - 24), (globalAverage - 18), (globalAverage - 12), (globalAverage - 6), (globalAverage + 6),
-        (globalAverage + 12), (globalAverage + 18), (globalAverage + 24)])
-      .range(d3.schemeRdBu[8])
+  colorScale
+    .domain([(globalAverage - 24), (globalAverage - 18), (globalAverage - 12), (globalAverage - 6), (globalAverage + 6),
+      (globalAverage + 12), (globalAverage + 18), (globalAverage + 24)])
+    .range(d3.schemeRdBu[8])
 
-    d3.selectAll('.map-svg path')
-      .data(countries.features)
-      .transition()
-      .duration(1000)
-      .ease(d3.easeCubic)
-      .attr('fill', d => {
-        if (traitValue[d.properties.name] === undefined) {
-          return 'white'
-        } else if (traitValue[d.properties.name] >= (globalAverage - 24) && traitValue[d.properties.name] < (globalAverage - 18)) {
-          return colorScale((globalAverage - 24))
-        } else if (traitValue[d.properties.name] >= (globalAverage - 18) && traitValue[d.properties.name] < (globalAverage - 12)) {
-          return colorScale((globalAverage - 18))
-        } else if (traitValue[d.properties.name] >= (globalAverage - 12) && traitValue[d.properties.name] < (globalAverage - 6)) {
-          return colorScale((globalAverage - 12))
-        } else if (traitValue[d.properties.name] >= (globalAverage - 6) && traitValue[d.properties.name] < globalAverage) {
-          return colorScale((globalAverage - 6))
-        } else if (traitValue[d.properties.name] >= globalAverage && traitValue[d.properties.name] < (globalAverage + 6)) {
-          return colorScale((globalAverage + 6))
-        } else if (traitValue[d.properties.name] >= (globalAverage + 6) && traitValue[d.properties.name] < (globalAverage + 12)) {
-          return colorScale((globalAverage + 12))
-        } else if (traitValue[d.properties.name] >= (globalAverage + 12) && traitValue[d.properties.name] < (globalAverage + 18)) {
-          return colorScale((globalAverage + 18))
-        } else if (traitValue[d.properties.name] >= (globalAverage + 18) && traitValue[d.properties.name] < (globalAverage + 24)) {
-          return colorScale((globalAverage + 24))
-        }
-      })
+  d3.selectAll('.map-svg .country')
+    .data(countries.features)
+    .transition()
+    .duration(1000)
+    .ease(d3.easeCubic)
+    .attr('fill', d => {
+      if (traitValue[d.properties.name] === undefined) {
+        return 'white'
+      } else if (traitValue[d.properties.name] >= (globalAverage - 24) && traitValue[d.properties.name] < (globalAverage - 18)) {
+        return colorScale((globalAverage - 24))
+      } else if (traitValue[d.properties.name] >= (globalAverage - 18) && traitValue[d.properties.name] < (globalAverage - 12)) {
+        return colorScale((globalAverage - 18))
+      } else if (traitValue[d.properties.name] >= (globalAverage - 12) && traitValue[d.properties.name] < (globalAverage - 6)) {
+        return colorScale((globalAverage - 12))
+      } else if (traitValue[d.properties.name] >= (globalAverage - 6) && traitValue[d.properties.name] < globalAverage) {
+        return colorScale((globalAverage - 6))
+      } else if (traitValue[d.properties.name] >= globalAverage && traitValue[d.properties.name] < (globalAverage + 6)) {
+        return colorScale((globalAverage + 6))
+      } else if (traitValue[d.properties.name] >= (globalAverage + 6) && traitValue[d.properties.name] < (globalAverage + 12)) {
+        return colorScale((globalAverage + 12))
+      } else if (traitValue[d.properties.name] >= (globalAverage + 12) && traitValue[d.properties.name] < (globalAverage + 18)) {
+        return colorScale((globalAverage + 18))
+      } else if (traitValue[d.properties.name] >= (globalAverage + 18) && traitValue[d.properties.name] < (globalAverage + 24)) {
+        return colorScale((globalAverage + 24))
+      }
+    })
+
+  const tooltipDiv = d3.select('.tooltip.tooltip-map')
+
+  d3.selectAll('.map-svg .country').on('mouseover', (event, d) => {
+    tooltipDiv.transition()
+      .duration(200)
+      .style('opacity', 1)
+    tooltipDiv.html('<strong>' + d.properties.name + ' - ' + (traitValue[d.properties.name] === undefined ? 'No Data' : (traitValue[d.properties.name] + ' (Deviation: ' + ((traitValue[d.properties.name] - globalAverage).toFixed(2)) + '%)')) + '</strong>')
+      .style('left', (event.pageX - 35) + 'px')
+      .style('top', (event.pageY - 35) + 'px')
+  })
+
+  d3.selectAll('.map-svg .country').on('click', (event, d) => {
+    if (traitValue[d.properties.name]) updateRadarChartsCountry(event.target)
   })
 }
