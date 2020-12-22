@@ -149,7 +149,7 @@ function getInfo (datum) {
         'Introversion/Extraversion, Sensing/Intuition, Thinking/Feeling, Judging/Perceiving - creating 16 different ' +
         'personality types, since each person is believed to have one preferred quality for each category. One letter ' +
         'from each category is taken to produce a four-letter test result. '
-      source = { url: 'https://www.myersbriggs.org/my-mbti-personality-type/mbti-basics/', text: 'The Myers & Briggs Foundation' }
+      source = { url: 'https://www.myersbriggs.org/my-mbti-personality-type/mbti-basics/', text: 'Myers & Briggs Foundation' }
       break
 
     case 'MBTI-E':
@@ -160,7 +160,7 @@ function getInfo (datum) {
         'when talking out loud about it and hearing what others have to say. High scorers on Introversion get energy from' +
         ' dealing with the ideas, pictures, memories, and reactions inside their head. They often prefer doing things ' +
         'alone or with one or two people they feel comfortable with. They are less likely to be perceived as anxious or moody. '
-      source = { url: 'https://www.myersbriggs.org/my-mbti-personality-type/mbti-basics/', text: 'The Myers & Briggs Foundation' }
+      source = { url: 'https://www.myersbriggs.org/my-mbti-personality-type/mbti-basics/', text: 'Myers & Briggs Foundation' }
       break
 
     case 'MBTI-N':
@@ -170,7 +170,7 @@ function getInfo (datum) {
         ' practical use of things and learn best when interacting physically with the world. High scorers on Intiution ' +
         'tend to prefer to learn by thinking a problem through than by hands-on experience and remember events more as an' +
         ' impression of what it was like than as actual facts or details of what happened. '
-      source = { url: 'https://www.myersbriggs.org/my-mbti-personality-type/mbti-basics/', text: 'The Myers & Briggs Foundation' }
+      source = { url: 'https://www.myersbriggs.org/my-mbti-personality-type/mbti-basics/', text: 'Myers & Briggs Foundation' }
       break
 
     case 'MBTI-T':
@@ -179,7 +179,7 @@ function getInfo (datum) {
         'High scorers on Thinking tend to analyze pros and cons, and then be consistent and logical in deciding, and try' +
         ' to be impartial. High scorers on Feeling believe they can make the best decisions by weighing what people care' +
         ' about and the points-of-view of persons involved in a situation, concerning themselves with values above all. '
-      source = { url: 'https://www.myersbriggs.org/my-mbti-personality-type/mbti-basics/', text: 'The Myers & Briggs Foundation' }
+      source = { url: 'https://www.myersbriggs.org/my-mbti-personality-type/mbti-basics/', text: 'Myers & Briggs Foundation' }
       break
 
     case 'MBTI-J':
@@ -188,13 +188,13 @@ function getInfo (datum) {
         'High scorers on Judging prefer a more structured and decided lifestyle. They tend to feel more comfortable when ' +
         'decisions are made, and like to bring life under control as much as possible. High scorers on Perceiving prefer ' +
         'a more flexible and adaptable lifestyle. They prefer to understand and adapt to the world rather than organize it.'
-      source = { url: 'https://www.myersbriggs.org/my-mbti-personality-type/mbti-basics/', text: 'The Myers & Briggs Foundation' }
+      source = { url: 'https://www.myersbriggs.org/my-mbti-personality-type/mbti-basics/', text: 'Myers & Briggs Foundation' }
       break
 
     case 'big5Accuracy':
       title = 'Big Five Accuracy'
       description = 'Users were asked to rate the description given about them based on their test results: "How much did you identify with this test\'s results?"'
-      source = { url: 'https://www.myersbriggs.org/my-mbti-personality-type/mbti-basics/', text: 'The Myers & Briggs Foundation' }
+      source = { url: '', text: '' }
       break
 
     case 'mbtiAccuracy':
@@ -213,7 +213,9 @@ function showInfo (datum) {
   const text = d3.select('.info .content').style('display', 'block')
   text.select('.title').text(info.title)
   text.select('.description').text(info.description)
-  text.select('.source').text('Source: ' + info.source.text).attr('href', info.source.url)
+  if (info.source.text === '') {
+    text.select('.source').text('')
+  } else text.select('.source').text('Source: ' + info.source.text).attr('href', info.source.url)
 }
 
 // Hides info
