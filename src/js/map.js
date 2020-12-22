@@ -141,11 +141,11 @@ function drawChoroplethMap (target, data, options) {
           return colorScale((globalAverage - 18))
         } else if (traitValue[d.properties.name] >= (globalAverage - 12) && traitValue[d.properties.name] < (globalAverage - 6)) {
           return colorScale((globalAverage - 12))
-        } else if (traitValue[d.properties.name] >= (globalAverage - 8) && traitValue[d.properties.name] < globalAverage) {
+        } else if (traitValue[d.properties.name] >= (globalAverage - 6) && traitValue[d.properties.name] < globalAverage) {
           return colorScale((globalAverage - 6))
-        } else if (traitValue[d.properties.name] >= globalAverage && traitValue[d.properties.name] < (globalAverage + 8)) {
+        } else if (traitValue[d.properties.name] >= globalAverage && traitValue[d.properties.name] < (globalAverage + 6)) {
           return colorScale((globalAverage + 6))
-        } else if (traitValue[d.properties.name] >= (globalAverage + 8) && traitValue[d.properties.name] < (globalAverage + 12)) {
+        } else if (traitValue[d.properties.name] >= (globalAverage + 6) && traitValue[d.properties.name] < (globalAverage + 12)) {
           return colorScale((globalAverage + 12))
         } else if (traitValue[d.properties.name] >= (globalAverage + 12) && traitValue[d.properties.name] < (globalAverage + 18)) {
           return colorScale((globalAverage + 18))
@@ -283,11 +283,11 @@ async function updateChoroplethMap (traitSelected) {
           return colorScale((globalAverage - 18))
         } else if (traitValue[d.properties.name] >= (globalAverage - 12) && traitValue[d.properties.name] < (globalAverage - 6)) {
           return colorScale((globalAverage - 12))
-        } else if (traitValue[d.properties.name] >= (globalAverage - 8) && traitValue[d.properties.name] < globalAverage) {
+        } else if (traitValue[d.properties.name] >= (globalAverage - 6) && traitValue[d.properties.name] < globalAverage) {
           return colorScale((globalAverage - 6))
-        } else if (traitValue[d.properties.name] >= globalAverage && traitValue[d.properties.name] < (globalAverage + 8)) {
+        } else if (traitValue[d.properties.name] >= globalAverage && traitValue[d.properties.name] < (globalAverage + 6)) {
           return colorScale((globalAverage + 6))
-        } else if (traitValue[d.properties.name] >= (globalAverage + 8) && traitValue[d.properties.name] < (globalAverage + 12)) {
+        } else if (traitValue[d.properties.name] >= (globalAverage + 6) && traitValue[d.properties.name] < (globalAverage + 12)) {
           return colorScale((globalAverage + 12))
         } else if (traitValue[d.properties.name] >= (globalAverage + 12) && traitValue[d.properties.name] < (globalAverage + 18)) {
           return colorScale((globalAverage + 18))
