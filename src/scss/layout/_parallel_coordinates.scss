@@ -1,0 +1,109 @@
+.parallel-coordinates {
+	position: relative;
+
+	svg {
+		position: absolute;
+		bottom: 3%;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+
+	.count {
+		position: absolute;
+		top: 8px;
+		left: 15px;
+
+		span {
+			font-size: 12px;
+			color: color(typography, 1);
+			font-weight: 600 !important;
+
+			&#selectedNumber {
+				color: color(additional-4, 1);
+			}
+		}
+	}
+
+	.btn-outline-light {
+		border-radius: .4rem;
+		color: color(typography, 1);
+		border-color: color(typography, 1);
+
+		&:hover, &:focus {
+			color: white;
+			background-color: color(typography, 1);
+		}
+	}
+
+	#selectBtn, #formNameTag {
+		display: none;
+		position: absolute;
+		right: 30px;
+		top: 5px;
+	}
+
+	.titles {
+		position: relative;
+		top: 1.5rem;
+		color: color(typography, 1);
+
+		h6:hover {
+			cursor: pointer;
+			color: color(primary, 1);
+		}
+
+		.big5 {
+			position: absolute;
+			left: 12%;
+		}
+
+		.mbti {
+			position: absolute;
+			left: 38.5%;
+		}
+
+		.tipi {
+			position: absolute;
+			left: 74.5%;
+		}
+	}
+
+	g.inactive path, g.active path{
+		fill: none;
+		stroke-linecap: round;
+	}
+
+	g.active path {
+		stroke: color(additional-4, 1);
+		stroke-width: 1.2px;
+	}
+
+	g.inactive path {
+		stroke: #cbcbe1;
+		stroke-width: .8px;
+	}
+
+	.legend {
+		@include font-family(base);
+		font-size: 13px;
+		fill: color(typography, 1);
+		@include font-weight(medium);
+
+		&:hover {
+			cursor: pointer;
+			fill: color(primary, 1);
+			font-size: 15px;
+			@include font-weight(semibold);
+		}
+	}
+
+	.tick text, .trait .domain {
+		color: color(typography, 4);
+		font-size: 8px;
+	}
+
+	.tick line {
+		stroke: color(typography, 4);
+	}
+
+}

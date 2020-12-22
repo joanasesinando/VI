@@ -12,26 +12,26 @@ body {
 
 .info, .radar-charts, .map-pyramid {
 	height: 60vh;
-	@include margin-top(large);
+	@include margin-top(medium);
 }
 
 .info {
 	background-color: color(typography, 1);
 	@include border-radius(medium);
-	@include margin-right(large);
+	@include margin-right(small);
 	z-index: 10;
 }
 
 .radar-charts {
 	background-color: color(bg, 1);
 	@include border-radius(medium);
-	@include margin-right(large);
+	@include margin-right(small);
 	box-shadow: 0 4px 25px #DCD4E9;
 	z-index: 5;
 }
 
 .map, .population-pyramid {
-	height: 48%;
+	height: 49%;
 	background-color: color(bg, 1);
 	@include border-radius(medium);
 	box-shadow: 0 4px 25px #DCD4E9;
@@ -39,8 +39,8 @@ body {
 
 .parallel-coordinates {
 	width: 100%;
-	height: 27vh;
-	@include margin-top(medium);
+	height: 28vh;
+	@include margin-top(small);
 	background-color: color(bg, 3);
 	border-top-left-radius: 30px;
 	border-top-right-radius: 30px;

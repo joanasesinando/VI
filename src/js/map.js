@@ -115,7 +115,6 @@ function drawChoroplethMap (target, data, options) {
   d3.json('dist/data/countries-110m.json').then(topoJSONdata => {
     const traitValue = {}
     data.forEach(d => { traitValue[d.country] = d.trait })
-    console.log(traitValue)
 
     const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries)
 
@@ -229,7 +228,6 @@ function drawChoroplethMap (target, data, options) {
 
 // Update map when trait selected
 async function updateChoroplethMap (traitSelected) {
-  console.log('update')
   const colorScale = d3.scaleOrdinal()
   dataType = getRadarType(traitSelected)
 
