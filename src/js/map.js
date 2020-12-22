@@ -247,7 +247,7 @@ function updateChoroplethMap (traitSelected) {
       } else {
         choroplethMapData.push({
           country: entry.country,
-          trait: ((entry[traitSelected] * 100) / 7)
+          trait: ((entry[traitSelected] - 1) * 100 / 6)
         })
       }
     }
@@ -263,7 +263,7 @@ function updateChoroplethMap (traitSelected) {
   if (dataType === 'big5') {
     globalAverage = globalData[traitSelected]
   } else {
-    globalAverage = ((globalData[traitSelected] * 100) / 7)
+    globalAverage = ((globalData[traitSelected] - 1) * 100 / 6)
   }
 
   const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries)
