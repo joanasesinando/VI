@@ -290,7 +290,7 @@ function drawParallelCoordinates (target, data, traits, options) {
 function formatTitle (name, type) {
   if (name[0] === 'Q') return name
 
-  if (type === 'info' && isMbti(name)) {
+  if (type === 'info' && (isMbti(name) || name === 'big5Accuracy' || name === 'mbtiAccuracy')) {
     switch (name) {
       case 'extraverted':
         return 'MBTI-E'
@@ -303,6 +303,10 @@ function formatTitle (name, type) {
 
       case 'judging':
         return 'MBTI-J'
+
+      case 'big5Accuracy':
+      case 'mbtiAccuracy':
+        return name
     }
   }
 

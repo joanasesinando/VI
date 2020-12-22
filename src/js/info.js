@@ -3,7 +3,6 @@ function getInfo (datum) {
   let title
   let description
   let source
-
   switch (datum) {
     case 'Big Five':
       title = 'Big Five'
@@ -190,6 +189,18 @@ function getInfo (datum) {
         'decisions are made, and like to bring life under control as much as possible. High scorers on Perceiving prefer ' +
         'a more flexible and adaptable lifestyle. They prefer to understand and adapt to the world rather than organize it.'
       source = { url: 'https://www.myersbriggs.org/my-mbti-personality-type/mbti-basics/', text: 'The Myers & Briggs Foundation' }
+      break
+
+    case 'big5Accuracy':
+      title = 'Big Five Accuracy'
+      description = 'Users were asked to rate the description given about them based on their test results: "How much did you identify with this test\'s results?"'
+      source = { url: 'https://www.myersbriggs.org/my-mbti-personality-type/mbti-basics/', text: 'The Myers & Briggs Foundation' }
+      break
+
+    case 'mbtiAccuracy':
+      title = 'Myers-Briggs Type Indicator Accuracy'
+      description = 'Users were asked to rate the description given about them based on their test results: "How much did you identify with this test\'s results?"'
+      source = { url: '', text: '' }
       break
   }
 
