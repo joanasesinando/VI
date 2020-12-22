@@ -131,7 +131,7 @@ function drawParallelCoordinates (target, data, traits, options) {
   for (const x of traits) {
     yScales[x.name] = d3.scaleLinear()
       .domain(x.range)
-      .range([h - options.padding, options.padding])
+      .range([h - options.padding, options.padding / 2])
   }
 
   /** * --------------------------------------------- ***/
@@ -343,6 +343,11 @@ function isMbti (name) {
 function showForm () {
   $('#selectBtn').css('display', 'none')
   $('#formNameTag').css('display', 'flex')
+}
+
+function hideForm () {
+  $('#selectBtn').css('display', 'block')
+  $('#formNameTag').css('display', 'none')
 }
 
 function addSelection () {

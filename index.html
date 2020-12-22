@@ -208,6 +208,9 @@
 			<button id="selectBtn" class="btn btn-sm btn-outline-light" onclick="showForm()">Select</button>
 
 			<div id="formNameTag" class="input-group input-group-sm" style="width: 13rem">
+				<div class="input-group-prepend">
+					<button type="button" class="btn btn-sm btn-outline-danger" onclick="hideForm()">X</button>
+				</div>
 				<input type="text" class="form-control" placeholder="Add a name tag" value="">
 				<div class="input-group-append">
 					<button type="submit" class="btn btn-sm btn-outline-light" onclick="addSelection()">OK</button>
