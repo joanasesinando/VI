@@ -1,0 +1,60 @@
+.container-about {
+
+	h6 {
+		color: color(typography, 1);
+		@include font-weight(medium);
+		font-size: 1.1rem;
+		letter-spacing: .5px;
+		position: relative;
+
+		&::after {
+			content: '';
+			position: absolute;
+			bottom: -10px;
+			left: 0;
+			width: 33px;
+			height: 3px;
+			background-color: color(primary, 1);
+		}
+	}
+
+	p, span, a {
+		font-size: .9rem;
+		letter-spacing: 0.0175em;
+	}
+
+	.link-title {
+		@include font-weight(semibold);
+		color: color(typography, 1);
+	}
+
+	a {
+		color: color(typography, 4);
+	}
+
+	$imgSize: 9rem;
+	.img-wrapper {
+		height: $imgSize;
+		width: $imgSize;
+
+		img {
+			height: $imgSize;
+			width: 100%;
+			object-fit: cover;
+		}
+	}
+
+	.name {
+		display: block;
+		@include font-weight(semibold);
+		color: color(typography, 1);
+		font-size: 1rem;
+	}
+
+	.email {
+		display: block;
+		@include font-weight(light);
+		color: color(typography, 4);
+	}
+
+}

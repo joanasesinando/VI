@@ -46,6 +46,12 @@ body {
 	border-top-right-radius: 30px;
 }
 
+.project, .datasets, .team {
+	background-color: color(bg, 1);
+	@include border-radius(medium);
+	box-shadow: 0 4px 25px #DCD4E9;
+}
+
 ::-webkit-scrollbar {
 	width: 5px;
 	height: 5px;

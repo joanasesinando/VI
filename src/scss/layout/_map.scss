@@ -1,6 +1,6 @@
 .map {
 	position: relative;
-	background: #b3d5ff;
+	background: #EEF1FA;
 
 	svg {
 		border-radius: 10px;
@@ -17,157 +17,88 @@
 		cursor: pointer;
 	}
 
-	.legend{
+	.legend {
 		position: absolute;
 		bottom: 10px;
 		left: 10px;
-		height: 10px;
-		width: 138px;
-		border-radius: 5px;
 
-		.textNeg24, .textNeg20, .textNeg16, .textNeg12, .textNeg8, .textNeg4, .textNeutral, .textPos4, .textPos8, .textPos12, .textPos16, .textPos20, .textPos24, .textNoData {
-			width: 50px;
-			height: 10px;
-			font-size: 8px;
+		.squareWrapper {
+			position: relative;
+		}
+
+		span {
+			position: absolute;
+			top: -10px;
+			font-size: 7.5px;
+			@include font-weight(semibold);
 			color: color(typography, 1);
-			position: absolute;
-			line-height: 8px;
-			font-weight: 700;
 		}
 
-		.textNeg24 {
-			transform: translate(-8px, -12px);
-		}
-
-		.textNeg20 {
-			transform: translate(15px, -12px);
-		}
-
-		.textNeg16 {
-			transform: translate(38px, -12px)
-		}
-
-		.textNeg12 {
-			transform: translate(61px, -12px)
-		}
-
-		.textNeg8 {
-			transform: translate(84px, -12px)
-		}
-
-		.textNeg4 {
-			transform: translate(107px, -12px)
-		}
-
-		.textNeutral {
-			transform: translate(135px, -12px);
-		}
-
-		.textPos4 {
-			transform: translate(153px, -12px);
-		}
-
-		.textPos8 {
-			transform: translate(176px, -12px);
-		}
-
-		.textPos12 {
-			transform: translate(199px, -12px);
-		}
-
-		.textPos16 {
-			transform: translate(222px, -12px);
-		}
-
-		.textPos20 {
-			transform: translate(245px, -12px);
-		}
-
-		.textPos24 {
-			transform: translate(268px, -12px);
-		}
-
-		.textNoData {
-			transform: translate(0, -42px);
-		}
-
-		.squareNeg24, .squareNeg20, .squareNeg16, .squareNeg12, .squareNeg8, .squareNeg4, .squarePos4, .squarePos8, .squarePos12, .squarePos16, .squarePos20, .squarePos24, .squareNoData {
-			width: 23px;
+		.square {
+			width: 20px;
 			height: 10px;
-			font-size: 8px;
-			color: #8484A0;
-			position: absolute;
-			box-shadow: 0 1.91304px 7.569px #C7BADB;
-
 		}
 
-		.squareNeg24 {
-			background: #bb4111;
+		.squareNeg24 .square {
+			background: #BB4111;
 			border-top-left-radius: 3px;
 			border-bottom-left-radius: 3px;
 		}
-
-		.squareNeg20 {
-			background: #ed551a;
-			transform: translate(23px, 0);
-		}
-
-		.squareNeg16 {
-			background: #ff6d35;
-			transform: translate(46px, 0);
-		}
-
-		.squareNeg12 {
-			background: #ff8353;
-			transform: translate(69px, 0);
-		}
-
-		.squareNeg8 {
-			background: #ffa27d;
-			transform: translate(92px, 0);
-		}
-
-		.squareNeg4 {
-			background: #fec2aa;
-			transform: translate(115px, 0)
-		}
-
-		.squarePos4 {
-			background: #c8d0ff;
-			transform: translate(138px, 0);
-		}
-
-		.squarePos8 {
-			background: #adb8f3;
-			transform: translate(161px, 0);
-		}
-
-		.squarePos12 {
-			background: #7d8de5;
-			transform: translate(184px, 0);
-		}
-
-		.squarePos16 {
-			background: #5c6bc0;
-			transform: translate(207px, 0);
-		}
-
-		.squarePos20 {
-			background: #424f98;
-			transform: translate(230px, 0);
-		}
-
-		.squarePos24 {
-			background: #2e3972;
-			transform: translate(253px, 0);
+		.squareNeg20 .square { background: #ED551A; }
+		.squareNeg16 .square { background: #FF6D35; }
+		.squareNeg12 .square { background: #FF8353; }
+		.squareNeg8 .square { background: #FFA27D; }
+		.squareNeg4 .square { background: #FEC2AA; }
+		.squarePos4 .square { background: #C8D0FF; }
+		.squarePos8 .square { background: #ADB8F3; }
+		.squarePos12 .square { background: #7D8DE5; }
+		.squarePos16 .square { background: #5C6BC0; }
+		.squarePos20 .square { background: #424F98; }
+		.squarePos24 .square {
+			background: #2E3972;
 			border-top-right-radius: 3px;
 			border-bottom-right-radius: 3px;
 		}
 
+		.top {
+			position: absolute;
+			bottom: 27px;
+
+			span {
+				position: absolute;
+				top: -13px;
+				width: 100px;
+			}
+		}
+
+		.bottom, .top {
+			box-shadow: 0 0 10px 0 white;
+		}
+
 		.squareNoData {
 			background: white;
-			transform: translate(0, -30px);
 			border-radius: 3px;
+			border: 1px solid #bab5d4;
+		}
+
+		.squareNeg24, .squareNeg20, .squareNeg16, .squareNeg12, .squareNeg8, .squareNeg4 {
+			span {
+				position: absolute;
+				left: -10px;
+			}
+		}
+
+		.squarePos24, .squarePos20, .squarePos16, .squarePos12, .squarePos8, .squarePos4 {
+			span {
+				position: absolute;
+				right: -10px;
+			}
+		}
+
+		.span0 {
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
 		}
 	}
 
@@ -193,6 +124,7 @@
 				left: 50%;
 				transform: translate(-50%, 20%);
 				width: 1.3rem;
+				fill: color(typography, 3);
 			}
 		}
 
